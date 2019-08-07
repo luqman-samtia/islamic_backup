@@ -1,0 +1,50 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Auth::routes();
+
+Route::middleware('auth')->group(function(){
+
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/pages', 'HomeController@pages')->name('pages');
+    Route::get('/emails', 'HomeController@emails')->name('emails');
+
+    Route::prefix('users')->group(function (){
+        Route::get('/', 'UserController@index')->name('users');
+        Route::match(['GET', 'POST'], '/add', 'UserController@add')->name('users.add');
+        Route::match(['GET', 'POST'], '{user}/edit', 'UserController@edit')->name('users.edit');
+        Route::get('{user}/delete', 'UserController@delete')->name('users.delete');
+        Route::match(['GET', 'POST'], '{user}/role', 'UserController@role')->name('users.role');
+    });
+
+    Route::prefix('roles')->group(function (){
+        Route::get('/', 'RoleController@index')->name('roles');
+        Route::match(['GET', 'POST'], '/add', 'RoleController@add')->name('roles.add');
+        Route::match(['GET', 'POST'], '{role}/edit', 'RoleController@edit')->name('roles.edit');
+        Route::get('{role}/delete', 'RoleController@delete')->name('roles.delete');
+        Route::match(['GET', 'POST'], '{role}/permissions', 'RoleController@permissions')->name('roles.permissions');
+    });
+
+    Route::prefix('permissions')->group(function (){
+        Route::get('/', 'PermissionController@index')->name('permissions');
+        Route::match(['GET', 'POST'], '/add', 'PermissionController@add')->name('permissions.add');
+        Route::match(['GET', 'POST'], '{permission}/edit', 'PermissionController@edit')->name('permissions.edit');
+        Route::get('{permission}/delete', 'PermissionController@delete')->name('permissions.delete');
+        Route::match(['GET', 'POST'], '{permission}/roles', 'PermissionController@roles')->name('permissions.roles');
+    });
+
+});
