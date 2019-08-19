@@ -17,11 +17,29 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->prefix('admin')->group(function(){
 
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/pages', 'HomeController@pages')->name('pages');
     Route::get('/emails', 'HomeController@emails')->name('emails');
+
+
+
+    Route::prefix('resources')->group(function (){
+        Route::get('/', 'ResourcesController@index')->name('resources');
+        Route::match(['GET', 'POST'], '/add', 'ResourcesController@add')->name('resources.add');
+        Route::match(['GET', 'POST'], '{resource}/edit', 'ResourcesController@edit')->name('resources.edit');
+        Route::post('/delete', 'ResourcesController@delete')->name('resources.delete');
+        Route::match(['GET', 'POST'], '{resource}/add', 'ResourcesController@resourceAdd')->name('child.add');
+        Route::match(['GET', 'POST'], '{resource}/edit/{childResource}', 'ResourcesController@resourceEdit')->name('child.edit');
+        Route::get('{resource}', 'ResourcesController@resource')->name('resources.resources');
+    });
+
+
+    Route::prefix('quran')->group(function () {
+        Route::get('/', 'QuranController@index')->name('quran');
+        Route::match(['GET', 'POST'], '/add', 'QuranController@add')->name('quran.add');
+    });
 
     Route::prefix('users')->group(function (){
         Route::get('/', 'UserController@index')->name('users');

@@ -13,7 +13,8 @@
         "jeroennoten/laravel-adminlte": "^1.25",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "spatie/laravel-permission": "^2.37"
+        "spatie/laravel-permission": "^2.37",
+        "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

@@ -93,7 +93,7 @@ return [
 
     'login_url' => 'login',
 
-    'register_url' => 'register',
+    'register_url' => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -115,41 +115,53 @@ return [
             'url'  => 'home',
             'can' => 'homecontroller.index'
         ],
+//        [
+//            'text'        => 'Pages',
+//            'url'         => 'pages',
+//            'icon'        => 'file',
+//            'can' => 'homecontroller.pages'
+//        ],
         [
-            'text'        => 'Pages',
-            'url'         => 'pages',
+            'text'        => 'Islamic Resources',
+            'url'         => 'admin/resources',
             'icon'        => 'file',
-            'can' => 'homecontroller.pages'
+            'can' => 'resourcescontroller.index'
         ],
         [
-            'text'        => 'Users',
-            'url'         => 'users',
-            'icon'        => 'users',
-            'can' => 'usercontroller.index'
+            'text'        => 'Read Holy Quran',
+            'url'         => 'admin/quran',
+            'icon'        => 'file',
+            'can' => 'resourcescontroller.index'
         ],
-        [
-            'text'        => 'Email',
-            'url'         => 'emails',
-            'icon'        => 'envelope',
-            'can' => 'homecontroller.emails'
-        ],
-        [
-            'text'        => 'Access Levels',
-            'icon'        => 'lock',
-            'can' => ['rolecontroller.index', 'permissioncontroller.index'],
-            'submenu' => [
-                [
-                    'text' => 'Manage Roles',
-                    'can' => 'rolecontroller.index',
-                    'url' => 'roles'
-                ],
-                [
-                    'text' => 'Manage Permissions',
-                    'can' => 'permissioncontroller.index',
-                    'url' => 'permissions'
-                ]
-            ]
-        ],
+//        [
+//            'text'        => 'Users',
+//            'url'         => 'users',
+//            'icon'        => 'users',
+//            'can' => 'usercontroller.index'
+//        ],
+//        [
+//            'text'        => 'Email',
+//            'url'         => 'emails',
+//            'icon'        => 'envelope',
+//            'can' => 'homecontroller.emails'
+//        ],
+//        [
+//            'text'        => 'Access Levels',
+//            'icon'        => 'lock',
+//            'can' => ['rolecontroller.index', 'permissioncontroller.index'],
+//            'submenu' => [
+//                [
+//                    'text' => 'Manage Roles',
+//                    'can' => 'rolecontroller.index',
+//                    'url' => 'roles'
+//                ],
+//                [
+//                    'text' => 'Manage Permissions',
+//                    'can' => 'permissioncontroller.index',
+//                    'url' => 'permissions'
+//                ]
+//            ]
+//        ],
     ],
 
     /*
