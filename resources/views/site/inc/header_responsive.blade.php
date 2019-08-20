@@ -20,11 +20,11 @@
         <div class="rspn-cnt">
             <span>
                 <i class="fa fa-envelope thm-clr"></i>
-                <a href="#" title="">
-                    <span class="__cf_email__" data-cfemail="3851565e57785a514b555154545950165b5755">[email&#160;protected]</span>
+                <a href="mailto:info@equraninstitute.com" title="">
+                    <span class="__cf_email__" data-cfemail="3851565e57785a514b555154545950165b5755">info@equraninstitute.com</span>
                 </a>
             </span>
-            <span><i class="fa fa-phone thm-clr"></i>[phone&#160;protected]</span>
+            <span><i class="fa fa-phone thm-clr"></i>+92-311-5165709</span>
         </div>
         <span class="rspn-mnu-btn"><i class="fa fa-list-ul"></i></span>
     </div>

@@ -55,4 +55,8 @@ class PublicController extends Controller
         return view('site.charges');
     }
 
+    public function terms(){
+        return view('site.terms');
+    }
+
 }

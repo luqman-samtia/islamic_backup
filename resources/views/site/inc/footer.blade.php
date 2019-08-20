@@ -28,6 +28,7 @@
                                         <li><a href="{{ route('contactUs') }}" title="">Contact Us</a></li>
                                         <li><a href="{{ route('charges') }}" title="">Charges</a></li>
                                         <li><a href="{{ route('faq') }}" title="">FAQ</a></li>
+                                        <li><a href="{{ route('terms') }}" title="">Terms Of Service</a></li>
 
                                         {{--<li><a href="#" title="">Privacy Policy</a></li>
                                         <li><a href="#" title="">Cookies Policy</a></li>--}}
@@ -38,9 +39,9 @@
                                 <div class="wdgt-box">
                                     <h4>Information</h4>
                                     <ul class="cont-lst">
-                                        <li><i class="flaticon-location-pin"></i>Lorem Ipsum labore et dolore magnam. SWIP 3HZ</li>
-                                        <li><i class="flaticon-call"></i>+22 33 4455 6677</li>
-                                        <li><i class="flaticon-email"></i><a href="#" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">[email&#160;protected]</span></a></li>
+                                        <li style="padding: 0px;">Skype - equraninstitute</li>
+                                        <li><i class="flaticon-call"></i>+92-311-5165709</li>
+                                        <li><i class="flaticon-email"></i><a href="mailto:info@equraninstitute.com" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">info@equraninstitute.com</span></a></li>
                                     </ul>
                                 </div>
                             </div>
