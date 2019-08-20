@@ -15,10 +15,9 @@
                                 <div class="wdgt-box">
                                     <h4>Quick Links</h4>
                                     <ul>
-                                        <li><a href="#" title="">About Us</a></li>
-                                        <li><a href="#" title="">Product Category</a></li>
-                                        <li><a href="#" title="">Our Products</a></li>
-                                        <li><a href="#" title="">How we do it</a></li>
+                                        <li><a href="{{ route('site') }}" title="">Home</a></li>
+                                        <li><a href="{{ route('quranPage') }}" title="">Quran</a></li>
+{{--                                        <li><a href="#" title="">Our Products</a></li>--}}
                                     </ul>
                                 </div>
                             </div>
@@ -26,16 +25,18 @@
                                 <div class="wdgt-box">
                                     <h4>Useful Links</h4>
                                     <ul>
-                                        <li><a href="#" title="">Contact Us</a></li>
-                                        <li><a href="#" title="">Terms & Conditions</a></li>
-                                        <li><a href="#" title="">Privacy Policy</a></li>
-                                        <li><a href="#" title="">Cookies Policy</a></li>
+                                        <li><a href="{{ route('contactUs') }}" title="">Contact Us</a></li>
+                                        <li><a href="{{ route('charges') }}" title="">Charges</a></li>
+                                        <li><a href="{{ route('faq') }}" title="">FAQ</a></li>
+
+                                        {{--<li><a href="#" title="">Privacy Policy</a></li>
+                                        <li><a href="#" title="">Cookies Policy</a></li>--}}
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4 col-lg-4">
                                 <div class="wdgt-box">
-                                    <h4>Contact Us</h4>
+                                    <h4>Information</h4>
                                     <ul class="cont-lst">
                                         <li><i class="flaticon-location-pin"></i>Lorem Ipsum labore et dolore magnam. SWIP 3HZ</li>
                                         <li><i class="flaticon-call"></i>+22 33 4455 6677</li>

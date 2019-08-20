@@ -9,7 +9,7 @@ class Quran extends Model
 {
     protected $table = "quran";
     protected $fillable = [
-        'title', 'image', 'parent_id'
+        'title', 'image', 'parent_id', 'slug'
     ];
 
     protected $appends = ['image_url'];
@@ -17,6 +17,16 @@ class Quran extends Model
     public function scopeParent($query, $parent)
     {
         return $query->where('parent_id', $parent);
+    }
+
+    public function scopeOrderAsc($query, $column)
+    {
+        return $query->orderBy($column, 'asc');
+    }
+
+    public function scopeFindBySlug($query, $slug)
+    {
+        return $query->where('slug', $slug);
     }
 
     public function getImageUrlAttribute()

@@ -18,8 +18,8 @@
                             @endforeach
                         </ul>
                     </li>
-                    {{--<li><a href="event.html" title="">Event</a></li>
-                    <li><a href="crowd-funding.html" title="">Donate</a></li>
+                    <li><a href="{{ route('quranPage') }}" title="">Read Quran</a></li>
+                    {{--<li><a href="crowd-funding.html" title="">Donate</a></li>
                     <li class="menu-item-has-children"><a href="#" title="">Pages</a>
                         <ul>
                             <li><a href="team.html" title="">Team Grid View</a></li>
@@ -27,8 +27,8 @@
                             <li><a href="portfolio.html" title="">Our Portfolio</a></li>
                             <li><a href="services.html" title="">Our Services</a></li>
                         </ul>
-                    </li>
-                    <li><a href="about.html" title="">About</a></li>--}}
+                    </li>--}}
+{{--                    <li><a href="{{ route('faq') }}" title="">FAQ</a></li>--}}
                     <li><a href="{{ route('contactUs') }}" title="">Contact</a></li>
                 </ul>
             </div>

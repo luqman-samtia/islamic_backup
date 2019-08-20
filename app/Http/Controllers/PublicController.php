@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContacMail;
+use App\Quran;
 use App\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -14,7 +15,7 @@ class PublicController extends Controller
     }
 
     public function page($slug){
-        $resource = Resources::findBySlug($slug)->first();
+        $resource = Resources::with('children')->findBySlug($slug)->first();
         if(!$resource)
             abort(404);
         return view('site.page', compact('resource'));
@@ -33,4 +34,25 @@ class PublicController extends Controller
         }
         return view('site.contact_us');
     }
+
+    public function quran(){
+        $quran = Quran::parent(null)->orderAsc('created_at')->get();
+        return view('site.quran.index', compact('quran'));
+    }
+
+    public function quranSurat($slug){
+        $data['surat'] = Quran::with('children')->findBySlug($slug)->first();
+        if(!$data['surat'])
+            abort(404);
+        return view('site.quran.surat', $data);
+    }
+
+    public function faq(){
+        return view('site.faq');
+    }
+
+    public function charges(){
+        return view('site.charges');
+    }
+
 }
