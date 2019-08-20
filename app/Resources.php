@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\File;
 class Resources extends Model
 {
     protected $fillable = [
-        'title', 'image', 'parent_id'
+        'title', 'image', 'parent_id', 'slug'
     ];
 
     protected $appends = ['image_url'];
@@ -40,6 +40,11 @@ class Resources extends Model
     public function scopeParent($query, $parent)
     {
         return $query->where('parent_id', $parent);
+    }
+
+    public function scopeFindBySlug($query, $slug)
+    {
+        return $query->where('slug', $slug);
     }
 
     public function getImageUrlAttribute()

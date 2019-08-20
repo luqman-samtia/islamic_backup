@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PublicController@index')->name('site');
+Route::match(['GET', 'POST'],'/contactUs', 'PublicController@contactUs')->name('contactUs');
+Route::get('/page/{slug}', 'PublicController@page')->name('page');
 
 Auth::routes();
 

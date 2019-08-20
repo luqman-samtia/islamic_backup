@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Resources;
+use App\Services\Slug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;
@@ -39,6 +40,7 @@ class ResourcesController extends Controller
                 $path = $request->image->store('resources/images');
                 $data['image'] = $path;
             }
+            $data['slug'] = Slug::createSlug($request->title);
             $resource = Resources::create($data);
             $resource->save();
             return redirect()->route('resources');
