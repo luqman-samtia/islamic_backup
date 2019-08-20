@@ -7,7 +7,7 @@
         </div>
         <nav>
             <div>
-                <a class="thm-btn brd-rd40" href="#" title="">Visit Us</a>
+                <a class="thm-btn brd-rd40" href="{{ route('contactUs') }}" title="">Contact Us</a>
                 <ul>
                     <li><a href="{{ route('site') }}" title="">Home</a></li>
                     <li class="menu-item-has-children">
@@ -29,7 +29,7 @@
                         </ul>
                     </li>--}}
 {{--                    <li><a href="{{ route('faq') }}" title="">FAQ</a></li>--}}
-                    <li><a href="{{ route('contactUs') }}" title="">Contact</a></li>
+{{--                    <li><a href="{{ route('contactUs') }}" title="">Contact</a></li>--}}
                 </ul>
             </div>
         </nav>
