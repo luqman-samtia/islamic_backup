@@ -124,7 +124,7 @@ return [
         [
             'text'        => 'Islamic Resources',
             'url'         => 'admin/resources',
-            'icon'        => 'lines',
+            'icon'        => 'list',
             'can' => 'resourcescontroller.index'
         ],
         [
