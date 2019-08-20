@@ -40,7 +40,7 @@ class ResourcesController extends Controller
                 $path = $request->image->store('resources/images');
                 $data['image'] = $path;
             }
-            $data['slug'] = Slug::createSlug($request->title);
+            $data['slug'] = Slug::createSlug($request->title, 0, 'Resources');
             $resource = Resources::create($data);
             $resource->save();
             return redirect()->route('resources');
