@@ -2,6 +2,10 @@
 
 @section('title', 'Edit Artical')
 
+@push('css')
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+@endpush
+
 @section('content_header')
     <h1>
         Edit Artical
@@ -10,7 +14,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-12">
             <div class="box box-primary">
                 <div class="box-body">
                     <form method="post" enctype="multipart/form-data">
@@ -20,13 +24,10 @@
                                 <label>Title</label>
                                 <input type="text" name="title" value="{{ $artical->title }}" class="form-control" autocomplete="title" autofocus>
                             </div>
-{{--                            <div class="form-group">--}}
-{{--                                <label> Edit Image </label>--}}
-{{--                                <div class="d-flex">--}}
-{{--                                    <img src="{{ asset('storage/'.$artical->image) }}" style="width: 200px;"/>--}}
-{{--                                    <input type="file"  class="form-control-file" id="image" name="image" >--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
+                            <div class="form-group">
+                                <label> Edit Artical </label>
+                                <textarea name="content" class="summernote-content" placeholder="Enter Title" required>{{ $artical->content }}</textarea>
+                            </div>
                         </div>
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Update</button>
@@ -40,3 +41,12 @@
         </div>
     </div>
 @stop
+
+@push('js')
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
+    <script !src="">
+        $('.summernote-content').summernote({
+            height: 250,
+        });
+    </script>
+@endpush

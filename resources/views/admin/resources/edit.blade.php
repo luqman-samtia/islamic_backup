@@ -24,7 +24,7 @@
                                 <label> Edit Image </label>
                                 <div class="d-flex">
                                     <img src="{{ asset('storage/'.$resource->image) }}" style="width: 200px;"/>
-                                    <input type="file" , class="form-control-file" id="image" name="image" >
+                                    <input type="file"  class="form-control-file" id="image" name="image" >
                                 </div>
                             </div>
                         </div>

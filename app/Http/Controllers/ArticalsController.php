@@ -34,10 +34,7 @@ class ArticalsController extends Controller
     public function edit(Request $request, Articals $artical){
         if ($request->post()){
             $artical->title = $request->title;
-            if ($request->hasFile('image')){
-                $path = $request->image->store('articals/images');
-                $artical->image = $path;
-            }
+            $artical->content = $request->content;
             $artical->save();
             return redirect()->route('articals');
         }

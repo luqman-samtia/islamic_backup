@@ -41,27 +41,15 @@
                 ajax: '{!! route('articals') !!}',
                 columns: [
                     { data: 'title' },
-                    // {
-                    //     data: 'image',
-                    //     render: function(data, type, row){
-                    //         // console.log(row);
-                    //         if(row.image_url)
-                    //             return '<img src="'+row.image_url+'" style="width: 50px;height: 50px;">';
-                    //         return'';
-                    //     }
-                    // },
                     {
                         data: 'id',
                         render: function(data){
                             let edit = '{{ route('articals.edit', ':id') }}';
                             edit = edit.replace(':id', data);
-                            {{--let add = '{{ route('articals.articals', ':id') }}';--}}
-                            {{--add = add.replace(':id', data);--}}
                             let deleteArtical = '{{ route('articals.delete', ':id') }}';
                             deleteArtical = deleteArtical.replace(':id', data);
-                            return '<a href="'+edit+'" class="btn btn-success"><i class="fa fa-pencil"></i></a> ' +
-                                // '<a href="'+add+'" class="btn btn-primary"><i class="fa fa-plus-square"></i></a> ' +
-                                '<button type="button" data-id="'+data+'" class="btn btn-danger delete"><i class="fa fa-trash-o"></i></button> ';
+                            return '<a href="'+edit+'" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i></a> ' +
+                                '<button type="button" data-id="'+data+'" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i></button> ';
                         }
                     },
                 ]

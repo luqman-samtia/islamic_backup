@@ -51,8 +51,6 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::match(['GET', 'POST'], '/add', 'ArticalsController@add')->name('articals.add');
         Route::match(['GET', 'POST'], '{artical}/edit', 'ArticalsController@edit')->name('articals.edit');
         Route::post('/delete', 'ArticalsController@delete')->name('articals.delete');
-//        Route::match(['GET', 'POST'], '{artical}/add', 'ArticalsController@articalAdd')->name('child.add');
-//        Route::match(['GET', 'POST'], '{artical}/edit/{childArtical}', 'ArticalsController@articalEdit')->name('child.edit');
         Route::get('{artical}', 'ArticalsController@artical')->name('articals.articals');
     });
 
