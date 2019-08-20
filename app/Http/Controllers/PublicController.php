@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Articals;
 use App\Mail\ContacMail;
 use App\Quran;
 use App\Resources;
@@ -57,6 +58,11 @@ class PublicController extends Controller
 
     public function terms(){
         return view('site.terms');
+    }
+
+    public function artical($slug){
+        $artical = Articals::findBySlug($slug)->first();
+        return view('site.artical', compact('artical'));
     }
 
 }

@@ -19,6 +19,7 @@ Route::get('/quran/{surat}', 'PublicController@quranSurat')->name('quranSurat');
 Route::get('/faq', 'PublicController@faq')->name('faq');
 Route::get('/charges', 'PublicController@charges')->name('charges');
 Route::get('/terms', 'PublicController@terms')->name('terms');
+Route::get('/artical/{slug}', 'PublicController@artical')->name('artical');
 
 Auth::routes();
 
