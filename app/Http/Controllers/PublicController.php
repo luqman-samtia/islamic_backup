@@ -47,4 +47,8 @@ class PublicController extends Controller
         return view('site.quran.surat', $data);
     }
 
+    public function faq(){
+        return view('site.faq');
+    }
+
 }

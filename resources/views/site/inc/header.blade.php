@@ -27,8 +27,8 @@
                             <li><a href="portfolio.html" title="">Our Portfolio</a></li>
                             <li><a href="services.html" title="">Our Services</a></li>
                         </ul>
-                    </li>
-                    <li><a href="about.html" title="">About</a></li>--}}
+                    </li>--}}
+                    <li><a href="{{ route('faq') }}" title="">FAQ</a></li>
                     <li><a href="{{ route('contactUs') }}" title="">Contact</a></li>
                 </ul>
             </div>
