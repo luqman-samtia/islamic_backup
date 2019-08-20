@@ -53,7 +53,7 @@
                 </ul>
             </li>
             <li><a href="about.html" title="">About</a></li>--}}
-            <li><a href="{{ route('faq') }}" title="">FAQ</a></li>
+{{--            <li><a href="{{ route('faq') }}" title="">FAQ</a></li>--}}
             <li><a href="{{ route('contactUs') }}" title="">Contact</a></li>
         </ul>
     </div>

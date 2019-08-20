@@ -18,7 +18,6 @@
                                         <li><a href="{{ route('site') }}" title="">Home</a></li>
                                         <li><a href="{{ route('quranPage') }}" title="">Quran</a></li>
 {{--                                        <li><a href="#" title="">Our Products</a></li>--}}
-                                        <li><a href="{{ route('faq') }}" title="">FAQ</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -27,8 +26,10 @@
                                     <h4>Useful Links</h4>
                                     <ul>
                                         <li><a href="{{ route('contactUs') }}" title="">Contact Us</a></li>
-                                        {{--<li><a href="#" title="">Terms & Conditions</a></li>
-                                        <li><a href="#" title="">Privacy Policy</a></li>
+                                        <li><a href="{{ route('charges') }}" title="">Charges</a></li>
+                                        <li><a href="{{ route('faq') }}" title="">FAQ</a></li>
+
+                                        {{--<li><a href="#" title="">Privacy Policy</a></li>
                                         <li><a href="#" title="">Cookies Policy</a></li>--}}
                                     </ul>
                                 </div>
