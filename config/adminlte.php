@@ -133,6 +133,12 @@ return [
             'icon'        => 'book',
             'can' => 'resourcescontroller.index'
         ],
+        [
+            'text'        => 'Articals',
+            'url'         => 'admin/articals',
+            'icon'        => 'file',
+            'can' => 'resourcescontroller.index'
+        ],
 //        [
 //            'text'        => 'Users',
 //            'url'         => 'users',

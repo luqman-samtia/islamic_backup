@@ -24,7 +24,6 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::get('/emails', 'HomeController@emails')->name('emails');
 
 
-
     Route::prefix('resources')->group(function (){
         Route::get('/', 'ResourcesController@index')->name('resources');
         Route::match(['GET', 'POST'], '/add', 'ResourcesController@add')->name('resources.add');
@@ -45,6 +44,18 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::match(['GET', 'POST'], '{quran}/edit/{childQuran}', 'QuranController@quranEdit')->name('child.edit');
         Route::get('{quran}', 'QuranController@quran')->name('quran.quran');
     });
+
+
+    Route::prefix('articals')->group(function () {
+        Route::get('/', 'ArticalsController@index')->name('articals');
+        Route::match(['GET', 'POST'], '/add', 'ArticalsController@add')->name('articals.add');
+        Route::match(['GET', 'POST'], '{artical}/edit', 'ArticalsController@edit')->name('articals.edit');
+        Route::post('/delete', 'ArticalsController@delete')->name('articals.delete');
+//        Route::match(['GET', 'POST'], '{artical}/add', 'ArticalsController@articalAdd')->name('child.add');
+//        Route::match(['GET', 'POST'], '{artical}/edit/{childArtical}', 'ArticalsController@articalEdit')->name('child.edit');
+        Route::get('{artical}', 'ArticalsController@artical')->name('articals.articals');
+    });
+
 
     Route::prefix('users')->group(function (){
         Route::get('/', 'UserController@index')->name('users');

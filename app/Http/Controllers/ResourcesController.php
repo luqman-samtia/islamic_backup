@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Resources;
-use App\Services\Slug;
+use App\Slug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;

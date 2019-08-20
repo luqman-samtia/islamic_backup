@@ -1,5 +1,6 @@
 <?php
-namespace App\Services;
+
+namespace App;
 
 class Slug
 {
