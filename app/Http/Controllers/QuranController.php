@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Quran;
 use App\Resources;
-use App\Services\Slug;
+use App\Slug;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
