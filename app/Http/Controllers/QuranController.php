@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Quran;
 use App\Resources;
+use App\Services\Slug;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -40,6 +41,7 @@ class QuranController extends Controller
                 $path = $request->image->store('quran/images');
                 $data['image'] = $path;
             }
+            $data['slug'] = Slug::createSlug($request->title, 0, 'Quran');
             $quran = Quran::create($data);
             $quran->save();
             return redirect()->route('quran');

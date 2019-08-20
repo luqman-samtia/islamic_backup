@@ -18,8 +18,8 @@
                             @endforeach
                         </ul>
                     </li>
-                    {{--<li><a href="event.html" title="">Event</a></li>
-                    <li><a href="crowd-funding.html" title="">Donate</a></li>
+                    <li><a href="{{ route('quranPage') }}" title="">Read Quran</a></li>
+                    {{--<li><a href="crowd-funding.html" title="">Donate</a></li>
                     <li class="menu-item-has-children"><a href="#" title="">Pages</a>
                         <ul>
                             <li><a href="team.html" title="">Team Grid View</a></li>

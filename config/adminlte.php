@@ -85,7 +85,7 @@ return [
     |
     */
 
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'admin/home',
 
     'logout_url' => 'logout',
 
@@ -112,7 +112,7 @@ return [
         [
             'text' => 'Dashboard',
             'icon' => 'dashboard',
-            'url'  => 'home',
+            'url'  => 'admin/home',
             'can' => 'homecontroller.index'
         ],
 //        [

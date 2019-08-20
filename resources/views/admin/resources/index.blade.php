@@ -59,9 +59,9 @@
                             add = add.replace(':id', data);
                             let deleteResource = '{{ route('resources.delete', ':id') }}';
                             deleteResource = deleteResource.replace(':id', data);
-                            return '<a href="'+edit+'" class="btn btn-success"><i class="fa fa-pencil"></i></a> ' +
-                                '<a href="'+add+'" class="btn btn-primary"><i class="fa fa-plus-square"></i></a> ' +
-                                '<button type="button" data-id="'+data+'" class="btn btn-danger delete"><i class="fa fa-trash-o"></i></button> ';
+                            return '<a href="'+edit+'" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i></a> ' +
+                                '<a href="'+add+'" class="btn btn-primary btn-xs"><i class="fa fa-plus-square"></i></a> ' +
+                                '<button type="button" data-id="'+data+'" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i></button> ';
                         }
                     },
                 ]

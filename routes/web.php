@@ -14,6 +14,8 @@
 Route::get('/', 'PublicController@index')->name('site');
 Route::match(['GET', 'POST'],'/contactUs', 'PublicController@contactUs')->name('contactUs');
 Route::get('/page/{slug}', 'PublicController@page')->name('page');
+Route::get('/quran', 'PublicController@quran')->name('quranPage');
+Route::get('/quran/{surat}', 'PublicController@quranSurat')->name('quranSurat');
 
 Auth::routes();
 
