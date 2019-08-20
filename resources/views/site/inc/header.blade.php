@@ -18,6 +18,7 @@
                             @endforeach
                         </ul>
                     </li>
+                    <li><a href="{{ route('charges') }}" title="">Charges</a></li>
                     <li><a href="{{ route('quranPage') }}" title="">Read Quran</a></li>
                     {{--<li><a href="crowd-funding.html" title="">Donate</a></li>
                     <li class="menu-item-has-children"><a href="#" title="">Pages</a>
