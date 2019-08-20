@@ -28,7 +28,7 @@
                         </div>
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <a href="{{ route('resources') }}" class="btn btn-default">Cancel</a>
+                            <a href="{{ route('quran') }}" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

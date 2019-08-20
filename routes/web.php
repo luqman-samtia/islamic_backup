@@ -39,6 +39,11 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::prefix('quran')->group(function () {
         Route::get('/', 'QuranController@index')->name('quran');
         Route::match(['GET', 'POST'], '/add', 'QuranController@add')->name('quran.add');
+        Route::match(['GET', 'POST'], '{quran}/edit', 'QuranController@edit')->name('quran.edit');
+        Route::post('/delete', 'QuranController@delete')->name('quran.delete');
+        Route::match(['GET', 'POST'], '{quran}/add', 'QuranController@quranAdd')->name('child.add');
+        Route::match(['GET', 'POST'], '{quran}/edit/{childQuran}', 'QuranController@quranEdit')->name('child.edit');
+        Route::get('{quran}', 'QuranController@quran')->name('quran.quran');
     });
 
     Route::prefix('users')->group(function (){

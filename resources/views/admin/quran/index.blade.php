@@ -32,51 +32,50 @@
     <div class="rolesModal"></div>
 @stop
 
-{{--@push('js')--}}
-{{--    <script>--}}
-{{--        // $(function() {--}}
-{{--            var datatable = $('.table').DataTable({--}}
-{{--                processing: true,--}}
-{{--                serverSide: true,--}}
-{{--                ajax: '{!! route('resources') !!}',--}}
-{{--                columns: [--}}
-{{--                    { data: 'title' },--}}
-{{--                    {--}}
-{{--                        data: 'image',--}}
-{{--                        render: function(data, type, row){--}}
-{{--                            // console.log(row);--}}
-{{--                            if(row.image_url)--}}
-{{--                                return '<img src="'+row.image_url+'" style="width: 50px;height: 50px;">';--}}
-{{--                            return'';--}}
-{{--                        }--}}
-{{--                    },--}}
-{{--                    {--}}
-{{--                        data: 'id',--}}
-{{--                        render: function(data){--}}
-{{--                            let edit = '{{ route('resources.edit', ':id') }}';--}}
-{{--                            edit = edit.replace(':id', data);--}}
-{{--                            let add = '{{ route('resources.resources', ':id') }}';--}}
-{{--                            add = add.replace(':id', data);--}}
-{{--                            let deleteResource = '{{ route('resources.delete', ':id') }}';--}}
-{{--                            deleteResource = deleteResource.replace(':id', data);--}}
-{{--                            return '<a href="'+edit+'" class="btn btn-success"><i class="fa fa-pencil"></i></a> ' +--}}
-{{--                                '<a href="'+add+'" class="btn btn-primary"><i class="fa fa-plus-square"></i></a> ' +--}}
-{{--                                '<button type="button" data-id="'+data+'" class="btn btn-danger delete"><i class="fa fa-trash-o"></i></button> ';--}}
-{{--                        }--}}
-{{--                    },--}}
-{{--                ]--}}
-{{--            });--}}
-{{--        // });--}}
-{{--        $(document).on('click', '.delete', function(){--}}
-{{--            let id = $(this).attr('data-id');--}}
-{{--            $.ajax({--}}
-{{--                url : "{{ route('resources.delete') }}",--}}
-{{--                data: 'id='+id+"&_token={{ csrf_token() }}&parent=1",--}}
-{{--                type:"post",--}}
-{{--                success: function(output){--}}
-{{--                    datatable.ajax.reload();--}}
-{{--                }--}}
-{{--            });--}}
-{{--        })--}}
-{{--    </script>--}}
-{{--    @endpush--}}
+@push('js')
+    <script>
+        // $(function() {
+            var datatable = $('.table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{!! route('quran') !!}',
+                columns: [
+                    { data: 'title' },
+                    {
+                        data: 'image',
+                        render: function(data, type, row){
+                            if(row.image_complete_url)
+                                return '<img src="'+row.image_complete_url+'" style="width: 50px;height: 50px;">';
+                            return'';
+                        }
+                    },
+                    {
+                        data: 'id',
+                        render: function(data){
+                            let edit = '{{ route('quran.edit', ':id') }}';
+                            edit = edit.replace(':id', data);
+                            let add = '{{ route('quran.quran', ':id') }}';
+                            add = add.replace(':id', data);
+                            let deleteQuran = '{{ route('quran.delete', ':id') }}';
+                            deleteQuran = deleteQuran.replace(':id', data);
+                            return '<a href="'+edit+'" class="btn btn-success"><i class="fa fa-pencil"></i></a> ' +
+                                '<a href="'+add+'" class="btn btn-primary"><i class="fa fa-plus-square"></i></a> ' +
+                                '<button type="button" data-id="'+data+'" class="btn btn-danger delete"><i class="fa fa-trash-o"></i></button> ';
+                        }
+                    },
+                ]
+            });
+        // });
+        $(document).on('click', '.delete', function(){
+            let id = $(this).attr('data-id');
+            $.ajax({
+                url : "{{ route('quran.delete') }}",
+                data: 'id='+id+"&_token={{ csrf_token() }}&parent=1",
+                type:"post",
+                success: function(output){
+                    datatable.ajax.reload();
+                }
+            });
+        })
+    </script>
+    @endpush
