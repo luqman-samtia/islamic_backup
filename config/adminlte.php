@@ -124,13 +124,13 @@ return [
         [
             'text'        => 'Islamic Resources',
             'url'         => 'admin/resources',
-            'icon'        => 'file',
+            'icon'        => 'lines',
             'can' => 'resourcescontroller.index'
         ],
         [
             'text'        => 'Read Holy Quran',
             'url'         => 'admin/quran',
-            'icon'        => 'file',
+            'icon'        => 'book',
             'can' => 'resourcescontroller.index'
         ],
 //        [
