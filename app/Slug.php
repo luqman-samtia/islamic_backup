@@ -1,6 +1,6 @@
 <?php
 namespace App\Services;
-use App\Resources;
+
 class Slug
 {
     /**
@@ -9,13 +9,13 @@ class Slug
      * @return string
      * @throws \Exception
      */
-    public static function createSlug($title, $id = 0)
+    public static function createSlug($title, $id = 0, $model)
     {
         // Normalize the title
         $slug = str_slug($title);
         // Get any that could possibly be related.
         // This cuts the queries down by doing it once.
-        $allSlugs = self::getRelatedSlugs($slug, $id);
+        $allSlugs = self::getRelatedSlugs($slug, $id, $model);
         // If we haven't used it before then we are all good.
         if (! $allSlugs->contains('slug', $slug)){
             return $slug;
@@ -30,9 +30,10 @@ class Slug
         throw new \Exception('Can not create a unique slug');
     }
 
-    protected static function getRelatedSlugs($slug, $id = 0)
+    protected static function getRelatedSlugs($slug, $id = 0, $model)
     {
-        return Resources::select('slug')->where('slug', 'like', $slug.'%')
+        $modelName = '\\App\\'.$model;
+        return $modelName::select('slug')->where('slug', 'like', $slug.'%')
             ->where('id', '<>', $id)
             ->get();
     }
