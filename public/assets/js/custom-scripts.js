@@ -302,8 +302,8 @@
       autoplayHoverPause: true,
       nav: false,
       margin: 0,
-      animateIn: 'fadeIn',
-      animateOut: 'fadeOut',
+      /*animateIn: 'fadeIn',
+      animateOut: 'fadeOut',*/
       navText: [
       "<i class='fa fa-angle-up'></i>",
       "<i class='fa fa-angle-down'></i>"
