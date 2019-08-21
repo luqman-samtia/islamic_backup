@@ -19,6 +19,8 @@
                         <tr>
                             <td>Page #</td>
                             <td>Title</td>
+                            <td>Ayat From</td>
+                            <td>Ayat To</td>
                             <td>Image</td>
                             <td>Action</td>
                         </tr>
@@ -43,6 +45,8 @@
                 columns: [
                     { data: 'number' },
                     { data: 'title' },
+                    { data: 'ayat_from' },
+                    { data: 'ayat_to' },
                     {
                         data: 'image',
                         render: function(data, type, row){

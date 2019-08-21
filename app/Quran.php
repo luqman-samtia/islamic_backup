@@ -9,7 +9,7 @@ class Quran extends Model
 {
     protected $table = "quran";
     protected $fillable = [
-        'title', 'image', 'parent_id', 'slug', 'number'
+        'title', 'image', 'parent_id', 'slug', 'number','ayat_from','ayat_to'
     ];
 
     protected $appends = ['image_url'];
