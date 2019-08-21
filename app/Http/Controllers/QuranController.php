@@ -32,7 +32,7 @@ class QuranController extends Controller
     }
 
 
-    public function add(Request $request, Quran $quran)
+    public function add(Request $request)
     {
         if ($request->post()) {
             $data = $request->all();

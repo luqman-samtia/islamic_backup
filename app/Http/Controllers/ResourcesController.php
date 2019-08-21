@@ -33,7 +33,7 @@ class ResourcesController extends Controller
     }
 
 
-    public function add(Request $request, Resources $resource){
+    public function add(Request $request){
         if ($request->post()){
             $data = $request->all();
             if ($request->hasFile('image')){

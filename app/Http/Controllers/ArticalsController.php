@@ -18,7 +18,7 @@ class ArticalsController extends Controller
     }
 
 
-    public function add(Request $request, Articals $artical){
+    public function add(Request $request){
         if ($request->post()){
             $data = $request->all();
             $slug = new Slug();
