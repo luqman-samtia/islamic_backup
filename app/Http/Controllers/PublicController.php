@@ -42,7 +42,9 @@ class PublicController extends Controller
     }
 
     public function quranSurat($slug){
-        $data['surat'] = Quran::with('children')->findBySlug($slug)->first();
+        $data['surat'] = Quran::with(['children' => function($query){
+            $query->orderAsc('number');
+        }])->findBySlug($slug)->first();
         if(!$data['surat'])
             abort(404);
         return view('site.quran.surat', $data);
