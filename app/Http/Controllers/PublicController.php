@@ -62,7 +62,8 @@ class PublicController extends Controller
 
     public function artical($slug){
         $artical = Articals::findBySlug($slug)->first();
-        return view('site.artical', compact('artical'));
+        $posts = Articals::orderBy('created_at','desc')->take(5)->get();
+        return view('site.artical', compact('artical','posts'));
     }
 
 }

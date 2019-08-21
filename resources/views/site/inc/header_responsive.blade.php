@@ -40,6 +40,14 @@
                     @endforeach
                 </ul>
             </li>
+            <li class="menu-item-has-children">
+                <a href="#" title="">Articles</a>
+                <ul>
+                    @foreach(\App\Articals::all() as $resource)
+                        <li><a href="{{ route('artical', $resource->slug) }}" title="{{ $resource->title }}">{{ $resource->title }}</a></li>
+                    @endforeach
+                </ul>
+            </li>
             <li><a href="{{ route('quranPage') }}" title="">Read Quran</a></li>
 
             {{--<li><a href="event.html" title="">Event</a></li>
@@ -53,8 +61,8 @@
                 </ul>
             </li>
             <li><a href="about.html" title="">About</a></li>--}}
-{{--            <li><a href="{{ route('faq') }}" title="">FAQ</a></li>--}}
-            <li><a href="{{ route('contactUs') }}" title="">Contact</a></li>
+            <li><a href="{{ route('charges') }}" title="">Charges</a></li>
+            <li><a href="{{ route('contactUs') }}" title="">Contact Us</a></li>
         </ul>
     </div>
 </div>
