@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Articals;
+use App\Quran;
+use App\Resources;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,7 +26,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $data['resources'] = Resources::parent(null)->count();
+        $data['surah'] = Quran::parent(null)->count();
+        $data['articles'] = Articals::count();
+        return view('home', $data);
     }
 
     public function emails()
