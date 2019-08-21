@@ -5,7 +5,7 @@
 @section('content_header')
     <h1>
         {{ $resource->title }}
-        <a href="{{ route('child.add', $resource->id) }}" class="btn btn-sm btn-success pull-right"><i class="fa fa-plus"></i> Add New </a>
+        <a href="{{ route('resource.child.add', $resource->id) }}" class="btn btn-sm btn-success pull-right"><i class="fa fa-plus"></i> Add New </a>
     </h1>
 @stop
 
