@@ -25,8 +25,8 @@
                                 <input type="text" name="title" value="{{ $artical->title }}" class="form-control" autocomplete="title" autofocus>
                             </div>
                             <div class="form-group">
-                                <label> Edit Artical </label>
-                                <textarea name="content" class="summernote-content" placeholder="Enter Title" required>{{ $artical->content }}</textarea>
+                                <label> Content </label>
+                                <textarea name="content_body" class="summernote-content" required>{{ $artical->content }}</textarea>
                             </div>
                         </div>
                         <div class="box-footer">

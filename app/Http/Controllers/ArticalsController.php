@@ -33,8 +33,9 @@ class ArticalsController extends Controller
 
     public function edit(Request $request, Articals $artical){
         if ($request->post()){
+//            dd($request->all());
             $artical->title = $request->title;
-            $artical->content = $request->Content;
+            $artical->content = $request->content_body;
             $artical->save();
             return redirect()->route('articals');
         }
