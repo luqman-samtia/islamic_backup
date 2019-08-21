@@ -14,7 +14,7 @@ class ArticalsController extends Controller
         if ($request->ajax()){
             return DataTables::of(Articals::query())->make(true);
         }
-        return view('admin.articals.index', compact('artical'));
+        return view('admin.articals.index');
     }
 
 

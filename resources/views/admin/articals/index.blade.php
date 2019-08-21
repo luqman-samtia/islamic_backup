@@ -1,11 +1,11 @@
 @extends('adminlte::page')
 
-@section('title', 'Articals')
+@section('title', 'Articles')
 
 @section('content_header')
     <h1>
-        Articals
-        <a href="{{ route('articals.add') }}" class="btn btn-sm btn-success pull-right"><i class="fa fa-plus"></i> New Articals</a>
+        Articles
+        <a href="{{ route('articals.add') }}" class="btn btn-sm btn-success pull-right"><i class="fa fa-plus"></i> New Article</a>
     </h1>
 @stop
 

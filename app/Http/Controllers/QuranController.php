@@ -28,7 +28,7 @@ class QuranController extends Controller
                 return ($query->image) ? asset('storage/'.$query->image) : null;
             })->make(true);
         }
-        return view('admin.quran.index', compact('quran'));
+        return view('admin.quran.index');
     }
 
 

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Add Artical')
+@section('title', 'Add Article')
 
 @push('css')
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
@@ -8,7 +8,7 @@
 
 @section('content_header')
     <h1>
-        Add Artical
+        Add Article
     </h1>
 @stop
 

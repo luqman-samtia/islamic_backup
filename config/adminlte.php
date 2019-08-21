@@ -134,8 +134,8 @@ return [
             'can' => 'resourcescontroller.index'
         ],
         [
-            'text'        => 'Articals',
-            'url'         => 'admin/articals',
+            'text'        => 'Articles',
+            'url'         => 'admin/articles',
             'icon'        => 'file',
             'can' => 'resourcescontroller.index'
         ],

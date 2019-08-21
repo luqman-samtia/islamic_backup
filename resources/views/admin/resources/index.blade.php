@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Read Holy Quran')
+@section('title', 'Islamic Resources')
 
 @section('content_header')
     <h1>

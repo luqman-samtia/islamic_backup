@@ -52,12 +52,12 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     });
 
 
-    Route::prefix('articals')->group(function () {
+    Route::prefix('articles')->group(function () {
         Route::get('/', 'ArticalsController@index')->name('articals');
         Route::match(['GET', 'POST'], '/add', 'ArticalsController@add')->name('articals.add');
         Route::match(['GET', 'POST'], '{artical}/edit', 'ArticalsController@edit')->name('articals.edit');
         Route::post('/delete', 'ArticalsController@delete')->name('articals.delete');
-        Route::get('{artical}', 'ArticalsController@artical')->name('articals.articals');
+        Route::get('{article}', 'ArticalsController@artical')->name('articals.articals');
     });
 
 
