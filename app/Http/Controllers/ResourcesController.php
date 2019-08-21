@@ -29,7 +29,7 @@ class ResourcesController extends Controller
                 return ($query->image) ? asset('storage/'.$query->image) : null;
             })->make(true);
         }
-        return view('admin.resources.index', compact('resources'));
+        return view('admin.resources.index');
     }
 
 
