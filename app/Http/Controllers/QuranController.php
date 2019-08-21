@@ -68,6 +68,7 @@ class QuranController extends Controller
     {
         if ($request->post()) {
             $quran->title = $request->title;
+            $quran->number = $request->number;
             if ($request->hasFile('image')) {
                 $path = $request->image->store('quran/images');
                 $quran->image = $path;
@@ -82,6 +83,7 @@ class QuranController extends Controller
     public function quranEdit(Request $request, Quran $quran, Quran $childQuran){
         if ($request->post()){
             $childQuran->title = $request->title;
+            $childQuran->number = $request->number;
             if ($request->hasFile('image')){
                 $path = $request->image->store('quran/images');
                 $childQuran->image = $path;

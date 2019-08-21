@@ -37,7 +37,7 @@ class PublicController extends Controller
     }
 
     public function quran(){
-        $quran = Quran::parent(null)->orderAsc('created_at')->get();
+        $quran = Quran::parent(null)->orderAsc('number')->get();
         return view('site.quran.index', compact('quran'));
     }
 

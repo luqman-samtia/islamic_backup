@@ -17,6 +17,7 @@
                     <table class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
+                            <td>Page #</td>
                             <td>Title</td>
                             <td>Image</td>
                             <td>Action</td>
@@ -40,6 +41,7 @@
                 serverSide: true,
                 ajax: '{!! route('quran.quran', $quran->id) !!}',
                 columns: [
+                    { data: 'number' },
                     { data: 'title' },
                     {
                         data: 'image',
@@ -59,9 +61,9 @@
 
                             let deleteQuran = '{{ route('quran.delete', ':id') }}';
                             deleteQuran = deleteQuran.replace(':id', data);
-                            return '<a href="'+edit+'" class="btn btn-success"><i class="fa fa-pencil"></i></a> ' +
+                            return '<a href="'+edit+'" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i></a> ' +
                                 // '<a href="'+edit+'" class="btn btn-primary"><i class="fa fa-plus-square"></i></a> ' +
-                                '<button type="button" data-id="'+data+'" class="btn btn-danger delete"><i class="fa fa-trash-o"></i></button> ';
+                                '<button type="button" data-id="'+data+'" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i></button> ';
                         }
                     },
                 ]

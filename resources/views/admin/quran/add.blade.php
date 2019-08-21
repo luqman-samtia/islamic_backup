@@ -21,6 +21,10 @@
                                 <input type="text" name="title" class="form-control" placeholder="Enter Title" required>
                             </div>
                             <div class="form-group">
+                                <label>Surah #</label>
+                                <input type="number" name="number" min="1" class="form-control" placeholder="Enter Surah Number" required>
+                            </div>
+                            <div class="form-group">
                                 <label> Upload Image </label>
 
                                 <input type="file" class="form-control-file" id="image" name="image">

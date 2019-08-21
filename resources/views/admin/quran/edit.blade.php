@@ -21,10 +21,16 @@
                                 <input type="text" name="title" value="{{ $quran->title }}" class="form-control" autocomplete="title" autofocus>
                             </div>
                             <div class="form-group">
-                                <label> Edit Image </label>
+                                <label>Surah #</label>
+                                <input type="number" name="number" min="1" class="form-control" placeholder="Enter Surah Number" required value="{{ $quran->number }}">
+                            </div>
+                            <div class="form-group">
+                                <label> Image </label>
                                 <div class="d-flex">
+                                    @if($quran->image)
                                     <img src="{{ asset('storage/'.$quran->image) }}" style="width: 200px;"/>
-                                    <input type="file"  class="form-control-file" id="image" name="image" >
+                                    @endif
+                                    <input type="file" class="form-control-file" id="image" name="image" >
                                 </div>
                             </div>
                         </div>
