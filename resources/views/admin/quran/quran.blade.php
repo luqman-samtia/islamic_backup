@@ -55,7 +55,7 @@
                         data: 'id',
                         render: function(data, type , row)
                         {
-                            let edit = '{{ route('child.edit', [':id', ':id2']) }}';
+                            let edit = '{{ route('quran.child.edit', [':id', ':id2']) }}';
                             edit = edit.replace(':id', row.parent_id);
                             edit = edit.replace(':id2', data);
 

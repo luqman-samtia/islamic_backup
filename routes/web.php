@@ -36,7 +36,7 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::match(['GET', 'POST'], '{resource}/edit', 'ResourcesController@edit')->name('resources.edit');
         Route::post('/delete', 'ResourcesController@delete')->name('resources.delete');
         Route::match(['GET', 'POST'], '{resource}/add', 'ResourcesController@resourceAdd')->name('resource.child.add');
-        Route::match(['GET', 'POST'], '{resource}/edit/{childResource}', 'ResourcesController@resourceEdit')->name('child.edit');
+        Route::match(['GET', 'POST'], '{resource}/edit/{childResource}', 'ResourcesController@resourceEdit')->name('resource.child.edit');
         Route::get('{resource}', 'ResourcesController@resource')->name('resources.resources');
     });
 
@@ -47,7 +47,7 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::match(['GET', 'POST'], '{quran}/edit', 'QuranController@edit')->name('quran.edit');
         Route::post('/delete', 'QuranController@delete')->name('quran.delete');
         Route::match(['GET', 'POST'], '{quran}/add', 'QuranController@quranAdd')->name('quran.child.add');
-        Route::match(['GET', 'POST'], '{quran}/edit/{childQuran}', 'QuranController@quranEdit')->name('child.edit');
+        Route::match(['GET', 'POST'], '{quran}/edit/{childQuran}', 'QuranController@quranEdit')->name('quran.child.edit');
         Route::get('{quran}', 'QuranController@quran')->name('quran.quran');
     });
 
