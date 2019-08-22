@@ -68,4 +68,10 @@ class PublicController extends Controller
         return view('site.artical', compact('artical','posts'));
     }
 
+    public function search(Request $request){
+        $data['request'] = $request;
+        $data['quran'] = Quran::parent(null)->orderAsc('number')->get();
+        return view('site.search', $data);
+    }
+
 }

@@ -2217,7 +2217,8 @@ footer {
   max-width: 735px;
   width: 100%;
 }
-.contact-form > form input, 
+.contact-form > form input,
+.contact-form > form select,
 .contact-form > form textarea {
   float: left;
   width: 100%;
