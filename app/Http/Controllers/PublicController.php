@@ -73,37 +73,20 @@ class PublicController extends Controller
         $data['quran'] = Quran::parent(null)->get();
         $search = Quran::findBySlug($request->surat)->first()->children;
         $record = $search->filter(function($image) use ($request){
-            if($request->page <= $image->number){
+            if($request->page && $request->page == $image->number){
                 return $image;
             }
-            if($request->ayat_from >= $image->ayat_from && $request->ayat_to <= $image->ayat_to){
+            if($request->ayat_from && $request->ayat_to && $request->ayat_from >= $image->ayat_from && $request->ayat_to <= $image->ayat_to){
                 return $image;
             }
-            if($request->ayat_from >= $image->ayat_from){
+            if($request->ayat_from && $image->ayat_from && $request->ayat_from >= $image->ayat_from && $request->ayat_from <= $image->ayat_to){
                 return $image;
             }
-            if($request->ayat_to <= $image->ayat_to){
+            if($request->ayat_to && $image->ayat_to && $request->ayat_to <= $image->ayat_to){
                 return $image;
             }
         });
-        /*if($request->ayat_from) {
-            $search->whereHas('getParent', function ($query) use ($request) {
-                $query->where('ayat_from', '>=', $request->ayat_from);
-            });
-        }*/
-        /*if($request->ayat_to) {
-            $search->whereHas('children', function ($query) use ($request) {
-                $query->where('ayat_to', '<=', $request->ayat_to);
-            });
-        }
-
-        if($request->page) {
-            $search->whereHas('children', function ($query) use ($request) {
-                $query->where('number', $request->number);
-            });
-        }*/
-//        $data['search'] = $search->orderAsc('number')->get();
-        dd($record);
+        $data['search'] = $record;
         return view('site.search', $data);
     }
 }
