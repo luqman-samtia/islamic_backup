@@ -27,6 +27,24 @@
                 <div class="container">
                     <div class="prtfl-wrap text-center">
                         <div class="serv-wrap text-center remove-ext3">
+                            <div class="d-flex pb-5">
+                                    <div class="form-group col-md-2.5 pr-3">
+                                        <input type="text" name="title" class="form-control" placeholder="Enter Surah Title" >
+                                    </div>
+                                    <div class="form-group col-md-2.5 pl-3 pr-3">
+                                        <input type="number" name="ayat_from" min="1" class="form-control" placeholder="Ayat From " >
+                                    </div>
+                                    <div class="form-group col-md-2.5 pr-3 pl-3">
+                                        <input type="number" name="ayat_to" min="1" class="form-control" placeholder="Ayat To " >
+                                    </div>
+                                    <div class="form-group col-md-2.5 pl-3 pr-3">
+                                        <input type="number" name="number" min="1" class="form-control" placeholder="Enter Page Number" >
+                                    </div>
+                                    <div class="form-group col-md-2 pl-5">
+{{--                                        <a class="thm-btn brd-rd40" href="#" title="">Search</a>--}}
+                                        <button type="button" class="btn btn-block" style="background-color: #E7C860;color: white;">Search</button>
+                                    </div>
+                                </div>
                             <div class="row">
                                 @foreach($quran as $surat)
                                 <div class="col-md-3 col-sm-6 col-lg-3">
