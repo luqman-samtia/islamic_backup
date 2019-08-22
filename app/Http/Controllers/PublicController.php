@@ -76,13 +76,13 @@ class PublicController extends Controller
             if($request->page && $request->page == $image->number){
                 return $image;
             }
-            if($request->ayat_from && $request->ayat_to && $request->ayat_from >= $image->ayat_from && $request->ayat_to <= $image->ayat_to){
+            elseif($request->ayat_from && $request->ayat_to && $request->ayat_from >= $image->ayat_from && $request->ayat_to <= $image->ayat_to){
                 return $image;
             }
-            if($request->ayat_from && $image->ayat_from && $request->ayat_from >= $image->ayat_from && $request->ayat_from <= $image->ayat_to){
+            elseif($request->ayat_from && $image->ayat_from && $request->ayat_from >= $image->ayat_from && $request->ayat_from <= $image->ayat_to){
                 return $image;
             }
-            if($request->ayat_to && $image->ayat_to && $request->ayat_to <= $image->ayat_to){
+            elseif($request->ayat_to && $image->ayat_to && $request->ayat_to <= $image->ayat_to){
                 return $image;
             }
         });
