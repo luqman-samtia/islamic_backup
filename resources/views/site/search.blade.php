@@ -71,7 +71,16 @@
 
                             <div class="row">
                                 <div class="col-md-3 col-sm-6 col-lg-3">
-{{--                                    Show Searched Content Here--}}
+{{--                                    <div class="row">--}}
+{{--                                        @foreach($surat->children as $child)--}}
+{{--                                            <div class="col-md-2 col-sm-4 col-lg-2 fltr-itm fltr-itm1">--}}
+
+{{--                                                <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">--}}
+{{--                                                    <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">--}}
+{{--                                                </a>--}}
+{{--                                            </div>--}}
+{{--                                        @endforeach--}}
+{{--                                    </div>--}}
                                 </div>
                             </div>
                         </div>

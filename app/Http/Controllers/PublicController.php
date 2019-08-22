@@ -73,5 +73,4 @@ class PublicController extends Controller
         $data['quran'] = Quran::parent(null)->orderAsc('number')->get();
         return view('site.search', $data);
     }
-
 }
