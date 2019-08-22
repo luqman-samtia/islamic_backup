@@ -69,8 +69,8 @@ class QuranController extends Controller
         if ($request->post()) {
             $quran->title = $request->title;
             $quran->number = $request->number;
-            $quran->ayat_from = $request->ayat_from;
-            $quran->ayat_to = $request->ayat_to;
+//            $quran->ayat_from = $request->ayat_from;
+//            $quran->ayat_to = $request->ayat_to;
             if ($request->hasFile('image')) {
                 $path = $request->image->store('quran/images');
                 $quran->image = $path;

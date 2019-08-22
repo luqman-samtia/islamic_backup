@@ -26,11 +26,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Ayat From</label>
-                                <input type="number" name="number" min="1" class="form-control" placeholder="Ayat From " required>
+                                <input type="number" name="ayat_from" min="1" class="form-control" placeholder="Ayat From " required>
                             </div>
                             <div class="form-group">
                                 <label>Ayat To</label>
-                                <input type="number" name="number" min="1" class="form-control" placeholder="Ayat To" required>
+                                <input type="number" name="ayat_to" min="1" class="form-control" placeholder="Ayat To" required>
                             </div>
                             <div class="form-group">
                                 <label> Upload Image </label>
