@@ -39,6 +39,11 @@ class Quran extends Model
         return $this->hasMany(Quran::class, 'parent_id', 'id');
     }
 
+    public function getParent()
+    {
+        return $this->hasMany(Quran::class, 'id', 'parent_id');
+    }
+
     public function delete(){
         @unlink(public_path("/storage/".$this->image));
         $path = public_path('/storage/quran/'.$this->id);
