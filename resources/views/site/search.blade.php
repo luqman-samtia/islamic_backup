@@ -36,11 +36,11 @@
         <section>
             <div class="gap" style="padding-top: 20px;">
                 <div class="container">
-                    <div class="prtfl-wrap text-center">
-                        <div class="serv-wrap text-center remove-ext3">
+                    <div class="prtfl-wrap">
+                        <div class="serv-wrap remove-ext3">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="contact-form text-center mb-5">
+                                    <div class="contact-form mb-5">
                                         <form action="{{ route('search') }}">
                                             <div class="row mrg20">
                                                 <div class="col-md-4 col-sm-6 col-lg-4">

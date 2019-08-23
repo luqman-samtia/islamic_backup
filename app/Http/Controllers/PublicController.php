@@ -7,6 +7,7 @@ use App\Mail\ContacMail;
 use App\Quran;
 use App\Resources;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class PublicController extends Controller
@@ -71,22 +72,18 @@ class PublicController extends Controller
     public function search(Request $request){
         $data['request'] = $request;
         $data['quran'] = Quran::parent(null)->get();
-        $search = Quran::findBySlug($request->surat)->first()->children;
-        $record = $search->filter(function($image) use ($request){
-            if($request->page && $request->page == $image->number){
-                return $image;
-            }
-            elseif($request->ayat_from && $request->ayat_to && $request->ayat_from >= $image->ayat_from && $request->ayat_to <= $image->ayat_to){
-                return $image;
-            }
-            elseif($request->ayat_from && $image->ayat_from && $request->ayat_from >= $image->ayat_from && $request->ayat_from <= $image->ayat_to){
-                return $image;
-            }
-            elseif($request->ayat_to && $image->ayat_to && $request->ayat_to <= $image->ayat_to){
-                return $image;
-            }
-        });
-        $data['search'] = $record;
+        $search = DB::table('quran')->select('surat.*')
+            ->join('quran as surat', 'surat.parent_id', '=', 'quran.id');
+        if($request->page){
+            $search->where('surat.number', $request->page);
+        }
+        if($request->ayat_from){
+            $search->whereRaw("{$request->ayat_from} between surat.ayat_from and surat.ayat_to OR {$request->ayat_from} <= surat.ayat_to");
+        }
+        if($request->ayat_to){
+            $search->WhereRaw("{$request->ayat_to} between surat.ayat_from and surat.ayat_to OR {$request->ayat_to} >= surat.ayat_to");
+        }
+        $data['search'] = $search->get();
         return view('site.search', $data);
     }
 }
