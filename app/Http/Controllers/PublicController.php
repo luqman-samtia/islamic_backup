@@ -73,15 +73,16 @@ class PublicController extends Controller
         $data['request'] = $request;
         $data['quran'] = Quran::parent(null)->get();
         $search = DB::table('quran')->select('surat.*')
-            ->join('quran as surat', 'surat.parent_id', '=', 'quran.id');
+            ->join('quran as surat', 'surat.parent_id', '=', 'quran.id')
+            ->where('quran.slug', $request->surat);
         if($request->page){
             $search->where('surat.number', $request->page);
         }
         if($request->ayat_from){
-            $search->whereRaw("{$request->ayat_from} between surat.ayat_from and surat.ayat_to OR {$request->ayat_from} <= surat.ayat_to");
+            $search->whereRaw("({$request->ayat_from} between surat.ayat_from and surat.ayat_to OR {$request->ayat_from} <= surat.ayat_to)");
         }
         if($request->ayat_to){
-            $search->WhereRaw("{$request->ayat_to} between surat.ayat_from and surat.ayat_to OR {$request->ayat_to} >= surat.ayat_to");
+            $search->WhereRaw("({$request->ayat_to} between surat.ayat_from and surat.ayat_to OR {$request->ayat_to} >= surat.ayat_to)");
         }
         $data['search'] = $search->get();
         return view('site.search', $data);
