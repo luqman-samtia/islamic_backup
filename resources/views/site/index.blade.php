@@ -192,69 +192,69 @@
                 </div>
             </div>
         </section>
-        <section>
-            <div class="gap white-layer opc9">
-                <div class="fixed-bg ptrn-bg" style="background-image: url('{{ asset('assets/images/pattern-bg.jpg') }}');"></div>
-                <div class="container">
-                    <div class="sec-title text-center">
-                        <div class="sec-title-inner">
-                            <span>Our Expert</span>
-                            <h3>Islamic Scholars</h3>
-                        </div>
-                        <p>Experts in the field amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    </div>
-                    <div class="team-wrap text-center remove-ext5">
-                        <div class="row">
-                            <div class="col-md-4 col-sm-6 col-lg-4">
-                                <div class="team-box">
-                                    <img src="{{ asset('assets/images/resources/team-img1-1.jpg') }}" alt="team-img1-1.jpg">
-                                    <div class="team-info">
-                                        <h4>Al Zahra</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                                        <div class="team-scl">
-                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
-                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
-                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
-                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-6 col-lg-4">
-                                <div class="team-box">
-                                    <img src="{{ asset('assets/images/resources/team-img1-2.jpg') }}" alt="team-img1-2.jpg">
-                                    <div class="team-info">
-                                        <h4>Umair</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                                        <div class="team-scl">
-                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
-                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
-                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
-                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-6 col-lg-4">
-                                <div class="team-box">
-                                    <img src="{{ asset('assets/images/resources/team-img1-3.jpg') }}" alt="team-img1-3.jpg">
-                                    <div class="team-info">
-                                        <h4>Fatima</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                                        <div class="team-scl">
-                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
-                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
-                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
-                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+{{--        <section>--}}
+{{--            <div class="gap white-layer opc9">--}}
+{{--                <div class="fixed-bg ptrn-bg" style="background-image: url('{{ asset('assets/images/pattern-bg.jpg') }}');"></div>--}}
+{{--                <div class="container">--}}
+{{--                    <div class="sec-title text-center">--}}
+{{--                        <div class="sec-title-inner">--}}
+{{--                            <span>Our Expert</span>--}}
+{{--                            <h3>Islamic Scholars</h3>--}}
+{{--                        </div>--}}
+{{--                        <p>Experts in the field amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>--}}
+{{--                    </div>--}}
+{{--                    <div class="team-wrap text-center remove-ext5">--}}
+{{--                        <div class="row">--}}
+{{--                            <div class="col-md-4 col-sm-6 col-lg-4">--}}
+{{--                                <div class="team-box">--}}
+{{--                                    <img src="{{ asset('assets/images/resources/team-img1-1.jpg') }}" alt="team-img1-1.jpg">--}}
+{{--                                    <div class="team-info">--}}
+{{--                                        <h4>Al Zahra</h4>--}}
+{{--                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>--}}
+{{--                                        <div class="team-scl">--}}
+{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
+{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
+{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
+{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-4 col-sm-6 col-lg-4">--}}
+{{--                                <div class="team-box">--}}
+{{--                                    <img src="{{ asset('assets/images/resources/team-img1-2.jpg') }}" alt="team-img1-2.jpg">--}}
+{{--                                    <div class="team-info">--}}
+{{--                                        <h4>Umair</h4>--}}
+{{--                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>--}}
+{{--                                        <div class="team-scl">--}}
+{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
+{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
+{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
+{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-4 col-sm-6 col-lg-4">--}}
+{{--                                <div class="team-box">--}}
+{{--                                    <img src="{{ asset('assets/images/resources/team-img1-3.jpg') }}" alt="team-img1-3.jpg">--}}
+{{--                                    <div class="team-info">--}}
+{{--                                        <h4>Fatima</h4>--}}
+{{--                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>--}}
+{{--                                        <div class="team-scl">--}}
+{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
+{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
+{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
+{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </section>--}}
         <section>
             <div class="gap gray-layer opc95">
                 <div class="fixed-bg" style="background-image: url(assets/images/parallax4.jpg);"></div>
@@ -264,42 +264,25 @@
                             <div class="col-md-8 col-sm-12 col-lg-8">
                                 <div class="sec-title">
                                     <div class="sec-title-inner">
-                                        <h3><span>Upcoming</span> Events</h3>
+                                        <h3><span>Recent</span> Articles</h3>
                                     </div>
-                                    <p>There are many variations of passages of Lorem Ipsum available.</p>
                                 </div>
                                 <div class="evnt-wrap remove-ext5">
                                     <div class="row mrg20">
-                                        <div class="col-md-6 col-sm-6 col-lg-6">
-                                            <div class="evnt-box">
-                                                <div class="evnt-thmb">
-                                                    <a href="#" title=""><img src="{{ asset('assets/images/resources/evnt-img1.jpg') }}" alt="evnt-img1.jpg"></a>
-                                                </div>
-                                                <div class="evnt-info">
-                                                    <h4><a href="#" title="">Islamic Teaching Event</a></h4>
-                                                    <ul class="pst-mta">
-                                                        <li class="thm-clr">07/10/2019</li>
-                                                        <li>12:00 AM to 02:00 PM</li>
-                                                    </ul>
-                                                    <p>Central masque, New town, Las Vegas MuslimHub Center</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-sm-6 col-lg-6">
-                                            <div class="evnt-box">
-                                                <div class="evnt-thmb">
-                                                    <a href="#" title=""><img src="{{ asset('assets/images/resources/evnt-img2.jpg') }}" alt="evnt-img2.jpg"></a>
-                                                </div>
-                                                <div class="evnt-info">
-                                                    <h4><a href="#" title="">Islamic Teaching Event</a></h4>
-                                                    <ul class="pst-mta">
-                                                        <li class="thm-clr">10/10/2019</li>
-                                                        <li>12:00 AM to 02:00 PM</li>
-                                                    </ul>
-                                                    <p>Central masque, New town, Las Vegas MuslimHub Center</p>
+                                        @foreach($posts as $post)
+                                            <div class="col-md-6 col-sm-6 col-lg-6">
+                                                <div class="evnt-box">
+                                                    <div class="evnt-info">
+                                                        <h4><a href="{{ route('artical', $post->slug) }}" title="">{{ $post->title }}</a></h4>
+                                                        <ul class="pst-mta">
+                                                            <li class="thm-clr">{{ $post->created_at->format('d/m/Y') }}</li>
+                                                            <li>{{ $post->created_at->format('h:i A') }}</li>
+                                                        </ul>
+                                                        <p>{!! str_limit(strip_tags($post->content),150) !!}</p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>

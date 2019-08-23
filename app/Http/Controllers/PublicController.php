@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Mail;
 class PublicController extends Controller
 {
     public function index(){
-        return view('site.index');
+        $posts = Articals::orderBy('created_at','desc')->take(4)->get();
+        return view('site.index', compact('posts'));
     }
 
     public function page($slug){
@@ -31,7 +32,7 @@ class PublicController extends Controller
                 'subject' => 'required',
                 'message' => 'required'
             ]);
-            Mail::to($request->email)->send(new ContacMail($request));
+            Mail::to('admin@company.com')->send(new ContacMail($request));
             return redirect()->back()->with('success', 'Email has been sent to the team.');
         }
         return view('site.contact_us');
