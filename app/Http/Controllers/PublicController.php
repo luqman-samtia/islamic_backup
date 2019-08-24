@@ -9,9 +9,18 @@ use App\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\View;
 
 class PublicController extends Controller
 {
+
+    public function __construct() {
+        $resources = \App\Resources::parent(null)->get();
+        $articles = \App\Articals::all();
+        View::share ( 'resources', $resources);
+        View::share ( 'articles', $articles);
+    }
+
     public function index(){
         $posts = Articals::orderBy('created_at','desc')->take(4)->get();
         return view('site.index', compact('posts'));

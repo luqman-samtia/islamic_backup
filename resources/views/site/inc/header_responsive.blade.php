@@ -35,7 +35,7 @@
             <li class="menu-item-has-children">
                 <a href="#" title="">Islamic Resources</a>
                 <ul>
-                    @foreach(\App\Resources::parent(null)->get() as $resource)
+                    @foreach($resources as $resource)
                         <li><a href="{{ route('page', $resource->slug) }}" title="{{ $resource->title }}">{{ $resource->title }}</a></li>
                     @endforeach
                 </ul>
@@ -43,7 +43,7 @@
             <li class="menu-item-has-children">
                 <a href="#" title="">Articles</a>
                 <ul>
-                    @foreach(\App\Articals::all() as $resource)
+                    @foreach($articles as $resource)
                         <li><a href="{{ route('artical', $resource->slug) }}" title="{{ $resource->title }}">{{ $resource->title }}</a></li>
                     @endforeach
                 </ul>
