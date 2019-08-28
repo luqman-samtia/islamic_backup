@@ -6,7 +6,7 @@
                     <div class="col-md-4 col-sm-12 col-lg-4">
                         <div class="wdgt-box">
                             <div class="logo"><a href="{{ route('site') }}" title="Logo"><img src="{{ asset('assets/images/logo2.png') }}" alt="logo2.png"></a></div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <p>Online Quran learning started while considering the problem of the parents in finding qualified Quran teachers near to their home. The online way of learning holy Quran has a lot of advantages as compared to the conventional Quran classes.</p>
                         </div>
                     </div>
                     <div class="col-md-8 col-sm-12 col-lg-8">
@@ -39,9 +39,10 @@
                                 <div class="wdgt-box">
                                     <h4>Information</h4>
                                     <ul class="cont-lst">
-                                        <li style="padding: 0px;">Skype - equraninstitute</li>
-                                        <li><i class="flaticon-call"></i>+92-311-5165709</li>
-                                        <li><i class="flaticon-email"></i><a href="mailto:info@equraninstitute.com" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">info@equraninstitute.com</span></a></li>
+                                        <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:+923174352944?call">+92-317-4352944</a></li>
+                                        <li><i class="flaticon-call"></i><a href="tel:+923174352944">+92-317-4352944</a></li>
+{{--                                        <li><i class="flaticon-email"></i><a href="mailto:info@equraninstitute.com" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">info@equraninstitute.com</span></a></li>--}}
+                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923060475163" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">+92-306-0475163</span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -50,7 +51,7 @@
                 </div>
             </div>
             <div class="bottom-bar">
-                <p>&copy; Copyright {{ date('Y') }}. All Rights Reserved. - <a href="https://ioitechnologies.com/" target="_blank">IOI Technologies</a></p>
+                <p>&copy; Copyright {{ date('Y') }}. All Rights Reserved. - Made with <span style="color:red">❤</span> by <a href="https://ioitechnologies.com/" target="_blank">IOI Technologies</a></p>
                 <div class="scl">
                     <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
                     <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>

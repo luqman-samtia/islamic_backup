@@ -96,8 +96,7 @@
                                 <div class="abot-sec">
                                     <div class="sec-title">
                                         <div class="sec-title-inner">
-                                            <span>About</span>
-                                            <h3>Our Center</h3>
+                                            <h3><span class="secndry-clr">About</span> Us</h3>
                                         </div>
                                     </div>
                                     <p>Online Quran learning started while considering the problem of the parents in finding qualified Quran teachers near to their home.
@@ -116,18 +115,17 @@
                 <div class="container">
                     <div class="sec-title text-center">
                         <div class="sec-title-inner">
-                            <span>Serving Humanity</span>
-                            <h3>Our Services</h3>
+                            <h3><span class="secndry-clr">Our</span> Services</h3>
                         </div>
                     </div>
                     <div class="serv-wrap">
                         <div class="row">
                             <div class="col-md-4 col-sm-12 col-lg-4">
                                 <div class="srv-tl">
-                                    <h2>We're on a <span>Mission</span> to</h2>
-                                    <h6>As compared to other online quran Institute, Our Quran academy provides effective
+                                    <h2>We Have a <span>Mission</span></h2>
+                                    <p>As compared to other online quran Institute, Our Quran academy provides effective
                                         classes and Tajweed( Reading of the Holy Quran with correct pronunciation and accent )
-                                        classes at affordable charges to let most of the muslims learn quran at home online.</h6>
+                                        classes at affordable charges to let most of the muslims learn quran at home online.</p>
                                 </div>
                             </div>
                             <div class="col-md-8 col-sm-12 col-lg-8">
@@ -177,98 +175,75 @@
                 </div>
             </div>
         </section>
-{{--        <section>--}}
-{{--            <div class="gap black-layer2 opc8 style-4-donate">--}}
-{{--                <div class="fixed-bg" style="background-image: url('{{ asset('assets/images/parallax3.jpg') }}');"></div>--}}
-{{--                <div class="container">--}}
-{{--                    <div class="sec-title2 text-center">--}}
-{{--                        <div class="sec-title-inner">--}}
-{{--                            <span>Support us,</span>--}}
-{{--                            <h3>We need your help.</h3>--}}
-{{--                        </div>--}}
-{{--                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Duis aute irure dolor in reprehenit in voluptate.</p>--}}
-{{--                    </div>--}}
-{{--                    <div class="suprt-prgrs style2 text-center">--}}
-{{--                        <div class="suprt-prg" id="suprt-prg1"></div>--}}
-{{--                        <div class="suprt-prg" id="suprt-prg2"></div>--}}
-{{--                        <div class="suprt-prg" id="suprt-prg3"></div>--}}
-{{--                    </div>--}}
-{{--                    <div class="view-all text-center">--}}
-{{--                        <a class="thm-btn brd-rd40" href="#" title="">Donate Now</a>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </section>--}}
         <section>
             <div class="gap white-layer opc9">
-                <div class="fixed-bg ptrn-bg" style="background-image: url('{{ asset('assets/images/pattern-bg.jpg') }}');"></div>
+                <div class="fixed-bg ptrn-bg" style="background-image: url(assets/images/pattern-bg.jpg);"></div>
                 <div class="container">
                     <div class="sec-title text-center">
                         <div class="sec-title-inner">
                             <span>Our Expert</span>
                             <h3>Islamic Scholars</h3>
                         </div>
-                        <p>Experts in the field amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     </div>
-                    <div class="team-wrap text-center remove-ext5">
-                        <div class="row">
-                            <div class="col-md-3 col-sm-6 col-lg-3">
-                                <div class="team-box">
-                                    <img src="{{ asset('assets/images/resources/team-img1-1.jpg') }}" alt="team-img1-1.jpg">
-                                    <div class="team-info">
-                                        <h4>Al Zahra</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-{{--                                        <div class="team-scl">--}}
-{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
-{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
-{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
-{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
-{{--                                        </div>--}}
+                    <div class="team-wrap2 text-center remove-ext3">
+                        <div class="row justify-content-center">
+                            <div class="col-md-3 col-sm-6 col-lg-3 fadeIn" data-wow-duration=".8s" data-wow-delay=".2s">
+                                <div class="team-box2">
+                                    <img src="assets/images/resources/team-img2-1.jpg" alt="team-img2-1.jpg">
+                                    <div class="team-info2">
+                                        <h4>AL Zahra</h4>
+                                        <p>Teaches Arabic Languages,, consectetur adipisicing elit, sed do eiusmod tempor</p>
+                                        {{-- <div class="team-scl">
+                                             <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                                             <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
+                                             <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+                                             <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                         </div>--}}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-lg-3">
-                                <div class="team-box">
-                                    <img src="{{ asset('assets/images/resources/team-img1-2.jpg') }}" alt="team-img1-2.jpg">
-                                    <div class="team-info">
+                            <div class="col-md-3 col-sm-6 col-lg-3 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
+                                <div class="team-box2">
+                                    <img src="assets/images/resources/team-img2-2.jpg" alt="team-img2-2.jpg">
+                                    <div class="team-info2">
                                         <h4>Umair</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-{{--                                        <div class="team-scl">--}}
-{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
-{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
-{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
-{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
-{{--                                        </div>--}}
+                                        <p>Teaches Arabic Languages,, consectetur adipisicing elit, sed do eiusmod tempor</p>
+                                        {{-- <div class="team-scl">
+                                             <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                                             <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
+                                             <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+                                             <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                         </div>--}}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-lg-3">
-                                <div class="team-box">
-                                    <img src="{{ asset('assets/images/resources/team-img1-3.jpg') }}" alt="team-img1-3.jpg">
-                                    <div class="team-info">
+                            <div class="col-md-3 col-sm-6 col-lg-3 fadeIn" data-wow-duration=".8s" data-wow-delay=".4s">
+                                <div class="team-box2">
+                                    <img src="assets/images/resources/team-img2-3.jpg" alt="team-img2-3.jpg">
+                                    <div class="team-info2">
                                         <h4>Fatima</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-{{--                                        <div class="team-scl">--}}
-{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
-{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
-{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
-{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
-{{--                                        </div>--}}
+                                        <p>Teaches Arabic Languages,, consectetur adipisicing elit, sed do eiusmod tempor</p>
+                                        {{-- <div class="team-scl">
+                                             <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                                             <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
+                                             <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+                                             <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                         </div>--}}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-lg-3">
-                                <div class="team-box">
-                                    <img src="{{ asset('assets/images/resources/team-img1-3.jpg') }}" alt="team-img1-3.jpg">
-                                    <div class="team-info">
-                                        <h4>Fatima</h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
-{{--                                        <div class="team-scl">--}}
-{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
-{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
-{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
-{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
-{{--                                        </div>--}}
+                            <div class="col-md-3 col-sm-6 col-lg-3 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
+                                <div class="team-box2">
+                                    <img src="assets/images/resources/team-img2-2.jpg" alt="team-img2-2.jpg">
+                                    <div class="team-info2">
+                                        <h4>Umair</h4>
+                                        <p>Teaches Arabic Languages,, consectetur adipisicing elit, sed do eiusmod tempor</p>
+                                        {{-- <div class="team-scl">
+                                             <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                                             <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
+                                             <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+                                             <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                         </div>--}}
                                     </div>
                                 </div>
                             </div>
@@ -283,7 +258,7 @@
                 <div class="container">
                     <div class="evnt-pry-wrap">
                         <div class="row">
-                            <div class="col-md-8 col-sm-12 col-lg-8">
+                            <div class="col-md-12 col-sm-12 col-lg-12">
                                 <div class="sec-title">
                                     <div class="sec-title-inner">
                                         <h3><span>Recent</span> Articles</h3>
@@ -292,7 +267,7 @@
                                 <div class="evnt-wrap remove-ext5">
                                     <div class="row mrg20">
                                         @foreach($posts as $post)
-                                            <div class="col-md-6 col-sm-6 col-lg-6">
+                                            <div class="col-md-4 col-sm-6 col-lg-4">
                                                 <div class="evnt-box">
                                                     <div class="evnt-info">
                                                         <h4><a href="{{ route('artical', $post->slug) }}" title="">{{ $post->title }}</a></h4>
@@ -307,23 +282,6 @@
                                         @endforeach
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4 col-sm-12 col-lg-4">
-                                <div class="sec-title">
-                                    <div class="sec-title-inner">
-                                        <h3>Prayer <span>Times</span></h3>
-                                    </div>
-                                </div>
-                                <ul class="prayer-times">
-                                    <li class="pry-tim-hed"><span>Salat</span><span>Start</span><span>Iqamah</span></li>
-                                    <li><span class="thm-clr">Fajar</span><span>03:58 am</span><span>04:45 am</span></li>
-                                    <li><span class="thm-clr">Sunrise</span><span>05:31 am</span><span>05:31 am</span></li>
-                                    <li><span class="thm-clr">Zuhr</span><span>12:47 pm</span><span>12:47 pm</span></li>
-                                    <li><span class="thm-clr">Asr</span><span>05:53 pm</span><span>05:50 pm</span></li>
-                                    <li><span class="thm-clr">Maghrib</span><span>08:04 pm</span><span>08:04 pm</span></li>
-                                    <li><span class="thm-clr">Isha</span><span>09:37 pm</span><span>09:30 pm</span></li>
-                                    <li><span class="thm-clr">Jumu'ah 1</span><span>01:15 pm</span><span>01:15 pm</span></li>
-                                </ul>
                             </div>
                         </div>
                     </div>
