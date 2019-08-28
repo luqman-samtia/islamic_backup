@@ -16,9 +16,9 @@
                         <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
                             <div class="featured-cap">
                                 <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
-                                <h1><img src="{{ asset('assets/images/resources/ayat-txt.png') }}" alt="ayat-txt-color.png"></h1>
-                                <h3>He raised the sky and set up the balance</h3>
-                                <span>"Surah Al-Rahmaan Vesre 7"</span>
+                                <h1><img src="{{ asset('assets/images/resources/text1.png') }}" alt="ayat-txt-color.png"></h1>
+                                <h3>Or add to it, and recite the Qur'an with measured recitation.</h3>
+                                <span>"Surah Al-Muzzammil Vesre 4"</span>
                                 <a class="thm-btn brd-rd40" href="#" title="">Read More</a>
                             </div>
                         </div>
@@ -46,7 +46,8 @@
                                     <i class="flaticon-islamic-pray"></i>
                                     <div class="pilr-info">
                                         <h4>Salah</h4>
-                                        <p>Salat ipsum dolor sit amet, consectetur adipiscing.</p>
+                                        <p>“O you who have believed, seek help through patience and prayer. Indeed, Allah is with the patient.”</p>
+                                        <p>(Q 2:153)</p>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +56,8 @@
                                     <i class="flaticon-islamic-ramadan"></i>
                                     <div class="pilr-info">
                                         <h4>Fasting</h4>
-                                        <p>Fasting ipsum dolor sit amet, consectetur adipiscing.</p>
+                                        <p>"Fasting is prescribed for you as it was prescribed for those before you, that you may attain taqwaa."</p>
+                                        <p>(Q 2:183)</p>
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +66,8 @@
                                     <i class="flaticon-charity"></i>
                                     <div class="pilr-info">
                                         <h4>Zakah</h4>
-                                        <p>Zakat ipsum dolor sit amet, consectetur adipiscing.</p>
+                                        <p>“And keep the prayer established, and pay the zakah, and bow your heads with those who bow down.”</p>
+                                        <p>(Q 2:43)</p>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +76,8 @@
                                     <i class="flaticon-kaaba-building"></i>
                                     <div class="pilr-info">
                                         <h4>Hajj</h4>
-                                        <p>Hajj ipsum dolor sit amet, consectetur adipiscing.</p>
+                                        <p>"Then let them end their untidiness and fulfill their vows and perform Tawaf around the ancient House."</p>
+                                        <p>(Q 22:29)</p>
                                     </div>
                                 </div>
                             </div>
@@ -96,7 +100,8 @@
                                             <h3>Our Center</h3>
                                         </div>
                                     </div>
-                                    <p>Established in 1987 to serve people who are in need of funds or education. We are developing dolor sit amet. Click edit button to change this text. I am text block. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus,Consectetur adipiscing elit. </p>
+                                    <p>Online Quran learning started while considering the problem of the parents in finding qualified Quran teachers near to their home.
+                                        The online way of learning holy Quran has a lot of advantages as compared to the conventional Quran classes.</p>
                                     <a class="secndry-btn brd-rd40" href="#" title="">Learn More</a>
                                 </div>
                             </div>
@@ -120,7 +125,9 @@
                             <div class="col-md-4 col-sm-12 col-lg-4">
                                 <div class="srv-tl">
                                     <h2>We're on a <span>Mission</span> to</h2>
-                                    <h5>solve the problems and gain resources for a new generation.</h5>
+                                    <h6>As compared to other online quran Institute, Our Quran academy provides effective
+                                        classes and Tajweed( Reading of the Holy Quran with correct pronunciation and accent )
+                                        classes at affordable charges to let most of the muslims learn quran at home online.</h6>
                                 </div>
                             </div>
                             <div class="col-md-8 col-sm-12 col-lg-8">
@@ -170,91 +177,106 @@
                 </div>
             </div>
         </section>
-        <section>
-            <div class="gap black-layer2 opc8 style-4-donate">
-                <div class="fixed-bg" style="background-image: url('{{ asset('assets/images/parallax3.jpg') }}');"></div>
-                <div class="container">
-                    <div class="sec-title2 text-center">
-                        <div class="sec-title-inner">
-                            <span>Support us,</span>
-                            <h3>We need your help.</h3>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Duis aute irure dolor in reprehenit in voluptate.</p>
-                    </div>
-                    <div class="suprt-prgrs style2 text-center">
-                        <div class="suprt-prg" id="suprt-prg1"></div>
-                        <div class="suprt-prg" id="suprt-prg2"></div>
-                        <div class="suprt-prg" id="suprt-prg3"></div>
-                    </div>
-                    <div class="view-all text-center">
-                        <a class="thm-btn brd-rd40" href="#" title="">Donate Now</a>
-                    </div>
-                </div>
-            </div>
-        </section>
 {{--        <section>--}}
-{{--            <div class="gap white-layer opc9">--}}
-{{--                <div class="fixed-bg ptrn-bg" style="background-image: url('{{ asset('assets/images/pattern-bg.jpg') }}');"></div>--}}
+{{--            <div class="gap black-layer2 opc8 style-4-donate">--}}
+{{--                <div class="fixed-bg" style="background-image: url('{{ asset('assets/images/parallax3.jpg') }}');"></div>--}}
 {{--                <div class="container">--}}
-{{--                    <div class="sec-title text-center">--}}
+{{--                    <div class="sec-title2 text-center">--}}
 {{--                        <div class="sec-title-inner">--}}
-{{--                            <span>Our Expert</span>--}}
-{{--                            <h3>Islamic Scholars</h3>--}}
+{{--                            <span>Support us,</span>--}}
+{{--                            <h3>We need your help.</h3>--}}
 {{--                        </div>--}}
-{{--                        <p>Experts in the field amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>--}}
+{{--                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Duis aute irure dolor in reprehenit in voluptate.</p>--}}
 {{--                    </div>--}}
-{{--                    <div class="team-wrap text-center remove-ext5">--}}
-{{--                        <div class="row">--}}
-{{--                            <div class="col-md-4 col-sm-6 col-lg-4">--}}
-{{--                                <div class="team-box">--}}
-{{--                                    <img src="{{ asset('assets/images/resources/team-img1-1.jpg') }}" alt="team-img1-1.jpg">--}}
-{{--                                    <div class="team-info">--}}
-{{--                                        <h4>Al Zahra</h4>--}}
-{{--                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>--}}
-{{--                                        <div class="team-scl">--}}
-{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
-{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
-{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
-{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-4 col-sm-6 col-lg-4">--}}
-{{--                                <div class="team-box">--}}
-{{--                                    <img src="{{ asset('assets/images/resources/team-img1-2.jpg') }}" alt="team-img1-2.jpg">--}}
-{{--                                    <div class="team-info">--}}
-{{--                                        <h4>Umair</h4>--}}
-{{--                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>--}}
-{{--                                        <div class="team-scl">--}}
-{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
-{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
-{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
-{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-4 col-sm-6 col-lg-4">--}}
-{{--                                <div class="team-box">--}}
-{{--                                    <img src="{{ asset('assets/images/resources/team-img1-3.jpg') }}" alt="team-img1-3.jpg">--}}
-{{--                                    <div class="team-info">--}}
-{{--                                        <h4>Fatima</h4>--}}
-{{--                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>--}}
-{{--                                        <div class="team-scl">--}}
-{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
-{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
-{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
-{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
+{{--                    <div class="suprt-prgrs style2 text-center">--}}
+{{--                        <div class="suprt-prg" id="suprt-prg1"></div>--}}
+{{--                        <div class="suprt-prg" id="suprt-prg2"></div>--}}
+{{--                        <div class="suprt-prg" id="suprt-prg3"></div>--}}
+{{--                    </div>--}}
+{{--                    <div class="view-all text-center">--}}
+{{--                        <a class="thm-btn brd-rd40" href="#" title="">Donate Now</a>--}}
 {{--                    </div>--}}
 {{--                </div>--}}
 {{--            </div>--}}
 {{--        </section>--}}
+        <section>
+            <div class="gap white-layer opc9">
+                <div class="fixed-bg ptrn-bg" style="background-image: url('{{ asset('assets/images/pattern-bg.jpg') }}');"></div>
+                <div class="container">
+                    <div class="sec-title text-center">
+                        <div class="sec-title-inner">
+                            <span>Our Expert</span>
+                            <h3>Islamic Scholars</h3>
+                        </div>
+                        <p>Experts in the field amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                    <div class="team-wrap text-center remove-ext5">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-lg-3">
+                                <div class="team-box">
+                                    <img src="{{ asset('assets/images/resources/team-img1-1.jpg') }}" alt="team-img1-1.jpg">
+                                    <div class="team-info">
+                                        <h4>Al Zahra</h4>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
+{{--                                        <div class="team-scl">--}}
+{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
+{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
+{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
+{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
+{{--                                        </div>--}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-lg-3">
+                                <div class="team-box">
+                                    <img src="{{ asset('assets/images/resources/team-img1-2.jpg') }}" alt="team-img1-2.jpg">
+                                    <div class="team-info">
+                                        <h4>Umair</h4>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
+{{--                                        <div class="team-scl">--}}
+{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
+{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
+{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
+{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
+{{--                                        </div>--}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-lg-3">
+                                <div class="team-box">
+                                    <img src="{{ asset('assets/images/resources/team-img1-3.jpg') }}" alt="team-img1-3.jpg">
+                                    <div class="team-info">
+                                        <h4>Fatima</h4>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
+{{--                                        <div class="team-scl">--}}
+{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
+{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
+{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
+{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
+{{--                                        </div>--}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-lg-3">
+                                <div class="team-box">
+                                    <img src="{{ asset('assets/images/resources/team-img1-3.jpg') }}" alt="team-img1-3.jpg">
+                                    <div class="team-info">
+                                        <h4>Fatima</h4>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor</p>
+{{--                                        <div class="team-scl">--}}
+{{--                                            <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
+{{--                                            <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
+{{--                                            <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
+{{--                                            <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
+{{--                                        </div>--}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section>
             <div class="gap gray-layer opc95">
                 <div class="fixed-bg" style="background-image: url(assets/images/parallax4.jpg);"></div>
@@ -315,7 +337,7 @@
                     <div class="sec-title text-center">
                         <div class="sec-title-inner">
                             <span>What Our</span>
-                            <h3>Donator Say</h3>
+                            <h3>Student's Parent Say</h3>
                         </div>
                     </div>
                     <div class="testi-wrap text-center">
