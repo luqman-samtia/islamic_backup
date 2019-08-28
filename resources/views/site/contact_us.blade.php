@@ -33,7 +33,7 @@
                         <p>
                             Your Query will be replied in 24 hours at your given email address.<br>
                             Your information will be kept confidential..<br>
-                            You can also mail us at <a href="mailto:info@equraninstitute.com">info@equraninstitute.com</a>
+                            You can also mail us at <a href="mailto:info@equraninstitute.com">info@taleemulquraninstitute.com</a>
                         </p>
                     </div>
                     <div class="contact-form text-center">

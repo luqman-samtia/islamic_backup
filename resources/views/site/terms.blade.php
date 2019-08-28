@@ -52,9 +52,9 @@
                                         <div class="col-md-6 col-sm-6 col-lg-6">
                                             <div class="srv-box3">
                                                 <div class="srv-ttl" style="padding: 0px;">
-                                                    <h4>eQuranInstitute.com - Refund policy:</h4>
+                                                    <h4>taleemulquraninstitute.com - Refund policy:</h4>
                                                 </div>
-                                                <p>We have a 100% customer satisfaction policy. If for any reason you are not satisfied simply email info@equraninstitute.com and ask for a refund within 7 days of the invoice. You will receive an acknowledgement within 24 hours. </p>
+                                                <p>We have a 100% customer satisfaction policy. If for any reason you are not satisfied simply email info@taleemulquraninstitute.com and ask for a refund within 7 days of the invoice. You will receive an acknowledgement within 24 hours. </p>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-lg-6">
@@ -62,7 +62,7 @@
                                                 <div class="srv-ttl" style="padding: 0px;">
                                                     <h4>Complaints:</h4>
                                                 </div>
-                                                <p>Please email your complaints to info@equraninstitute.com - InshaALLAH we will respond within 2 days maximum.</p>
+                                                <p>Please email your complaints to info@taleemulquraninstitute.com - InshaALLAH we will respond within 2 days maximum.</p>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-lg-6">
@@ -95,9 +95,9 @@
                                                     <h4>Contact details:</h4>
                                                 </div>
                                                 <p>
-                                                    Email us at info@equraninstitute.com or <br>
-                                                    Call us at our 24/7 number +92-311-5165709.<br>
-                                                    You can also Skype us at equraninstitute.
+                                                    Email us at info@taleemulquraninstitute.com or <br>
+                                                    Call us at our 24/7 number +92-317-4352944.<br>
+                                                    You can also Skype us at +92-317-4352944.
                                                 </p>
                                             </div>
                                         </div>

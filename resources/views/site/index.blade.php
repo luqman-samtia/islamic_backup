@@ -13,15 +13,15 @@
             <div class="gap no-gap owl-yellow">
                 <div class="featured-area-wrap text-center">
                     <div class="featured-area owl-carousel">
-                        <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
-                            <div class="featured-cap">
-                                <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
-                                <h1><img src="{{ asset('assets/images/resources/text1.png') }}" alt="ayat-txt-color.png"></h1>
-                                <h3>Or add to it, and recite the Qur'an with measured recitation.</h3>
-                                <span>"Surah Al-Muzzammil Vesre 4"</span>
-                                <a class="thm-btn brd-rd40" href="#" title="">Read More</a>
-                            </div>
-                        </div>
+{{--                        <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">--}}
+{{--                            <div class="featured-cap">--}}
+{{--                                <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">--}}
+{{--                                <h1><img src="{{ asset('assets/images/resources/text1.png') }}" alt="ayat-txt-color.png"></h1>--}}
+{{--                                <h3>Or add to it, and recite the Qur'an with measured recitation.</h3>--}}
+{{--                                <span>"Surah Al-Muzzammil Vesre 4"</span>--}}
+{{--                                <a class="thm-btn brd-rd40" href="#" title="">Read More</a>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
                             <div class="featured-cap">
                                 <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
@@ -100,7 +100,8 @@
                                         </div>
                                     </div>
                                     <p>Online Quran learning started while considering the problem of the parents in finding qualified Quran teachers near to their home.
-                                        The online way of learning holy Quran has a lot of advantages as compared to the conventional Quran classes.</p>
+                                        The online way of learning holy Quran has a lot of advantages as compared to the conventional Quran classes.
+                                        We have 4 years experience. Now we are offering Tajweed-e-Qiraat course and Dars-e-Nizami course.</p>
                                     <a class="secndry-btn brd-rd40" href="#" title="">Learn More</a>
                                 </div>
                             </div>
@@ -135,16 +136,16 @@
                                             <div class="serv-box">
                                                 <i class="flaticon-quran-rehal"></i>
                                                 <div class="serv-info">
-                                                    <h4>Quran Learning</h4>
+                                                    <h4>Quran Teaching</h4>
                                                     <p>Quran Teaching dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-lg-6">
                                             <div class="serv-box">
-                                                <i class="flaticon-heart-1"></i>
+                                                <i class="flaticon-islamic-pray"></i>
                                                 <div class="serv-info">
-                                                    <h4>Chartiy Service</h4>
+                                                    <h4>Kalmay</h4>
                                                     <p>Charity Events dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
                                                 </div>
                                             </div>
@@ -153,16 +154,34 @@
                                             <div class="serv-box">
                                                 <i class="flaticon-mosque"></i>
                                                 <div class="serv-info">
-                                                    <h4>Mosque Development</h4>
+                                                    <h4>Namaz</h4>
                                                     <p>Mosque Renovation dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-lg-6">
                                             <div class="serv-box">
-                                                <i class="flaticon-social-care"></i>
+                                                <i class="flaticon-quran-rehal"></i>
                                                 <div class="serv-info">
-                                                    <h4>Help Poor's</h4>
+                                                    <h4>Tajweed-e-Qira'at Course</h4>
+                                                    <p>Help Your fellows dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-lg-6">
+                                            <div class="serv-box">
+                                                <i class="flaticon-quran-rehal"></i>
+                                                <div class="serv-info">
+                                                    <h4>Dars-e-Nizami Course</h4>
+                                                    <p>Help Your fellows dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-lg-6">
+                                            <div class="serv-box">
+                                                <i class="flaticon-islamic-pray"></i>
+                                                <div class="serv-info">
+                                                    <h4>Qaida</h4>
                                                     <p>Help Your fellows dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
                                                 </div>
                                             </div>
@@ -187,63 +206,46 @@
                     </div>
                     <div class="team-wrap2 text-center remove-ext3">
                         <div class="row justify-content-center">
-                            <div class="col-md-3 col-sm-6 col-lg-3 fadeIn" data-wow-duration=".8s" data-wow-delay=".2s">
+{{--                            <div class="col-md-1 col-lg-1 hidden-sm hidden-xs"></div>--}}
+                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".2s">
                                 <div class="team-box2">
-                                    <img src="assets/images/resources/team-img2-1.jpg" alt="team-img2-1.jpg">
+                                    <img src="assets/images/resources/Qari1.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
                                     <div class="team-info2">
-                                        <h4>AL Zahra</h4>
-                                        <p>Teaches Arabic Languages,, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                                        {{-- <div class="team-scl">
-                                             <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
-                                             <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
-                                             <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
-                                             <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                         </div>--}}
+                                        <h4>Qari M. Habib Ur Rehman</h4>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-lg-3 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
+                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
                                 <div class="team-box2">
-                                    <img src="assets/images/resources/team-img2-2.jpg" alt="team-img2-2.jpg">
+                                    <img src="assets/images/resources/Qari2.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
                                     <div class="team-info2">
-                                        <h4>Umair</h4>
-                                        <p>Teaches Arabic Languages,, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                                        {{-- <div class="team-scl">
-                                             <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
-                                             <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
-                                             <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
-                                             <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                         </div>--}}
+                                        <h4>Qari M. Muratib</h4>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-lg-3 fadeIn" data-wow-duration=".8s" data-wow-delay=".4s">
+                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".4s">
                                 <div class="team-box2">
-                                    <img src="assets/images/resources/team-img2-3.jpg" alt="team-img2-3.jpg">
+                                    <img src="assets/images/resources/Qari3.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
                                     <div class="team-info2">
-                                        <h4>Fatima</h4>
-                                        <p>Teaches Arabic Languages,, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                                        {{-- <div class="team-scl">
-                                             <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
-                                             <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
-                                             <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
-                                             <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                         </div>--}}
+                                        <h4>Qari M. Khalil Ur Rehman</h4>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-lg-3 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
+{{--                            <div class="col-md-1 col-lg-1 hidden-sm hidden-xs"></div>--}}
+
+                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
                                 <div class="team-box2">
-                                    <img src="assets/images/resources/team-img2-2.jpg" alt="team-img2-2.jpg">
+                                    <img src="assets/images/resources/Qari4.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
                                     <div class="team-info2">
-                                        <h4>Umair</h4>
-                                        <p>Teaches Arabic Languages,, consectetur adipisicing elit, sed do eiusmod tempor</p>
-                                        {{-- <div class="team-scl">
-                                             <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
-                                             <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>
-                                             <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
-                                             <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                         </div>--}}
+                                        <h4>Qari M. Nasir</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
+                                <div class="team-box2">
+                                    <img src="assets/images/resources/Qari5.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
+                                    <div class="team-info2">
+                                        <h4>Qari M. Ramzan</h4>
                                     </div>
                                 </div>
                             </div>
@@ -301,17 +303,23 @@
                     <div class="testi-wrap text-center">
                         <div class="testi-car owl-carousel">
                             <div class="testi-itm">
-                                <i><img src="{{ asset('assets/images/resources/testi-img1.jpg') }}" alt="testi-img1.jpg"></i>
+                                <i><img src="{{ asset('assets/images/resources/parent1.jpeg') }}" style="width: 110px;height: 110px;object-fit: cover;" alt="testi-img1.jpg"></i>
                                 <div class="testi-info">
-                                    <h4>Abu Hassam Adam</h4>
-                                    <p><i>"</i>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<i>"</i></p>
+                                    <h4>Muhammad Bilal</h4>
+                                    <p><i>"</i>Qari Habib is an unmatched Quraan tutor in the city equipped with fatherly love for his students
+                                        and armed with professional knowledge accompanied by skill to deliver where by his students develop natural
+                                        fluency to read the Holy Scripture. He has been giving private lessons to my two children since 18 months.
+                                        I recommend him as a most effective and time efficient tutor.<i>"</i></p>
                                 </div>
                             </div>
                             <div class="testi-itm">
-                                <i><img src="{{ asset('assets/images/resources/testi-img2.jpg') }}" alt="testi-img2.jpg"></i>
+                                <i><img src="{{ asset('assets/images/resources/parent2.jpeg') }}" style="width: 110px;height: 110px;object-fit: cover;" alt="testi-img1.jpg"></i>
                                 <div class="testi-info">
-                                    <h4>Abu Adam Hassam</h4>
-                                    <p><i>"</i>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<i>"</i></p>
+                                    <h4>Awais Ahmed</h4>
+                                    <p><i>"</i>Hafiz Qari Habib is a very good teacher of Qiraat. If you want to learn Quran with the complete rules
+                                        and principles of Qiraat then there is no other option except of Hafiz Qari Habib. I suggest you because he
+                                        has a very simple pickable and basic method of teaching Qiraat, with the complete principles and laws of
+                                        reading Quran. If you are interested in learning Quran then please contact him as soon as early.<i>"</i></p>
                                 </div>
                             </div>
                         </div>

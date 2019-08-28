@@ -54,7 +54,7 @@
                                                 <div class="srv-ttl" style="padding: 0px;">
                                                     <h4>Our Introduction</h4>
                                                 </div>
-                                                <p>Equran Institute is a world wide Islamic Academy. Its Purpose is to provide online quranic education to the people. This Project was started keeping the people in view who can’t learn Holy Quran due to lack of resources.</p>
+                                                <p>Taleem ul Quran Institute is a world wide Islamic Academy. Its Purpose is to provide online quranic education to the people. This Project was started keeping the people in view who can’t learn Holy Quran due to lack of resources.</p>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-6 col-lg-6">

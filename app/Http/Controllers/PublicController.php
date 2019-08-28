@@ -22,7 +22,7 @@ class PublicController extends Controller
     }
 
     public function index(){
-        $posts = Articals::orderBy('created_at','desc')->take(4)->get();
+        $posts = Articals::orderBy('created_at','desc')->take(6)->get();
         return view('site.index', compact('posts'));
     }
 
