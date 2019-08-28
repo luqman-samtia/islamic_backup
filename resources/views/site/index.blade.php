@@ -13,15 +13,15 @@
             <div class="gap no-gap owl-yellow">
                 <div class="featured-area-wrap text-center">
                     <div class="featured-area owl-carousel">
-{{--                        <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">--}}
-{{--                            <div class="featured-cap">--}}
-{{--                                <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">--}}
-{{--                                <h1><img src="{{ asset('assets/images/resources/text1.png') }}" alt="ayat-txt-color.png"></h1>--}}
-{{--                                <h3>Or add to it, and recite the Qur'an with measured recitation.</h3>--}}
-{{--                                <span>"Surah Al-Muzzammil Vesre 4"</span>--}}
-{{--                                <a class="thm-btn brd-rd40" href="#" title="">Read More</a>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
+                        <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
+                            <div class="featured-cap">
+                                <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
+                                <h1><img src="{{ asset('assets/images/resources/text1.png') }}" alt="ayat-txt-color.png"></h1>
+                                <h3>Or add to it, and recite the Qur'an with measured recitation.</h3>
+                                <span>"Surah Al-Muzzammil Vesre 4"</span>
+                                <a class="thm-btn brd-rd40" href="#" title="">Read More</a>
+                            </div>
+                        </div>
                         <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
                             <div class="featured-cap">
                                 <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
@@ -101,7 +101,8 @@
                                     </div>
                                     <p>Online Quran learning started while considering the problem of the parents in finding qualified Quran teachers near to their home.
                                         The online way of learning holy Quran has a lot of advantages as compared to the conventional Quran classes.
-                                        We have 4 years experience. Now we are offering Tajweed-e-Qiraat course and Dars-e-Nizami course.</p>
+                                        We have 4 years experience. Now we are offering Tajweed-e-Qiraat course and Dars-e-Nizami course.
+                                        As concerned for male students we have male teachers and for female students we have female teachers.</p>
                                     <a class="secndry-btn brd-rd40" href="#" title="">Learn More</a>
                                 </div>
                             </div>
@@ -137,7 +138,7 @@
                                                 <i class="flaticon-quran-rehal"></i>
                                                 <div class="serv-info">
                                                     <h4>Quran Teaching</h4>
-                                                    <p>Quran Teaching dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+                                                    <p>As Quran is the prime source of guidance for all the humanity, especially Muslims, therefore, it is the duty of parents to ensure that the kids get proper Quran education.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -146,7 +147,7 @@
                                                 <i class="flaticon-islamic-pray"></i>
                                                 <div class="serv-info">
                                                     <h4>Kalmay</h4>
-                                                    <p>Charity Events dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+                                                    <p>The six Kalimah in Islam are six significant parts of one's religious belief, mostly taken from hadiths (in some traditions, six phrases, then known as the six kalimas.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -155,7 +156,7 @@
                                                 <i class="flaticon-mosque"></i>
                                                 <div class="serv-info">
                                                     <h4>Namaz</h4>
-                                                    <p>Mosque Renovation dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+                                                    <p>The second rukan of Islam is “Namaz”. Namaz is the act done by Muslims by bowing their heads in the court of Allah. Allah obligated Namaz five times a day. </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -164,7 +165,8 @@
                                                 <i class="flaticon-quran-rehal"></i>
                                                 <div class="serv-info">
                                                     <h4>Tajweed-e-Qira'at Course</h4>
-                                                    <p>Help Your fellows dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+                                                    <p>Tajweed means to make beauty in reading.
+                                                        It means to pronounce every letter correctly with all its qualities.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -173,7 +175,7 @@
                                                 <i class="flaticon-quran-rehal"></i>
                                                 <div class="serv-info">
                                                     <h4>Dars-e-Nizami Course</h4>
-                                                    <p>Help Your fellows dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+                                                    <p>Dars-e-Nizami is a study curriculum or system used in traditional Islamic institutions (madrassas) and Dar Ul Ulooms.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -182,7 +184,7 @@
                                                 <i class="flaticon-islamic-pray"></i>
                                                 <div class="serv-info">
                                                     <h4>Qaida</h4>
-                                                    <p>Help Your fellows dolor sit amet, coteudtur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+                                                    <p>A series of books for beginners to learn Quranic Arabic. It is used to teach children how to read the Quran.</p>
                                                 </div>
                                             </div>
                                         </div>
