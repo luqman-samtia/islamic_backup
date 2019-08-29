@@ -16,8 +16,8 @@
                         <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
                             <div class="featured-cap">
                                 <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
-                                <h1><img src="{{ asset('assets/images/resources/text1.png') }}" alt="ayat-txt-color.png"></h1>
-                                <h3>Or add to it, and recite the Qur'an with measured recitation.</h3>
+                                <h1><img src="{{ asset('assets/images/resources/ayat-txt3.png') }}" alt="ayat-txt-color.png"></h1>
+                                <h3>Or increase a little more to it. And recite the Qur’an with most pleasant pauses</h3>
                                 <span>"Surah Al-Muzzammil Vesre 4"</span>
                                 <a class="thm-btn brd-rd40" href="#" title="">Read More</a>
                             </div>
@@ -25,9 +25,9 @@
                         <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
                             <div class="featured-cap">
                                 <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
-                                <h1><img src="{{ asset('assets/images/resources/ayat-txt.png') }}" alt="ayat-txt-color.png"></h1>
-                                <h3>He raised the sky and set up the balance</h3>
-                                <span>"Surah Al-Rahmaan Vesre 7"</span>
+                                <h1><img src="{{ asset('assets/images/resources/ayat-txt3-1.png') }}" alt="ayat-txt-color.png"></h1>
+                                <h3>Or increase a little more to it. And recite the Qur’an with most pleasant pauses</h3>
+                                <span>"Surah Al-Muzzammil Vesre 4"</span>
                                 <a class="thm-btn brd-rd40" href="#" title="">Read More</a>
                             </div>
                         </div>
