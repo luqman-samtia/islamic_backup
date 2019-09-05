@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-12 col-lg-4">
                         <div class="wdgt-box">
-                            <div class="logo"><a href="{{ route('site') }}" title="Logo"><img src="{{ asset('assets/images/logo2.png') }}" alt="logo2.png"></a></div>
+                            <div class="logo"><a href="{{ route('site') }}" title="Logo"><img src="{{ asset('assets/images/logo1.png') }}" alt="logo1.png"></a></div>
                             <p>Online Quran learning started while considering the problem of the parents in finding qualified Quran teachers near to their home.
                                 The online way of learning holy Quran has a lot of advantages as compared to the conventional Quran classes.</p>
                         </div>

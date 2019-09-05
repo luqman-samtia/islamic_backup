@@ -1,9 +1,7 @@
 <header class="style1">
     <div class="container">
         <div class="logo">
-            <a href="{{ route('site') }}" title="{{ config('app.name') }}">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="">
-            </a>
+            <a href="{{ route('site') }}" title="{{ config('app.name') }}"><img src="{{ asset('assets/images/logo1.png') }}" alt=""></a>
         </div>
         <nav>
             <div>

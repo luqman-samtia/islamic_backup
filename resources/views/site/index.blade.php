@@ -22,20 +22,19 @@
 {{--                                <a class="thm-btn brd-rd40" href="#" title="">Read More</a>--}}
                             </div>
                         </div>
-                        <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
-                            <div class="featured-cap">
-                                <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
-                                <h1><img src="{{ asset('assets/images/resources/hadees 1.png') }}" alt="ayat-txt-color.png"></h1>
-                                <h3>Or increase a little more to it. And recite the Qur’an with most pleasant pauses</h3>
-                                <span>"Hadees No 1"</span>
-                            </div>
-                        </div>
+{{--                        <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">--}}
+{{--                            <div class="featured-cap">--}}
+{{--                                <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">--}}
+{{--                                <h1><img src="{{ asset('assets/images/resources/hadees 1.png') }}" alt="ayat-txt-color.png"></h1>--}}
+{{--                                <h3>Or increase a little more to it. And recite the Qur’an with most pleasant pauses</h3>--}}
+{{--                                <span>"Hadees No 1"</span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
                             <div class="featured-cap">
                                 <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
                                 <h1><img src="{{ asset('assets/images/resources/hadees 2.png') }}" alt="ayat-txt-color.png"></h1>
                                 <h3>The religion is naseehah (sincerity)</h3>
-                                <span>"Hadees No 2"</span>
                             </div>
                         </div>
                         <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
@@ -43,7 +42,6 @@
                                 <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
                                 <h1><img src="{{ asset('assets/images/resources/hadees 3.png') }}" alt="ayat-txt-color.png"></h1>
                                 <h3>Seeking knowledge is a duty upon every Muslim</h3>
-                                <span>"Hadees No 3"</span>
                             </div>
                         </div>
                         <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
@@ -53,7 +51,6 @@
                                 <h3>
                                     The best amongst you are the ones who learn Qur'an and teach it to others
                                 </h3>
-                                <span>"Hadees No 4"</span>
                             </div>
                         </div>
                     </div>
@@ -354,25 +351,6 @@
                 </div>
             </div>
         </section>
-{{--        <section>--}}
-{{--            <div class="gap thm-layer opc9">--}}
-{{--                <div class="fixed-bg" style="background-image: url('{{asset('assets/images/parallax7.jpg')}}');"></div>--}}
-{{--                <div class="container">--}}
-{{--                    <div class="nwsltr-wrp text-center">--}}
-{{--                        <div class="nwsltr-innr">--}}
-{{--                            <div class="nwsltr-title">--}}
-{{--                                <h3>Newsletter</h3>--}}
-{{--                                <span>Subscribe to our mailing list</span>--}}
-{{--                            </div>--}}
-{{--                            <form>--}}
-{{--                                <input type="email" placeholder="Enter your email">--}}
-{{--                                <button type="submit">Sign up</button>--}}
-{{--                            </form>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </section>--}}
 
         @include('site.inc.footer')
     </main>
