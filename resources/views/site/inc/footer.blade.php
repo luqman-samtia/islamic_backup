@@ -46,9 +46,11 @@
                                     <h4>Information</h4>
                                     <ul class="cont-lst">
                                         <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:+923174352944?call">+92-317-4352944</a></li>
+                                        <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:+923484736397?call">+92-348-4736397</a></li>
                                         <li><i class="flaticon-call"></i><a href="tel:+923174352944">+92-317-4352944</a></li>
-{{--                                        <li><i class="flaticon-email"></i><a href="mailto:info@equraninstitute.com" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">info@equraninstitute.com</span></a></li>--}}
                                         <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923060475163" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">+92-306-0475163</span></a></li>
+                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923484736397" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">+92-348-4736397</span></a></li>
+                                        <li><i class="flaticon-email"></i><a href="mailto:qarihabib847@gmail.com" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">qarihabib847@gmail.com</span></a></li>
                                     </ul>
                                 </div>
                             </div>

@@ -41,7 +41,7 @@ class PublicController extends Controller
                 'subject' => 'required',
                 'message' => 'required'
             ]);
-            Mail::to('admin@company.com')->send(new ContacMail($request));
+            Mail::to('hafizhabib5651@gmail.com')->send(new ContacMail($request));
             return redirect()->back()->with('success', 'Email has been sent to the team.');
         }
         return view('site.contact_us');

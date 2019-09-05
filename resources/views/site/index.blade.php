@@ -19,16 +19,41 @@
                                 <h1><img src="{{ asset('assets/images/resources/ayat-txt3.png') }}" alt="ayat-txt-color.png"></h1>
                                 <h3>Or increase a little more to it. And recite the Qur’an with most pleasant pauses</h3>
                                 <span>"Surah Al-Muzzammil Vesre 4"</span>
-                                <a class="thm-btn brd-rd40" href="#" title="">Read More</a>
+{{--                                <a class="thm-btn brd-rd40" href="#" title="">Read More</a>--}}
                             </div>
                         </div>
                         <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
                             <div class="featured-cap">
                                 <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
-                                <h1><img src="{{ asset('assets/images/resources/ayat-txt3-1.png') }}" alt="ayat-txt-color.png"></h1>
+                                <h1><img src="{{ asset('assets/images/resources/hadees 1.png') }}" alt="ayat-txt-color.png"></h1>
                                 <h3>Or increase a little more to it. And recite the Qur’an with most pleasant pauses</h3>
-                                <span>"Surah Al-Muzzammil Vesre 4"</span>
-                                <a class="thm-btn brd-rd40" href="#" title="">Read More</a>
+                                <span>"Hadees No 1"</span>
+                            </div>
+                        </div>
+                        <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
+                            <div class="featured-cap">
+                                <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
+                                <h1><img src="{{ asset('assets/images/resources/hadees 2.png') }}" alt="ayat-txt-color.png"></h1>
+                                <h3>The religion is naseehah (sincerity)</h3>
+                                <span>"Hadees No 2"</span>
+                            </div>
+                        </div>
+                        <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
+                            <div class="featured-cap">
+                                <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
+                                <h1><img src="{{ asset('assets/images/resources/hadees 3.png') }}" alt="ayat-txt-color.png"></h1>
+                                <h3>Seeking knowledge is a duty upon every Muslim</h3>
+                                <span>"Hadees No 3"</span>
+                            </div>
+                        </div>
+                        <div class="featured-item" style="background-image: url('{{ asset('assets/images/resources/slide1.jpg') }}');">
+                            <div class="featured-cap">
+                                <img src="{{ asset('assets/images/resources/bsml-txt.png') }}" alt="bsml-txt.png">
+                                <h1><img src="{{ asset('assets/images/resources/hadees 4.png') }}" alt="ayat-txt-color.png"></h1>
+                                <h3>
+                                    The best amongst you are the ones who learn Qur'an and teach it to others
+                                </h3>
+                                <span>"Hadees No 4"</span>
                             </div>
                         </div>
                     </div>
@@ -103,7 +128,7 @@
                                         The online way of learning holy Quran has a lot of advantages as compared to the conventional Quran classes.
                                         We have 4 years experience. Now we are offering Tajweed-e-Qiraat course and Dars-e-Nizami course.
                                         As concerned for male students we have male teachers and for female students we have female teachers.</p>
-                                    <a class="secndry-btn brd-rd40" href="#" title="">Learn More</a>
+{{--                                    <a class="secndry-btn brd-rd40" href="#" title="">Learn More</a>--}}
                                 </div>
                             </div>
                         </div>
@@ -221,7 +246,7 @@
                                 <div class="team-box2">
                                     <img src="assets/images/resources/Qari2.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
                                     <div class="team-info2">
-                                        <h4>Qari M. Muratib</h4>
+                                        <h4>Qari M. Muratib Sahb</h4>
                                     </div>
                                 </div>
                             </div>
@@ -239,7 +264,7 @@
                                 <div class="team-box2">
                                     <img src="assets/images/resources/Qari4.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
                                     <div class="team-info2">
-                                        <h4>Qari M. Nasir</h4>
+                                        <h4>Qari M. Nasir Sahb</h4>
                                     </div>
                                 </div>
                             </div>
@@ -247,7 +272,7 @@
                                 <div class="team-box2">
                                     <img src="assets/images/resources/Qari5.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
                                     <div class="team-info2">
-                                        <h4>Qari M. Ramzan</h4>
+                                        <h4>Qari M. Ramzan Sahb</h4>
                                     </div>
                                 </div>
                             </div>
@@ -307,7 +332,7 @@
                             <div class="testi-itm">
                                 <i><img src="{{ asset('assets/images/resources/parent1.jpeg') }}" style="width: 110px;height: 110px;object-fit: cover;" alt="testi-img1.jpg"></i>
                                 <div class="testi-info">
-                                    <h4>Muhammad Bilal</h4>
+                                    <h4>Muhammad Nawaz Sahb</h4>
                                     <p><i>"</i>Qari Habib is an unmatched Quraan tutor in the city equipped with fatherly love for his students
                                         and armed with professional knowledge accompanied by skill to deliver where by his students develop natural
                                         fluency to read the Holy Scripture. He has been giving private lessons to my two children since 18 months.
@@ -317,7 +342,7 @@
                             <div class="testi-itm">
                                 <i><img src="{{ asset('assets/images/resources/parent2.jpeg') }}" style="width: 110px;height: 110px;object-fit: cover;" alt="testi-img1.jpg"></i>
                                 <div class="testi-info">
-                                    <h4>Awais Ahmed</h4>
+                                    <h4>Awais Ahmed Sahb</h4>
                                     <p><i>"</i>Hafiz Qari Habib is a very good teacher of Qiraat. If you want to learn Quran with the complete rules
                                         and principles of Qiraat then there is no other option except of Hafiz Qari Habib. I suggest you because he
                                         has a very simple pickable and basic method of teaching Qiraat, with the complete principles and laws of
