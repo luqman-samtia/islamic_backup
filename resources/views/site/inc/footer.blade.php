@@ -60,12 +60,6 @@
             </div>
             <div class="bottom-bar">
                 <p>&copy; Copyright {{ date('Y') }}. All Rights Reserved. - Made with <span style="color:red">❤</span> by <a href="https://ioitechnologies.com/" target="_blank">IOI Technologies</a></p>
-{{--                <div class="scl">--}}
-{{--                    <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>--}}
-{{--                    <a href="#" title="Pinterest" target="_blank"><i class="fa fa-pinterest-p"></i></a>--}}
-{{--                    <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>--}}
-{{--                    <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>--}}
-{{--                </div>--}}
             </div>
         </div>
     </div>
