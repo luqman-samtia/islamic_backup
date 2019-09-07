@@ -17,6 +17,7 @@
                     <table class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
+                            <td>Page #</td>
                             <td>Title</td>
                             <td>Image</td>
                             <td>Action</td>
@@ -40,6 +41,7 @@
                 serverSide: true,
                 ajax: '{!! route('resources.resources', $resource->id) !!}',
                 columns: [
+                    { data: 'number' },
                     { data: 'title' },
                     {
                         data: 'image',

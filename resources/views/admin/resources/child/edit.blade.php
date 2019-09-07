@@ -21,6 +21,10 @@
                                 <input type="text" name="title" value="{{ $childResource->title }}" class="form-control" autocomplete="title" autofocus>
                             </div>
                             <div class="form-group">
+                                <label>Page #</label>
+                                <input type="number" name="number" min="1" class="form-control" required value="{{ $childResource->number }}">
+                            </div>
+                            <div class="form-group">
                                 <label> Edit Image </label>
                                 <div class="d-flex">
                                     <img src="{{ asset('storage/'.$childResource->image) }}" style="width: 200px;"/>

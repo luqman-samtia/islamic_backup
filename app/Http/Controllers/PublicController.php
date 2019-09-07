@@ -27,7 +27,9 @@ class PublicController extends Controller
     }
 
     public function page($slug){
-        $resource = Resources::with('children')->findBySlug($slug)->first();
+        $resource = Resources::with(['children' => function($relation){
+            $relation->orderBy('number', 'asc');
+        }])->findBySlug($slug)->first();
         if(!$resource)
             abort(404);
         return view('site.page', compact('resource'));

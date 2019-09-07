@@ -81,6 +81,7 @@ class ResourcesController extends Controller
     public function resourceEdit(Request $request, Resources $resource, Resources $childResource){
         if ($request->post()){
             $childResource->title = $request->title;
+            $childResource->number = $request->number;
             if ($request->hasFile('image')){
                 $path = $request->image->store('resources/images');
                 $childResource->image = $path;
