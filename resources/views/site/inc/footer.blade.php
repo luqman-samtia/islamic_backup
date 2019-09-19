@@ -46,7 +46,7 @@
                                     <h4>Information</h4>
                                     <ul class="cont-lst">
                                         <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:live:428db5f55825624c?call">+92-317-4352944</a></li>
-                                        <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:live:b851327953a17b64?call">+92-348-4736397</a></li>
+                                        <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:live:b851327953a17b64?call">+92-306-0475163</a></li>
                                         <li><i class="flaticon-call"></i><a href="tel:+923174352944">+92-317-4352944</a></li>
                                         <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923060475163" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">+92-306-0475163</span></a></li>
                                         <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923484736397" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">+92-348-4736397</span></a></li>
