@@ -96,7 +96,7 @@ class PublicController extends Controller
         if($request->ayat_to){
             $search->WhereRaw("({$request->ayat_to} between surat.ayat_from and surat.ayat_to OR {$request->ayat_to} >= surat.ayat_to)");
         }
-        $data['search'] = $search->orderAsc('page')->get();
+        $data['search'] = $search->orderBy('number', 'asc')->get();
         return view('site.search', $data);
     }
 }
