@@ -25,18 +25,8 @@
                         </ul>
                     </li>
                     <li><a href="{{ route('quranPage') }}" title="">Read Quran</a></li>
-                    <li><a href="{{ route('charges') }}" title="">Charges</a></li>
-                    {{--<li><a href="crowd-funding.html" title="">Donate</a></li>
-                    <li class="menu-item-has-children"><a href="#" title="">Pages</a>
-                        <ul>
-                            <li><a href="team.html" title="">Team Grid View</a></li>
-                            <li><a href="team2.html" title="">Team Round View</a></li>
-                            <li><a href="portfolio.html" title="">Our Portfolio</a></li>
-                            <li><a href="services.html" title="">Our Services</a></li>
-                        </ul>
-                    </li>--}}
-{{--                    <li><a href="{{ route('faq') }}" title="">FAQ</a></li>--}}
-{{--                    <li><a href="{{ route('contactUs') }}" title="">Contact</a></li>--}}
+{{--                    <li><a href="{{ route('charges') }}" title="">Charges</a></li>--}}
+
                 </ul>
             </div>
         </nav>
