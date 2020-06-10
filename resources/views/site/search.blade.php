@@ -71,7 +71,7 @@
 
                             <div class="row">
                                 @foreach($search as $child)
-                                    <div class="col-md-2 col-sm-4 col-lg-2 fltr-itm fltr-itm1">
+                                    <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1" style="text-align: center;">
                                         <labe>
                                             {{ $child->title }}
                                         </labe>
