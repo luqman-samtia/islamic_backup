@@ -71,11 +71,16 @@
 
                             <div class="row">
                                 @foreach($search as $child)
-                                    <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1" style="text-align: center;">
+                                    <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
                                         <labe>
                                             {{ $child->title }}
+                                            <br>
+                                            <small class="text-gray">
+                                                Page - {{ $child->number }}
+                                            </small>
                                         </labe>
                                         <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">
+                                            <br>
                                             <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
                                         </a>
                                     </div>
