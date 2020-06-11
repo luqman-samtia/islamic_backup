@@ -45,14 +45,14 @@
                                     </div>
                                 @endforeach
                                     <div class="col-md-12 w-100">
-                                        @if(@$previous)
+                                        @if($prev)
                                             <div>
-                                                <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40 mt-2 pull-left" type="submit">Previous</a>
+                                                <a href="{{ route('quranSurat', $prev->slug) }}" class="thm-btn brd-rd40 mt-2 pull-left" type="submit">Previous</a>
                                             </div>
                                         @endif
-                                        @if(@$next)
+                                        @if($next)
                                             <div>
-                                                <a href="{{ route('search', $next) }}" class="thm-btn brd-rd40 mt-2 pull-right" type="submit">Next</a>
+                                                <a href="{{ route('quranSurat', $next->slug) }}" class="thm-btn brd-rd40 mt-2 pull-right" type="submit">Next</a>
                                             </div>
                                         @endif
                                     </div>

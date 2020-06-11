@@ -28,11 +28,22 @@ class PublicController extends Controller
 
     public function page($slug){
         $resource = Resources::with(['children' => function($relation){
+            if (request()->page)
+                $relation->where('number', request()->page);
             $relation->orderBy('number', 'asc');
         }])->findBySlug($slug)->first();
         if(!$resource)
             abort(404);
-        return view('site.page', compact('resource'));
+
+        if (request()->page){
+            $prev = Resources::where('number', '<', request()->page)->where('parent_id', $resource->id)->orderBy('number','desc')->first();
+            $next = Resources::where('number', '>', request()->page)->where('parent_id', $resource->id)->orderBy('number')->first();
+        }
+        return view('site.page', [
+            'resource' => $resource,
+            'next' => @$next,
+            'prev' => @$prev
+        ]);
     }
 
     public function contactUs(Request $request){
@@ -58,8 +69,16 @@ class PublicController extends Controller
         $data['surat'] = Quran::with(['children' => function($query){
             $query->orderAsc('number');
         }])->findBySlug($slug)->first();
+
         if(!$data['surat'])
             abort(404);
+
+        $prev = Quran::where('id', '<', $data['surat']->id)->whereNull('parent_id')->orderBy('id','desc')->first();
+        $next = Quran::where('id', '>', $data['surat']->id)->whereNull('parent_id')->orderBy('id')->first();
+
+        $data['prev'] = $prev;
+        $data['next'] = $next;
+
         return view('site.quran.surat', $data);
     }
 

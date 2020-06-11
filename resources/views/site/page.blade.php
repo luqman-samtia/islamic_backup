@@ -23,28 +23,53 @@
             </div>
         </section>
         <section>
-            <div class="gap">
+            <div class=" mt-5 mb-">
                 <div class="container">
                     <div class="prtfl-wrap text-center">
                         <div class="prtfl-dta remove-ext1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="contact-form text-center mb-5">
+                                        <form action="">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <input type="number" name="page" placeholder="Enter Page No" value="{{ request()->page }}">
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <button class="thm-btn brd-rd40 mt-3 pull-right" type="submit">Search</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row mrg15 masonry">
                                 @foreach($resource->children as $child)
-                                <div class="col-md-2 col-sm-4 col-lg-2 fltr-itm fltr-itm1">
-{{--                                    <div class="prtfl-box">--}}
+                                <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-4 text-center">
                                     <labe>
                                         {{ $child->title }}
+                                        <br>
                                     </labe>
                                         <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">
+                                            <br>
                                             <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
                                         </a>
-                                        {{--<div class="prtfl-info">
-                                            <i class="fa fa-plus"></i>
-                                            <h4>Islamic Center</h4>
-                                            <span>artwork / branding</span>
-                                        </div>--}}
-{{--                                    </div>--}}
                                 </div>
+
                                 @endforeach
+                            </div>
+                            <div class="col-md-12 w-100">
+                                @if($prev)
+                                    <div>
+                                        <a href="{{ route('page', [$resource->slug, 'page' => $prev->number]) }}" class="thm-btn brd-rd40 mt-2 mb-5 pull-left" type="submit">Previous</a>
+                                    </div>
+                                @endif
+                                @if($next)
+                                    <div>
+                                        <a href="{{ route('page', [$resource->slug, 'page' => $next->number]) }}" class="thm-btn brd-rd40 mt-2 mb-5 pull-right" type="submit">Next</a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
