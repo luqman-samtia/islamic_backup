@@ -84,6 +84,7 @@ class PublicController extends Controller
     public function search(Request $request){
         $data['request'] = $request;
         $data['quran'] = Quran::parent(null)->get();
+        $url = request()->all();
         $search = DB::table('quran')->select('surat.*')
             ->join('quran as surat', 'surat.parent_id', '=', 'quran.id');
         if (!$request->page) {
@@ -96,6 +97,16 @@ class PublicController extends Controller
             }
         }
         if($request->page){
+            $prev = DB::table('quran')->whereNotNull('parent_id')->where('number', $request->page - 1)->count();
+            $next = DB::table('quran')->whereNotNull('parent_id')->where('number', $request->page + 1)->count();
+            if ($prev) {
+                $url['page'] = $request->page - 1;
+                $data['previous'] = http_build_query($url);
+            }
+            if ($next) {
+                $url['page'] = $request->page + 1;
+                $data['next'] = http_build_query($url);
+            }
             $search->where('surat.number', $request->page);
         }
 

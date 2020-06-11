@@ -44,7 +44,7 @@
                                         <form action="{{ route('search') }}">
                                             <div class="row mrg20">
                                                 <div class="col-md-4 col-sm-6 col-lg-4">
-                                                    <select name="surat" required>
+                                                    <select name="surat">
                                                         <option value="">-- Select Option --</option>
                                                         @foreach($quran as $surat)
                                                             <option value="{{ $surat->slug }}">{{ $surat->title }}</option>
