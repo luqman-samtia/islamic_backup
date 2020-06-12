@@ -18,6 +18,7 @@ Route::get('/quran', 'PublicController@quran')->name('quranPage');
 Route::get('/quran/{surat}', 'PublicController@quranSurat')->name('quranSurat');
 Route::get('/faq', 'PublicController@faq')->name('faq');
 Route::get('/charges', 'PublicController@charges')->name('charges');
+Route::get('/islamicmedia/{slug}', 'PublicController@media')->name('islamicmedia');
 Route::get('/terms', 'PublicController@terms')->name('terms');
 Route::get('/article/{slug}', 'PublicController@artical')->name('artical');
 Route::get('/search', 'PublicController@search')->name('search');
@@ -61,6 +62,15 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::get('{article}', 'ArticalsController@artical')->name('articals.articals');
     });
 
+    Route::prefix('media')->group(function (){
+        Route::get('/', 'MediaController@index')->name('media');
+        Route::match(['GET', 'POST'], '/add', 'MediaController@add')->name('media.add');
+        Route::match(['GET', 'POST'], '{media}/edit', 'MediaController@edit')->name('media.edit');
+        Route::post('/delete', 'MediaController@delete')->name('media.delete');
+        Route::match(['GET', 'POST'], '{media}/add', 'MediaController@mediaAdd')->name('media.child.add');
+        Route::match(['GET', 'POST'], '{media}/edit/{childMedia}', 'MediaController@mediaEdit')->name('media.child.edit');
+        Route::get('{media}', 'MediaController@media')->name('media.media');
+    });
 
     Route::prefix('users')->group(function (){
         Route::get('/', 'UserController@index')->name('users');

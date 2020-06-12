@@ -30,13 +30,12 @@
                         <div class="serv-wrap text-center remove-ext3">
                             <div class="row">
                                 @foreach($surat->children as $child)
-                                    <div class="col-md-12 fltr-itm fltr-itm1 mb-3">
+                                    <div class="col-md-2 col-sm-6 col-lg-2 fltr-itm fltr-itm1 mb-3">
                                         <labe>
                                             {{ $child->title }}
                                             <br>
-                                            <small class="text-gray">
-                                                Page - {{ $child->number }}
-                                            </small>
+                                            Page - {{ $child->number }}
+                                            <br>
                                         </labe>
                                         <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">
                                             <br>

@@ -58,7 +58,7 @@
                                                     <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
                                                 </div>
                                                 <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    <input type="number" name="page" placeholder="Page" value="{{ $request->page }}">
+                                                    <input type="number" name="page" placeholder="Page" >
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-lg-2">
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
@@ -71,12 +71,11 @@
 
                             <div class="row">
                                 @foreach($search as $child)
-                                    <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
+                                    <div class="col-md-2 col-sm-6 col-lg-2 fltr-itm fltr-itm1 mb-3 text-center">
                                         <labe>
                                             {{ $child->title }}
                                             <br>
-                                            <small class="text-gray">
-                                                Page - {{ $child->number }}
+                                            Page - {{ $child->number }}
                                             </small>
                                         </labe>
                                         <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">

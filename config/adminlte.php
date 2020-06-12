@@ -139,6 +139,12 @@ return [
             'icon'        => 'file',
             'can' => 'resourcescontroller.index'
         ],
+        [
+            'text'        => 'Islamic Media',
+            'url'         => 'admin/media',
+            'icon'        => 'youtube-play',
+            'can' => 'resourcescontroller.index'
+        ],
 //        [
 //            'text'        => 'Users',
 //            'url'         => 'users',

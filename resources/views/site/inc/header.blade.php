@@ -25,6 +25,14 @@
                         </ul>
                     </li>
                     <li><a href="{{ route('quranPage') }}" title="">Read Quran</a></li>
+                    <li class="menu-item-has-children">
+                        <a href="#" title="">Islamic Media</a>
+                        <ul>
+                            @foreach($media as $islamic)
+                                <li><a href="{{ route('islamicmedia', $islamic->slug) }}" title="{{ $islamic->title }}">{{ $islamic->title }}</a></li>
+                            @endforeach
+                        </ul>
+                    </li>
 {{--                    <li><a href="{{ route('charges') }}" title="">Charges</a></li>--}}
 
                 </ul>

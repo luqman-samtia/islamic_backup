@@ -46,7 +46,7 @@
 
                             <div class="row mrg15 masonry">
                                 @foreach($resource->children as $child)
-                                <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-4 text-center">
+                                <div class="col-md-2 col-sm-6 col-lg-2 fltr-itm fltr-itm1 mb-4 text-center">
                                     <labe>
                                         {{ $child->title }}
                                         <br>

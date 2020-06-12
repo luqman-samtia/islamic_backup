@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Articals;
 use App\Mail\ContacMail;
+use App\Media;
 use App\Quran;
 use App\Resources;
 use Illuminate\Http\Request;
@@ -17,8 +18,10 @@ class PublicController extends Controller
     public function __construct() {
         $resources = \App\Resources::parent(null)->get();
         $articles = \App\Articals::all();
+        $media = \App\Media::whereNull('parent_id')->get();
         View::share ( 'resources', $resources);
         View::share ( 'articles', $articles);
+        View::share('media', $media);
     }
 
     public function index(){
@@ -88,6 +91,14 @@ class PublicController extends Controller
 
     public function charges(){
         return view('site.charges');
+    }
+
+    public function media($slug){
+        $data['islamicmedia'] = Media::with(['children'])->findBySlug($slug)->first();
+
+        if(!$data['islamicmedia'])
+            abort(404);
+        return view('site.media', $data);
     }
 
     public function terms(){
