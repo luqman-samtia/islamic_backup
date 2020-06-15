@@ -85,6 +85,24 @@ class PublicController extends Controller
         return view('site.quran.surat', $data);
     }
 
+    public function quranSuratPage($slug, $page){
+
+        $data['surat'] = Quran::whereHas('getParent', function($q) use ($slug){
+            $q->where('slug', $slug);
+        })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+
+        if(!$data['surat'])
+            abort(404);
+
+        $prev = Quran::where('id', '<', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id','desc')->first();
+        $next = Quran::where('id', '>', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id')->first();
+
+        $data['prev'] = $prev;
+        $data['next'] = $next;
+
+        return view('site.quran.suratpage', $data);
+    }
+
     public function faq(){
         return view('site.faq');
     }
@@ -94,7 +112,11 @@ class PublicController extends Controller
     }
 
     public function media($slug){
-        $data['islamicmedia'] = Media::with(['children'])->findBySlug($slug)->first();
+        $query = Media::with(['children' => function ($q) {
+            if (request()->q)
+                $q->where('title', "like" ,"%".request()->q."%")->orWhere('description', "like" ,"%".request()->q."%");
+        }]);
+        $data['islamicmedia'] = $query->findBySlug($slug)->first();
 
         if(!$data['islamicmedia'])
             abort(404);

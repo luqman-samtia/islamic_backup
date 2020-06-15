@@ -15,7 +15,12 @@ Route::get('/', 'PublicController@index')->name('site');
 Route::match(['GET', 'POST'],'/contactUs', 'PublicController@contactUs')->name('contactUs');
 Route::get('/page/{slug}', 'PublicController@page')->name('page');
 Route::get('/quran', 'PublicController@quran')->name('quranPage');
-Route::get('/quran/{surat}', 'PublicController@quranSurat')->name('quranSurat');
+Route::prefix('quran')->group(function(){
+    Route::prefix('{surat}')->group(function(){
+        Route::get('/', 'PublicController@quranSurat')->name('quranSurat');
+        Route::get('page/{page}', 'PublicController@quranSuratPage')->name('quranSurat.page');
+    });
+});
 Route::get('/faq', 'PublicController@faq')->name('faq');
 Route::get('/charges', 'PublicController@charges')->name('charges');
 Route::get('/islamicmedia/{slug}', 'PublicController@media')->name('islamicmedia');

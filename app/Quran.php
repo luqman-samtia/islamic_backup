@@ -41,7 +41,7 @@ class Quran extends Model
 
     public function getParent()
     {
-        return $this->hasMany(Quran::class, 'id', 'parent_id');
+        return $this->hasOne(Quran::class, 'id', 'parent_id');
     }
 
     public function delete(){

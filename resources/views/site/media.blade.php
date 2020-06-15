@@ -27,6 +27,22 @@
                 <div class="container">
                     <div class="prtfl-wrap text-center">
                         <div class="prtfl-dta remove-ext1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="contact-form text-center mb-5">
+                                        <form action="">
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6">
+                                                    <input type="text" name="q" placeholder="Search" value="{{ request()->q }}">
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <button class="thm-btn brd-rd40 mt-3 pull-right" type="submit">Search</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row mrg15 masonry">
                                 @foreach($islamicmedia->children as $child)
                                 <div class="col-md-4 col-sm-12 col-lg-4 fltr-itm fltr-itm1 mb-4 text-center">
