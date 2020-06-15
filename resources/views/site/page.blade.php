@@ -51,8 +51,9 @@
                                         {{ $child->title }}
                                         <br>
                                     </labe>
-                                        <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">
-                                            <br>
+{{--                                        <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">--}}
+                                        <a href="{{ route('quranSurat.page', [$resource->slug, $child->number]) }}" title="">
+                                        <br>
                                             <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
                                         </a>
                                 </div>

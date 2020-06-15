@@ -78,10 +78,10 @@
                                             Page - {{ $child->number }}
                                             </small>
                                         </labe>
-                                        <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">
+{{--                                        <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">--}}
                                             <br>
                                             <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
-                                        </a>
+{{--                                        </a>--}}
                                     </div>
                                 @endforeach
                                     <div class="col-md-12 w-100">

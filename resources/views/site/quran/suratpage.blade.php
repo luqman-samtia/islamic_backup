@@ -57,7 +57,6 @@
                 </div>
             </div>
         </section>
-
         @include('site.inc.footer')
     </main>
 @stop
