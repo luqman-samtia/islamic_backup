@@ -43,20 +43,18 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row mrg15 masonry">
                                 @foreach($resource->children as $child)
-                                <div class="col-md-2 col-sm-6 col-lg-2 fltr-itm fltr-itm1 mb-4 text-center">
+                                <div class="{{ request()->page ? 'col-12' : 'col-md-2 col-sm-6 col-lg-2' }} fltr-itm fltr-itm1 mb-4 text-center">
                                     <labe>
                                         {{ $child->title }}
                                         <br>
                                     </labe>
-                                        <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">
+                                        <a href="{{ route('page', [$resource->slug, 'page' => $child->number]) }}" title="">
                                         <br>
                                             <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
                                         </a>
                                 </div>
-
                                 @endforeach
                             </div>
                             <div class="col-md-12 w-100">
@@ -76,7 +74,6 @@
                 </div>
             </div>
         </section>
-
         @include('site.inc.footer')
     </main>
 @stop
