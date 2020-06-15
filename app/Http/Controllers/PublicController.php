@@ -7,6 +7,7 @@ use App\Mail\ContacMail;
 use App\Media;
 use App\Quran;
 use App\Resources;
+use App\Scholars;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\View;
 
 class PublicController extends Controller
 {
-
     public function __construct() {
         $resources = \App\Resources::parent(null)->get();
         $articles = \App\Articals::all();
@@ -26,7 +26,8 @@ class PublicController extends Controller
 
     public function index(){
         $posts = Articals::orderBy('created_at','desc')->take(6)->get();
-        return view('site.index', compact('posts'));
+        $scholars = Scholars::orderBy('sort')->get();
+        return view('site.index', compact('posts','scholars'));
     }
 
     public function page($slug){

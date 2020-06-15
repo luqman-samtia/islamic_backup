@@ -145,6 +145,12 @@ return [
             'icon'        => 'youtube-play',
             'can' => 'resourcescontroller.index'
         ],
+        [
+            'text'        => 'Islamic Scholars',
+            'url'         => 'admin/scholars',
+            'icon'        => 'users',
+            'can' => 'resourcescontroller.index'
+        ],
 //        [
 //            'text'        => 'Users',
 //            'url'         => 'users',

@@ -17,7 +17,7 @@
                         <ul class="breadcrumbs">
                             <li><a href="{{ route('site') }}" title="">Home</a></li>
                             <li><a href="{{ route('page', $resource->getPArent->slug) }}" >{{ $resource->getParent->title }}</a></li>
-                            <li>Page - {{ $resource->number }}</li>
+                            <li>{{ $resource->title }}</li>
                         </ul>
                     </div>
                 </div>

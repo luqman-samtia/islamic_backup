@@ -223,49 +223,16 @@
                     </div>
                     <div class="team-wrap2 text-center remove-ext3">
                         <div class="row justify-content-center">
-{{--                            <div class="col-md-1 col-lg-1 hidden-sm hidden-xs"></div>--}}
-                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".2s">
-                                <div class="team-box2">
-                                    <img src="assets/images/resources/Qari1.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
-                                    <div class="team-info2">
-                                        <h4>Qari M. Habib Ur Rehman</h4>
+                            @foreach($scholars as $scholar)
+                                <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".2s">
+                                    <div class="team-box2">
+                                        <img src="{{ asset('/storage/'.$scholar->image) }}" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
+                                        <div class="team-info2">
+                                            <h4>{{$scholar->name}}</h4>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
-                                <div class="team-box2">
-                                    <img src="assets/images/resources/Qari2.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
-                                    <div class="team-info2">
-                                        <h4>Qari M. Muratib Sahb</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".4s">
-                                <div class="team-box2">
-                                    <img src="assets/images/resources/Qari3.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
-                                    <div class="team-info2">
-                                        <h4>Qari M. Khalil Ur Rehman</h4>
-                                    </div>
-                                </div>
-                            </div>
-{{--                            <div class="col-md-1 col-lg-1 hidden-sm hidden-xs"></div>--}}
-
-                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
-                                <div class="team-box2">
-                                    <img src="assets/images/resources/Qari4.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
-                                    <div class="team-info2">
-                                        <h4>Qari M. Nasir Sahb</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-sm-6 col-lg-4 fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
-                                <div class="team-box2">
-                                    <img src="assets/images/resources/Qari5.jpeg" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
-                                    <div class="team-info2">
-                                        <h4>Qari M. Ramzan Sahb</h4>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
