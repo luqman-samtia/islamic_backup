@@ -151,6 +151,12 @@ return [
             'icon'        => 'users',
             'can' => 'resourcescontroller.index'
         ],
+        [
+            'text'        => 'Footer Information',
+            'url'         => 'admin/information',
+            'icon'        => 'info',
+            'can' => 'resourcescontroller.index'
+        ],
 //        [
 //            'text'        => 'Users',
 //            'url'         => 'users',

@@ -47,6 +47,11 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::get('{resource}', 'ResourcesController@resource')->name('resources.resources');
     });
 
+    Route::prefix('information')->group(function (){
+        Route::get('/', 'InformationController@index')->name('information');
+        Route::post('update', 'InformationController@update')->name('information.update');
+    });
+
     Route::prefix('scholars')->group(function (){
         Route::get('/', 'ScholarsController@index')->name('scholars');
         Route::match(['GET', 'POST'], '/add', 'ScholarsController@add')->name('scholars.add');

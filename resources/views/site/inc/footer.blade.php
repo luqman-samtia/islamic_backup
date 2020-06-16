@@ -42,15 +42,33 @@
                                 </div>
                             </div>
                             <div class="col-md-4 col-sm-4 col-lg-4">
+                                @php($info = \App\Information::query()->first())
                                 <div class="wdgt-box">
                                     <h4>Information</h4>
                                     <ul class="cont-lst">
-                                        <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:live:428db5f55825624c?call">+92-317-4352944</a></li>
-                                        <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:live:b851327953a17b64?call">+92-306-0475163</a></li>
-                                        <li><i class="flaticon-call"></i><a href="tel:+923174352944">+92-317-4352944</a></li>
-                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923060475163" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">+92-306-0475163</span></a></li>
-                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923484736397" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">+92-348-4736397</span></a></li>
-                                        <li><i class="flaticon-email"></i><a href="mailto:qarihabib847@gmail.com" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">qarihabib847@gmail.com</span></a></li>
+                                        @if(@$info['skype1']['label'] && @$info['skype1']['value'])
+                                        <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:live:{{$info['skype1']['value']}}?call">{{ $info['skype1']['label']  }}</a></li>
+                                        @endif
+                                        @if(@$info['skype2']['label'] && @$info['skype2']['value'])
+                                        <li><i class="fa fa-skype" style="padding: 5px 0px;"></i><a href="skype:live:{{$info['skype2']['value']}}?call">{{ $info['skype2']['label']  }}</a></li>
+                                        @endif
+                                        @if(@$info['phone1']['label'] && @$info['phone1']['value'])
+                                        <li><i class="flaticon-call"></i><a href="tel:{{$info['phone1']['value']}}">{{ $info['phone1']['label']  }}</a></li>
+                                        @endif
+                                        @if(@$info['phone2']['label'] && @$info['phone2']['value'])
+                                        <li><i class="flaticon-call"></i><a href="tel:{{$info['phone2']['value']}}">{{ $info['phone2']['label']  }}</a></li>
+                                        @endif
+                                        @if(@$info['whatsapp1']['label'] && @$info['whatsapp1']['value'])
+                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/{{$info['whatsapp1']['value']}}"><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">{{ $info['whatsapp1']['label']  }}</span></a></li>
+                                        @endif
+                                        @if(@$info['whatsapp2']['label'] && @$info['whatsapp2']['value'])
+                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/{{$info['whatsapp2']['value']}}"><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">{{ $info['whatsapp2']['label']  }}</span></a></li>
+                                        @endif
+                                        @if(@$info['email']['label'] && @$info['email']['value'])
+                                        <li><i class="flaticon-email"></i><a href="mailto:{{$info['email']['value']}}"><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">{{ $info['email']['label']  }}</span></a></li>
+                                        @endif
+{{--                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923484736397" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">+92-348-4736397</span></a></li>--}}
+{{--                                        <li><i class="flaticon-email"></i><a href="mailto:qarihabib847@gmail.com" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">qarihabib847@gmail.com</span></a></li>--}}
                                     </ul>
                                 </div>
                             </div>
