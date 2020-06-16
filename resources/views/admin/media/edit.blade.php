@@ -21,8 +21,8 @@
                                 <input type="text" name="title" value="{{ $media->title }}" class="form-control" autocomplete="title" autofocus>
                             </div>
                             <div class="form-group">
-                                <label>Description</label>
-                                <input type="text" name="description" value="{{ $media->description }}" class="form-control" autocomplete="description" autofocus>
+                                <label for="description" class="form-label">Description</label>
+                                <textarea id="description" name="description" class="form-control" rows="5" autocomplete="description" autofocus>{{ $media->description }}</textarea>
                             </div>
                         </div>
                         <div class="box-footer">

@@ -21,8 +21,8 @@
                                 <input type="text" name="name" value="{{ $testimonial->name }}" class="form-control" autocomplete="name" autofocus>
                             </div>
                             <div class="form-group">
-                                <label>Description</label>
-                                <input type="text" name="description" value="{{ $testimonial->description }}" class="form-control" autocomplete="description" autofocus>
+                                <label for="description" class="form-label">Description</label>
+                                <textarea id="description" name="description" class="form-control" rows="5" autocomplete="description" autofocus>{{ $testimonial->description }}</textarea>
                             </div>
                             <div class="form-group">
                                 <label> Edit Image </label>
