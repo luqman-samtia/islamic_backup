@@ -157,6 +157,12 @@ return [
             'icon'        => 'info',
             'can' => 'resourcescontroller.index'
         ],
+        [
+            'text'        => 'Testimonials',
+            'url'         => 'admin/testimonials',
+            'icon'        => 'comments',
+            'can' => 'resourcescontroller.index'
+        ],
 //        [
 //            'text'        => 'Users',
 //            'url'         => 'users',

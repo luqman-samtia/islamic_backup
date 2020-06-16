@@ -213,7 +213,7 @@
         </section>
         <section>
             <div class="gap white-layer opc9">
-                <div class="fixed-bg ptrn-bg" style="background-image: url(assets/images/pattern-bg.jpg);"></div>
+                <div class="fixed-bg ptrn-bg" style="background-image: url('{{ asset('assets/images/pattern-bg.jpg') }}');"></div>
                 <div class="container">
                     <div class="sec-title text-center">
                         <div class="sec-title-inner">
@@ -240,7 +240,7 @@
         </section>
         <section>
             <div class="gap gray-layer opc95">
-                <div class="fixed-bg" style="background-image: url(assets/images/parallax4.jpg);"></div>
+                <div class="fixed-bg" style="background-image: url('{{ asset('assets/images/parallax4.jpg') }}');"></div>
                 <div class="container">
                     <div class="evnt-pry-wrap">
                         <div class="row">
@@ -286,26 +286,15 @@
                     </div>
                     <div class="testi-wrap text-center">
                         <div class="testi-car owl-carousel">
+                            @foreach($testimonials as $testimonial)
                             <div class="testi-itm">
-                                <i><img src="{{ asset('assets/images/resources/parent1.jpeg') }}" style="width: 110px;height: 110px;object-fit: cover;" alt="testi-img1.jpg"></i>
+                                <i><img src="{{ asset('/storage/'.$testimonial->image) }}" style="width: 110px;height: 110px;object-fit: cover;" alt="testi-img1.jpg"></i>
                                 <div class="testi-info">
-                                    <h4>Muhammad Nawaz Sahb</h4>
-                                    <p><i>"</i>Qari Habib is an unmatched Quraan tutor in the city equipped with fatherly love for his students
-                                        and armed with professional knowledge accompanied by skill to deliver where by his students develop natural
-                                        fluency to read the Holy Scripture. He has been giving private lessons to my two children since 18 months.
-                                        I recommend him as a most effective and time efficient tutor.<i>"</i></p>
+                                    <h4>{{ $testimonial->name }}</h4>
+                                    <p><i>"</i>{{ $testimonial->description }}<i>"</i></p>
                                 </div>
                             </div>
-                            <div class="testi-itm">
-                                <i><img src="{{ asset('assets/images/resources/parent2.jpeg') }}" style="width: 110px;height: 110px;object-fit: cover;" alt="testi-img1.jpg"></i>
-                                <div class="testi-info">
-                                    <h4>Awais Ahmed Sahb</h4>
-                                    <p><i>"</i>Hafiz Qari Habib is a very good teacher of Qiraat. If you want to learn Quran with the complete rules
-                                        and principles of Qiraat then there is no other option except of Hafiz Qari Habib. I suggest you because he
-                                        has a very simple pickable and basic method of teaching Qiraat, with the complete principles and laws of
-                                        reading Quran. If you are interested in learning Quran then please contact him as soon as early.<i>"</i></p>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>

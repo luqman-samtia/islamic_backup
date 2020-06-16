@@ -59,6 +59,13 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::post('/delete', 'ScholarsController@delete')->name('scholars.delete');
     });
 
+    Route::prefix('testimonials')->group(function (){
+        Route::get('/', 'TestimonialsController@index')->name('testimonials');
+        Route::match(['GET', 'POST'], '/add', 'TestimonialsController@add')->name('testimonials.add');
+        Route::match(['GET', 'POST'], '{testimonial}/edit', 'TestimonialsController@edit')->name('testimonials.edit');
+        Route::post('/delete', 'TestimonialsController@delete')->name('testimonials.delete');
+    });
+
 
     Route::prefix('quran')->group(function () {
         Route::get('/', 'QuranController@index')->name('quran');

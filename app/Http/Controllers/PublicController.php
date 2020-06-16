@@ -8,6 +8,7 @@ use App\Media;
 use App\Quran;
 use App\Resources;
 use App\Scholars;
+use App\Testimonials;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -27,7 +28,8 @@ class PublicController extends Controller
     public function index(){
         $posts = Articals::orderBy('created_at','desc')->take(6)->get();
         $scholars = Scholars::orderBy('sort')->get();
-        return view('site.index', compact('posts','scholars'));
+        $testimonials = Testimonials::orderBy('created_at','desc')->get();
+        return view('site.index', compact('posts','scholars','testimonials'));
     }
 
     public function page($slug){
