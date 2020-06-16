@@ -22,6 +22,11 @@
     <link rel="alternate stylesheet" href="{{ asset('assets/css/colors/color4.css') }}" title="color4" />
 
     @yield('custom_css')
+    <script>
+        if(performance.navigation.type == 2){
+            location.reload(true);
+        }
+    </script>
 
 </head>
 <body>
