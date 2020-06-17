@@ -40,7 +40,7 @@
                 <div class="container">
                     <div class="prtfl-wrap text-center">
                         <div class="serv-wrap text-center remove-ext3">
-                            <div class="row">
+                            <div class="row mb-lg-5">
                                 @foreach($surat->children as $child)
                                     <div class="col-md-2 col-sm-6 col-lg-2 fltr-itm fltr-itm1 mb-3">
                                         <labe>
@@ -53,7 +53,6 @@
                                             <br>
                                             <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
                                         </a>
-                                        <br><br><br>
                                     </div>
                                 @endforeach
                             </div>
