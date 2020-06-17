@@ -24,7 +24,19 @@
             </div>
         </section>
         <section>
-            <div class="gap">
+            <div class="mt-lg-5">
+                <div class="col-md-12 w-100">
+                    @if($prev)
+                        <div>
+                            <a href="{{ route('quranSurat', $prev->slug) }}" class="thm-btn brd-rd40 mb-lg-5 pull-left" type="submit">Previous</a>
+                        </div>
+                    @endif
+                    @if($next)
+                        <div>
+                            <a href="{{ route('quranSurat', $next->slug) }}" class="thm-btn brd-rd40 mb-lg-5 pull-right" type="submit">Next</a>
+                        </div>
+                    @endif
+                </div>
                 <div class="container">
                     <div class="prtfl-wrap text-center">
                         <div class="serv-wrap text-center remove-ext3">
@@ -41,20 +53,9 @@
                                             <br>
                                             <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
                                         </a>
+                                        <br><br><br>
                                     </div>
                                 @endforeach
-                                    <div class="col-md-12 w-100">
-                                        @if($prev)
-                                            <div>
-                                                <a href="{{ route('quranSurat', $prev->slug) }}" class="thm-btn brd-rd40 mt-2 pull-left" type="submit">Previous</a>
-                                            </div>
-                                        @endif
-                                        @if($next)
-                                            <div>
-                                                <a href="{{ route('quranSurat', $next->slug) }}" class="thm-btn brd-rd40 mt-2 pull-right" type="submit">Next</a>
-                                            </div>
-                                        @endif
-                                    </div>
                             </div>
                         </div>
                     </div>
