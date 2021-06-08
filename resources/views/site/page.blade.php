@@ -50,10 +50,15 @@
                                         {{ $child->title }}
                                         <br>
                                     </labe>
+                                    @if(request()->page)
+                                        <br>
+                                        <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
+                                    @else
                                         <a href="{{ route('page', [$resource->slug, 'page' => $child->number]) }}" title="">
                                         <br>
                                             <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
                                         </a>
+                                    @endif
                                 </div>
                                 @endforeach
                             </div>
