@@ -28,6 +28,27 @@
         }
     </script>
 
+    <style>
+        .thm-btn, .secndry-btn{
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15) !important;
+        }
+        @media only screen and (min-width: 996px) {
+
+            .sticky{
+                position: fixed;
+                top: 80px;
+                background-color: white;
+                z-index: 9999;
+                box-shadow: 0 3px 5px rgba(0,0,0,.08);
+                width: 100%;
+                left: 15px;
+            }
+            .contact-form-row.sticky .contact-form{
+                margin-bottom: 10px !important;
+            }
+        }
+    </style>
+
 </head>
 <body>
     @yield('content')

@@ -38,7 +38,7 @@
                 <div class="container">
                     <div class="prtfl-wrap text-center">
                         <div class="serv-wrap text-center remove-ext3">
-                            <div class="row">
+                            <div class="row contact-form-row">
                                 <div class="col-md-12">
                                     <div class="contact-form text-center mb-5">
                                         <form action="{{ route('search') }}">
@@ -90,4 +90,21 @@
         </section>
         @include('site.inc.footer')
     </main>
+@stop
+
+@section('custom_js')
+    <script !src="">
+        var contactFormRow = ($('.contact-form-row').offset().top - 92);
+
+        //===== Sticky =====//
+        $(window).on('scroll',function () {
+            var scroll = $(window).scrollTop();
+
+            if (scroll >= contactFormRow) {
+                $('.contact-form-row').addClass('sticky');
+            } else {
+                $('.contact-form-row').removeClass('sticky');
+            }
+        });
+    </script>
 @stop
