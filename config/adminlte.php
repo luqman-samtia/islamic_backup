@@ -134,6 +134,12 @@ return [
             'can' => 'resourcescontroller.index'
         ],
         [
+            'text'        => 'Read Tajweed Quran',
+            'url'         => 'admin/tajweed-quran',
+            'icon'        => 'book',
+            'can' => 'resourcescontroller.index'
+        ],
+        [
             'text'        => 'Articles',
             'url'         => 'admin/articles',
             'icon'        => 'file',

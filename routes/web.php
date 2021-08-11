@@ -21,6 +21,17 @@ Route::prefix('quran')->group(function(){
         Route::get('page/{page}', 'PublicController@quranSuratPage')->name('quranSurat.page');
     });
 });
+
+Route::prefix('tajweed-quran')->group(function(){
+    Route::get('search', 'PublicController@tajweedQuranSearch')->name('tajweedQuranSearch');
+    Route::get('/', 'PublicController@tajweedQuran')->name('tajweedQuran');
+
+    Route::prefix('{surat}')->group(function(){
+        Route::get('/', 'PublicController@tajweedQuranSurat')->name('tajweedQuranSurat');
+        Route::get('page/{page}', 'PublicController@tajweedQuranSuratPage')->name('tajweedQuranSurat.page');
+    });
+});
+
 Route::get('/faq', 'PublicController@faq')->name('faq');
 Route::get('/charges', 'PublicController@charges')->name('charges');
 Route::get('/islamicmedia/{slug}', 'PublicController@media')->name('islamicmedia');
@@ -75,6 +86,17 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::match(['GET', 'POST'], '{quran}/add', 'QuranController@quranAdd')->name('quran.child.add');
         Route::match(['GET', 'POST'], '{quran}/edit/{childQuran}', 'QuranController@quranEdit')->name('quran.child.edit');
         Route::get('{quran}', 'QuranController@quran')->name('quran.quran');
+    });
+
+
+    Route::prefix('tajweed-quran')->group(function () {
+        Route::get('/', 'TajweedQuranController@index')->name('tajweed.quran');
+        Route::match(['GET', 'POST'], '/add', 'TajweedQuranController@add')->name('tajweed.quran.add');
+        Route::match(['GET', 'POST'], '{quran}/edit', 'TajweedQuranController@edit')->name('tajweed.quran.edit');
+        Route::post('/delete', 'TajweedQuranController@delete')->name('tajweed.quran.delete');
+        Route::match(['GET', 'POST'], '{quran}/add', 'TajweedQuranController@quranAdd')->name('tajweed.quran.child.add');
+        Route::match(['GET', 'POST'], '{quran}/edit/{childQuran}', 'TajweedQuranController@quranEdit')->name('tajweed.quran.child.edit');
+        Route::get('{quran}', 'TajweedQuranController@quran')->name('tajweed.quran.quran');
     });
 
 

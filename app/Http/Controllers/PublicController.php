@@ -8,6 +8,7 @@ use App\Media;
 use App\Quran;
 use App\Resources;
 use App\Scholars;
+use App\TajweedQuran;
 use App\Testimonials;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -106,6 +107,46 @@ class PublicController extends Controller
         return view('site.quran.suratpage', $data);
     }
 
+    public function tajweedQuran(){
+        $quran = TajweedQuran::parent(null)->orderAsc('number')->get();
+        return view('site.tajweed-quran.index', compact('quran'));
+    }
+
+    public function tajweedQuranSurat($slug){
+        $data['surat'] = TajweedQuran::with(['children' => function($query){
+            $query->orderAsc('number');
+        }])->findBySlug($slug)->first();
+
+        if(!$data['surat'])
+            abort(404);
+
+        $prev = TajweedQuran::where('id', '<', $data['surat']->id)->whereNull('parent_id')->orderBy('id','desc')->first();
+        $next = TajweedQuran::where('id', '>', $data['surat']->id)->whereNull('parent_id')->orderBy('id')->first();
+
+        $data['prev'] = $prev;
+        $data['next'] = $next;
+
+        return view('site.tajweed-quran.surat', $data);
+    }
+
+    public function tajweedQuranSuratPage($slug, $page){
+
+        $data['surat'] = TajweedQuran::whereHas('getParent', function($q) use ($slug){
+            $q->where('slug', $slug);
+        })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+
+        if(!$data['surat'])
+            abort(404);
+
+        $prev = TajweedQuran::where('id', '<', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id','desc')->first();
+        $next = TajweedQuran::where('id', '>', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id')->first();
+
+        $data['prev'] = $prev;
+        $data['next'] = $next;
+
+        return view('site.tajweed-quran.suratpage', $data);
+    }
+
     public function faq(){
         return view('site.faq');
     }
@@ -167,5 +208,38 @@ class PublicController extends Controller
 
         $data['search'] = $search->orderBy('number', 'asc')->get();
         return view('site.search', $data);
+    }
+
+    public function tajweedQuranSearch(Request $request){
+        $data['request'] = $request;
+        $data['quran'] = TajweedQuran::parent(null)->get();
+        $url = request()->all();
+        $search = DB::table('tajweed_quran')->select('surat.*')
+            ->join('tajweed_quran as surat', 'surat.parent_id', '=', 'tajweed_quran.id');
+        if (!$request->page) {
+            $search->where('tajweed_quran.slug', $request->surat);
+            if($request->ayat_from){
+                $search->whereRaw("({$request->ayat_from} between surat.ayat_from and surat.ayat_to OR {$request->ayat_from} <= surat.ayat_to)");
+            }
+            if($request->ayat_to){
+                $search->WhereRaw("({$request->ayat_to} between surat.ayat_from and surat.ayat_to OR {$request->ayat_to} >= surat.ayat_to)");
+            }
+        }
+        if($request->page){
+            $prev = DB::table('tajweed_quran')->whereNotNull('parent_id')->where('number', $request->page - 1)->count();
+            $next = DB::table('tajweed_quran')->whereNotNull('parent_id')->where('number', $request->page + 1)->count();
+            if ($prev) {
+                $url['page'] = $request->page - 1;
+                $data['previous'] = http_build_query($url);
+            }
+            if ($next) {
+                $url['page'] = $request->page + 1;
+                $data['next'] = http_build_query($url);
+            }
+            $search->where('surat.number', $request->page);
+        }
+
+        $data['search'] = $search->orderBy('number', 'asc')->get();
+        return view('site.tajweed-quran.search', $data);
     }
 }

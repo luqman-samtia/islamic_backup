@@ -25,6 +25,7 @@
                         </ul>
                     </li>
                     <li><a href="{{ route('quranPage') }}" title="">Read Quran</a></li>
+                    <li><a href="{{ route('tajweedQuran') }}" title="">Tajweed Quran</a></li>
                     <li class="menu-item-has-children">
                         <a href="#" title="">Islamic Media</a>
                         <ul>
