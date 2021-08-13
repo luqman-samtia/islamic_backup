@@ -2,6 +2,17 @@
 
 @section('title', $surat->title)
 
+@section('custom_css')
+    <style>
+        .contact-form-row.sticky .mb-lg-5{
+            margin-bottom: 15px !important;
+        }
+        .contact-form-row.sticky{
+            left: 0px;
+        }
+    </style>
+@stop
+
 @section('content')
     <main>
         @include('site.inc.loader')
@@ -25,7 +36,7 @@
         </section>
         <section>
             <div class="mt-lg-5">
-                <div class="col-md-12 w-100">
+                <div class="col-md-12 w-100 contact-form-row">
                     @if($prev)
                         <div>
                             <a href="{{ route('quranSurat', $prev->slug) }}" class="thm-btn brd-rd40 mb-lg-5 pull-left" type="submit">Previous</a>
@@ -64,4 +75,21 @@
 
         @include('site.inc.footer')
     </main>
+@stop
+
+@section('custom_js')
+    <script !src="">
+        var contactFormRow = ($('.contact-form-row').offset().top - 92);
+
+        //===== Sticky =====//
+        $(window).on('scroll',function () {
+            var scroll = $(window).scrollTop();
+
+            if (scroll >= contactFormRow) {
+                $('.contact-form-row').addClass('sticky');
+            } else {
+                $('.contact-form-row').removeClass('sticky');
+            }
+        });
+    </script>
 @stop
