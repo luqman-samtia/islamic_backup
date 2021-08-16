@@ -169,6 +169,12 @@ return [
             'icon'        => 'comments',
             'can' => 'resourcescontroller.index'
         ],
+        [
+            'text'        => 'Payment Information',
+            'url'         => 'admin/payment-methods',
+            'icon'        => 'dollar',
+            'can' => 'resourcescontroller.index'
+        ],
 //        [
 //            'text'        => 'Users',
 //            'url'         => 'users',

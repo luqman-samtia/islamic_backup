@@ -78,6 +78,36 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <div class="sec-title style2 text-center" style="margin-top: 20px">
+                        <div class="sec-title-inner">
+                            <h3><span class="secndry-clr">Payment</span> Methods</h3>
+                        </div>
+                    </div>
+                    <div class="srv-wrap3" style="direction: ltr">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-lg-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Method</th>
+                                        <th>Details</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($paymentMethods as $method)
+                                        <tr>
+                                            <td align="center" style="vertical-align: middle;">{{ $method->title }}</td>
+                                            <td align="center" style="vertical-align: middle;">{!! nl2br($method->description) !!}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>

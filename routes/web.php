@@ -142,4 +142,11 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::match(['GET', 'POST'], '{permission}/roles', 'PermissionController@roles')->name('permissions.roles');
     });
 
+    Route::prefix('payment-methods')->group(function (){
+        Route::get('/', 'PaymentsController@index')->name('payments');
+        Route::match(['GET', 'POST'], '/add', 'PaymentsController@add')->name('payments.add');
+        Route::match(['GET', 'POST'], '{paymentMethod}/edit', 'PaymentsController@edit')->name('payments.edit');
+        Route::post('/delete', 'PaymentsController@delete')->name('payments.delete');
+    });
+
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Articals;
 use App\Mail\ContacMail;
 use App\Media;
+use App\PaymentMethod;
 use App\Quran;
 use App\Resources;
 use App\Scholars;
@@ -152,7 +153,8 @@ class PublicController extends Controller
     }
 
     public function charges(){
-        return view('site.charges');
+        $data['paymentMethods'] = PaymentMethod::all();
+        return view('site.charges', $data);
     }
 
     public function media($slug){
