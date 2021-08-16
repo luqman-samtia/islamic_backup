@@ -34,7 +34,7 @@
                                     <ul>
                                         <li><a href="{{ route('site') }}" title="">Home</a></li>
                                         <li><a href="{{ route('quranPage') }}" title="">Quran</a></li>
-                                        <li><a href="{{ route('charges') }}" title="">Charges</a></li>
+                                        <li><a href="{{ route('charges') }}" title="">Charges & Payment Methods</a></li>
                                         <li><a href="{{ route('contactUs') }}" title="">Contact Us</a></li>
                                         <li><a href="{{ route('faq') }}" title="">FAQ</a></li>
                                         <li><a href="{{ route('terms') }}" title="">Terms Of Service</a></li>
