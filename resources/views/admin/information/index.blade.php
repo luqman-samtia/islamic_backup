@@ -180,6 +180,30 @@
             </div>
             <!-- /.box -->
         </div>
+        <div class="col-md-4">
+            <div class="box box-primary">
+                <!-- /.box-body -->
+                <form id="youtubeForm">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Youtube</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>Youtube</label>
+                            <input type="text" name="info[youtube][label]" class="form-control" placeholder="Enter Youtube" value="{{ @$info['youtube']['label'] }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Youtube</label>
+                            <input type="text" name="info[youtube][value]" class="form-control" placeholder="Enter Youtube" value="{{ @$info['youtube']['value'] }}">
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box -->
+        </div>
 
 
         {{-- Dynamic Fileds for Footer --}}
@@ -249,7 +273,7 @@
 
 @push('js')
     <script>
-        $('#skype1Form, #skype2Form, #phone1Form, #phone2Form, #whatsapp1Form, #whatsapp2Form, #emailForm').submit(function (e) {
+        $('#skype1Form, #skype2Form, #phone1Form, #phone2Form, #whatsapp1Form, #whatsapp2Form, #emailForm, #youtubeForm').submit(function (e) {
             e.preventDefault();
             $.ajax({
                 url: "{{ route('information.update') }}",

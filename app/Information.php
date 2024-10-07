@@ -23,6 +23,7 @@ class Information extends Model
         'whatsapp1' => 'array',
         'whatsapp2' => 'array',
         'email' => 'array',
+        'youtube' => 'array',
         'dynamic_footer_items' => 'array',
     ];
 
