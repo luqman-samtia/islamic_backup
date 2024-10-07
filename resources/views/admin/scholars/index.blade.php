@@ -18,6 +18,11 @@
                         <thead>
                         <tr>
                             <td>Name</td>
+                            <td>Salary</td>
+                            <td>Phone</td>
+                            <td>Address</td>
+                            <td>CNIC</td>
+                            <td>Notes</td>
                             <td>Image</td>
                             <td>Order</td>
                             <td>Action</td>
@@ -42,6 +47,11 @@
                 ajax: '{!! route('scholars') !!}',
                 columns: [
                     { data: 'name' },
+                    { data: 'salary' },
+                    { data: 'phone' },
+                    { data: 'address' },
+                    { data: 'cnic' },
+                    { data: 'notes' },
                     {
                         data: 'image',
                         render: function(data, type, row){
