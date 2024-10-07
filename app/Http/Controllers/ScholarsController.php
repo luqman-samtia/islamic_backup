@@ -38,6 +38,11 @@ class ScholarsController extends Controller
     public function edit(Request $request, Scholars $scholar){
         if ($request->post()){
             $scholar->name = $request->name;
+            $scholar->salary = $request->salary;
+            $scholar->phone = $request->phone;
+            $scholar->address = $request->address;
+            $scholar->cnic = $request->cnic;
+            $scholar->notes = $request->notes;
             $scholar->sort = $request->sort;
             if ($request->hasFile('image')){
                 $path = $request->image->store('scholars/images');

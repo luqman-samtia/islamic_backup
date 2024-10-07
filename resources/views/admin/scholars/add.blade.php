@@ -21,6 +21,26 @@
                                 <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
                             </div>
                             <div class="form-group">
+                                <label>Salary</label>
+                                <input type="text" name="salary" class="form-control" placeholder="Enter Salary" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone </label>
+                                <input type="text" name="phone" class="form-control" placeholder="Enter Phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" name="address" class="form-control" placeholder="Enter Address" required>
+                            </div>
+                            <div class="form-group">
+                                <label>CNIC</label>
+                                <input type="text" name="cnic" class="form-control" placeholder="Enter CNIC" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Notes</label>
+                                <input type="text" name="notes" class="form-control" placeholder="Enter Notes" required>
+                            </div>
+                            <div class="form-group">
                                 <label>Order</label>
                                 <input type="number" name="sort" class="form-control" min="0" value="0" placeholder="Enter Order" required>
                             </div>
