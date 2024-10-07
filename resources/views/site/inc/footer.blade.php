@@ -1,3 +1,8 @@
+@php
+    // Retrieve the first Information record
+    $information = \App\Information::query()->first();
+    
+@endphp
 <footer>
     <div class="gap top-spac70 drk-bg2 remove-bottom">
         <div class="container">
@@ -15,16 +20,16 @@
                             <div class="col-md-4 col-sm-4 col-lg-4">
                                 <div class="wdgt-box">
                                     <h4>Mobile Apps</h4>
-                                    <ul>
-                                        <li><a href="https://www.skype.com/en/get-skype" target="_blank" title="">Skype</a></li>
-                                        <li><a href="https://play.google.com/store/apps/details?id=com.dawateislami.alquranulkareem" target="_blank">Al-Quran-ul-Kareem</a></li>
-{{--                                        <li><a href="https://play.google.com/store/apps/details?id=com.wishwhizz.tajweedinooraniqaida" target="_blank">Colored Tajweedi Noorani Qaida</a></li>--}}
-                                        <li><a href="https://play.google.com/store/apps/details?id=com.naushad.faizanenamaz" target="_blank">Faizan e Namaz</a></li>
-                                        <li><a href="https://play.google.com/store/apps/details?id=pk.appmaker.NamazKayAhkam" target="_blank">Namaz Kay Ahkam</a></li>
-{{--                                        <li><a href="https://play.google.com/store/apps/details?id=com.namazwomen" target="_blank">Namaz Women</a></li>--}}
-                                        <li><a href="https://play.google.com/store/apps/details?id=com.dawateislami.kidsapplication" target="_blank">Kalma and Dua</a></li>
-{{--                                        <li><a href="https://play.google.com/store/apps/details?id=com.MadaniIslamicCartoon.android" target="_blank">Madani Islamic Cartoon</a></li>--}}
-                                        {{-- <li><a href="https://play.google.com/store/apps/details?id=com.qasimabdani.madaninaatcollection" target="_blank">Madani Naats</a></li> --}}
+                                    <ul>        
+                                        @if(!empty($information->dynamic_footer_items))
+                                        @foreach($information->dynamic_footer_items as $item)
+                                            <li>
+                                                <a href="{{ $item['link'] }}" target="_blank">{{ $item['title'] }}</a>
+                                            </li>
+                                        @endforeach
+                                    @else
+                                        <li>No dynamic footer items available.</li>
+                                    @endif
                                     </ul>
                                 </div>
                             </div>

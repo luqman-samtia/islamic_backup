@@ -184,12 +184,12 @@
 
         {{-- Dynamic Fileds for Footer --}}
         <div class="container">
-            <form id="dynamicFooterForm" method="POST" action="{{ route('information.update') }}">
+            <form id="dynamicFooterForm" method="POST" action="{{route('information.update')}}">
                 @csrf <!-- CSRF token for security -->
                 <div id="dynamicFooterContainer" class="row">
                     @if(!empty($info->dynamic_footer_items))
                         @foreach($info->dynamic_footer_items as $index => $item)
-                            <div class="col-md-4 footer-item-container">
+                            <div class="col-md-4 footer-item-container" style="width:32% !important;">
                                 <div class="box box-primary">
                                     <div class="box-header with-border">
                                         <input type="text" name="dynamic_footer_items[{{ $index }}][type]" value="{{ $item['type'] }}" class="form-control" placeholder="Enter Type">
@@ -221,7 +221,27 @@
         {{-- end box         --}}
         
     </div>
-    
+         {{-- Model Box --}}
+         <!-- Bootstrap Modal -->
+<div class="modal fade" id="updateSuccessModal" tabindex="-1" role="dialog" aria-labelledby="updateSuccessLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateSuccessLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Record updated successfully!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+ {{-- end Model Box --}}
 
     <div class="rolesModal"></div>
 @stop
@@ -250,7 +270,7 @@ $('#addFooterItem').click(function () {
     // Create a new footer item container
     const newFooterItemContainer = `
 
-        <div class="col-md-4 footer-item-container custom-col" style="width:32% !important;">
+        <div class="col-md-4 footer-item-container custom-col" style="width:31% !important;">
             <div class="box box-primary custom-box">
                 <div class="box-header with-border">
                     <input type="text" name="dynamic_footer_items[${index}][type]" class="form-control" placeholder="Enter Type">
@@ -283,5 +303,37 @@ $(document).on('click', '.remove-footer-item', function () {
     $(this).closest('.footer-item-container').remove();
 });
 
+// $('#dynamicFooterForm').submit(function (e) {
+//     e.preventDefault();
+
+//     $.ajax({
+//         url: "{{ route('information.update') }}",
+//         data: $(this).serialize() + "&_token={{ csrf_token() }}",
+//         type: "post",
+//         dataType: "json",
+//         success: function (response) {
+//             if (response.success) {
+//                 // Show the modal
+//                 $('#updateSuccessModal').modal('show');
+//             }
+//         }
+//     });
+// });
+
+$('#dynamicFooterForm').submit(function (e) {
+    e.preventDefault();
+    $.ajax({
+        url: "{{ route('information.update') }}",
+        type: "POST",
+        data: $(this).serialize(), // Serializes the form's elements
+        success: function(response) {
+            // alert('Update successful!');
+            $('#updateSuccessModal').modal('show');
+        },
+        error: function(xhr) {
+            alert('An error occurred: ' + xhr.responseText);
+        }
+    });
+});
     </script>
 @endpush
