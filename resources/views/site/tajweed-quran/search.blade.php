@@ -70,6 +70,11 @@
                             </div>
 
                             <div class="row">
+                                @if(isset($error))
+                            <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
+                                {{ $error }}
+                            </div>
+                                @endif
                                 @foreach($search as $child)
                                     <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
                                         <labe>

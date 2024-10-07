@@ -69,7 +69,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row">                        
                                 @foreach($quran as $surat)
                                 <div class="col-md-3 col-sm-6 col-lg-3">
                                     <div class="srv-box2">

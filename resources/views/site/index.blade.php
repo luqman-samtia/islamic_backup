@@ -116,7 +116,7 @@
                                     </div>
                                     <p>Online Quran learning started while considering the problem of the parents in finding qualified Quran teachers near to their home.
                                         The online way of learning holy Quran has a lot of advantages as compared to the conventional Quran classes.
-                                        We have 4 years experience. Now we are offering Tajweed-e-Qiraat course and Dars-e-Nizami course.
+                                        We have 12 years experience. Now we are offering Tajweed-e-Qiraat course and Dars-e-Nizami course.
                                         As concerned for male students we have male teachers and for female students we have female teachers.</p>
 {{--                                    <a class="secndry-btn brd-rd40" href="#" title="">Learn More</a>--}}
                                 </div>

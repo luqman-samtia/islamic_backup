@@ -24,7 +24,7 @@
 {{--                                        <li><a href="https://play.google.com/store/apps/details?id=com.namazwomen" target="_blank">Namaz Women</a></li>--}}
                                         <li><a href="https://play.google.com/store/apps/details?id=com.dawateislami.kidsapplication" target="_blank">Kalma and Dua</a></li>
 {{--                                        <li><a href="https://play.google.com/store/apps/details?id=com.MadaniIslamicCartoon.android" target="_blank">Madani Islamic Cartoon</a></li>--}}
-                                        <li><a href="https://play.google.com/store/apps/details?id=com.qasimabdani.madaninaatcollection" target="_blank">Madani Naats</a></li>
+                                        {{-- <li><a href="https://play.google.com/store/apps/details?id=com.qasimabdani.madaninaatcollection" target="_blank">Madani Naats</a></li> --}}
                                     </ul>
                                 </div>
                             </div>

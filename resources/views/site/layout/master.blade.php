@@ -29,6 +29,36 @@
     </script>
 
     <style>
+        /* floating */
+        .floating-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.floating-buttons a {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.floating-buttons a:hover {
+    transform: scale(1.1);
+}
+
+.floating-buttons img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+/* end floating */
         .thm-btn, .secndry-btn{
             box-shadow: 0 5px 10px rgba(0,0,0,0.15) !important;
         }
@@ -68,6 +98,17 @@
     <script src="{{ asset('assets/js/custom-scripts.js') }}"></script>
 
     @yield('custom_js')
-
+    <!-- Floating buttons -->
+    <div class="floating-buttons">
+        <!-- WhatsApp Button -->
+        <a href="https://wa.me/923001425825" target="_blank" class="whatsapp-button">
+            <img src="{{ asset('assets/images/whatsapp.png') }}" alt="WhatsApp">
+        </a>
+    
+        <!-- Skype Button -->
+        <a href="skype:live:live:428db5f55825624c?call" target="_blank" class="skype-button">
+            <img src="{{ asset('assets/images/skype.png') }}" alt="Skype">
+        </a>
+    </div>
 </body>
 </html>

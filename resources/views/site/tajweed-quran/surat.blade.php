@@ -28,12 +28,12 @@
                 <div class="col-md-12 w-100">
                     @if($prev)
                         <div>
-                            <a href="{{ route('TajweedQuranSurat', $prev->slug) }}" class="thm-btn brd-rd40 mb-lg-5 pull-left" type="submit">Previous</a>
+                            <a href="{{ route('tajweedQuranSurat', $prev->slug) }}" class="thm-btn brd-rd40 mb-lg-5 pull-left" type="submit">Previous</a>
                         </div>
                     @endif
                     @if($next)
                         <div>
-                            <a href="{{ route('TajweedQuranSurat', $next->slug) }}" class="thm-btn brd-rd40 mb-lg-5 pull-right" type="submit">Next</a>
+                            <a href="{{ route('tajweedQuranSurat', $next->slug) }}" class="thm-btn brd-rd40 mb-lg-5 pull-right" type="submit">Next</a>
                         </div>
                     @endif
                 </div>
@@ -41,6 +41,11 @@
                     <div class="prtfl-wrap text-center">
                         <div class="serv-wrap text-center remove-ext3">
                             <div class="row mb-lg-5">
+                                @if (session('error'))
+                                        <div class="col-md-2 col-sm-6 col-lg-2 fltr-itm fltr-itm1 mb-3">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
                                 @foreach($surat->children as $child)
                                     <div class="col-md-2 col-sm-6 col-lg-2 fltr-itm fltr-itm1 mb-3">
                                         <labe>

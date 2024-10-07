@@ -120,6 +120,7 @@ class PublicController extends Controller
 
         if(!$data['surat'])
             abort(404);
+       
 
         $prev = TajweedQuran::where('id', '<', $data['surat']->id)->whereNull('parent_id')->orderBy('id','desc')->first();
         $next = TajweedQuran::where('id', '>', $data['surat']->id)->whereNull('parent_id')->orderBy('id')->first();
@@ -138,7 +139,7 @@ class PublicController extends Controller
 
         if(!$data['surat'])
             abort(404);
-
+       
         $prev = TajweedQuran::where('id', '<', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id','desc')->first();
         $next = TajweedQuran::where('id', '>', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id')->first();
 
@@ -209,6 +210,13 @@ class PublicController extends Controller
         }
 
         $data['search'] = $search->orderBy('number', 'asc')->get();
+        if ($data['search']->isEmpty()) {
+            
+            $data['error'] = 'No results found for your search.';
+        } else {
+            
+            $data['search'] = $search->orderBy('number', 'asc')->get();;
+        }
         return view('site.search', $data);
     }
 
@@ -242,6 +250,13 @@ class PublicController extends Controller
         }
 
         $data['search'] = $search->orderBy('number', 'asc')->get();
+        if ($data['search']->isEmpty()) {
+            
+            $data['error'] = 'No results found for your search.';
+        } else {
+            
+            $data['search'] = $search->orderBy('number', 'asc')->get();;
+        }
         return view('site.tajweed-quran.search', $data);
     }
 }

@@ -25,6 +25,7 @@ Route::prefix('quran')->group(function(){
 Route::prefix('tajweed-quran')->group(function(){
     Route::get('search', 'PublicController@tajweedQuranSearch')->name('tajweedQuranSearch');
     Route::get('/', 'PublicController@tajweedQuran')->name('tajweedQuran');
+   
 
     Route::prefix('{surat}')->group(function(){
         Route::get('/', 'PublicController@tajweedQuranSurat')->name('tajweedQuranSurat');
