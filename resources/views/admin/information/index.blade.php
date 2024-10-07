@@ -222,25 +222,26 @@
         
     </div>
          {{-- Model Box --}}
-         <!-- Bootstrap Modal -->
-<div class="modal fade" id="updateSuccessModal" tabindex="-1" role="dialog" aria-labelledby="updateSuccessLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateSuccessLabel">Success</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Record updated successfully!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         <!-- Bootstrap Modal --> 
+        <!-- Modal Structure -->
+        <div class="modal fade" id="updateSuccessModal" tabindex="-1" role="dialog" aria-labelledby="updateSuccessLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content animate__animated animate__fadeIn"> <!-- Add animate classes -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateSuccessLabel">Success</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Record updated successfully!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
  {{-- end Model Box --}}
 
     <div class="rolesModal"></div>
@@ -302,23 +303,6 @@ $('#addFooterItem').click(function () {
 $(document).on('click', '.remove-footer-item', function () {
     $(this).closest('.footer-item-container').remove();
 });
-
-// $('#dynamicFooterForm').submit(function (e) {
-//     e.preventDefault();
-
-//     $.ajax({
-//         url: "{{ route('information.update') }}",
-//         data: $(this).serialize() + "&_token={{ csrf_token() }}",
-//         type: "post",
-//         dataType: "json",
-//         success: function (response) {
-//             if (response.success) {
-//                 // Show the modal
-//                 $('#updateSuccessModal').modal('show');
-//             }
-//         }
-//     });
-// });
 
 $('#dynamicFooterForm').submit(function (e) {
     e.preventDefault();
