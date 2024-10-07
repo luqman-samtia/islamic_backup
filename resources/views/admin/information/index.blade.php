@@ -180,7 +180,49 @@
             </div>
             <!-- /.box -->
         </div>
+
+
+        {{-- Dynamic Fileds for Footer --}}
+        <div class="container">
+            <form id="dynamicFooterForm" method="POST" action="{{ route('information.update') }}">
+                @csrf <!-- CSRF token for security -->
+                <div id="dynamicFooterContainer" class="row">
+                    @if(!empty($info->dynamic_footer_items))
+                        @foreach($info->dynamic_footer_items as $index => $item)
+                            <div class="col-md-4 footer-item-container">
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <input type="text" name="dynamic_footer_items[{{ $index }}][type]" value="{{ $item['type'] }}" class="form-control" placeholder="Enter Type">
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label>Title</label>
+                                            <input type="text" name="dynamic_footer_items[{{ $index }}][title]" value="{{ $item['title'] }}" class="form-control" placeholder="Enter Title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Link</label>
+                                            <input type="text" name="dynamic_footer_items[{{ $index }}][link]" value="{{ $item['link'] }}" class="form-control" placeholder="Enter Link">
+                                        </div>
+                                    </div>
+                                    <div class="box-footer">
+                                        <button type="button" class="btn btn-danger remove-footer-item">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+                <div class="box-footer" style="width:50%;margin:0px auto;text-align:center;">
+                    <button type="button" id="addFooterItem" class="btn btn-secondary">Add Footer Item</button>
+                    <button type="submit" class="btn btn-primary">Update All</button>
+                </div>
+            </form>
+        </div>
+        {{-- end box         --}}
+        
     </div>
+    
+
     <div class="rolesModal"></div>
 @stop
 
@@ -198,5 +240,48 @@
                 }
             });
         })
+
+
+        // add Dynamic code
+
+        let index = {{ !empty($info->dynamic_footer_items) ? count($info->dynamic_footer_items) : 0 }};
+
+$('#addFooterItem').click(function () {
+    // Create a new footer item container
+    const newFooterItemContainer = `
+
+        <div class="col-md-4 footer-item-container custom-col" style="width:32% !important;">
+            <div class="box box-primary custom-box">
+                <div class="box-header with-border">
+                    <input type="text" name="dynamic_footer_items[${index}][type]" class="form-control" placeholder="Enter Type">
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="dynamic_footer_items[${index}][title]" class="form-control" placeholder="Enter Title">
+                    </div>
+                    <div class="form-group">
+                        <label>Link</label>
+                        <input type="text" name="dynamic_footer_items[${index}][link]" class="form-control" placeholder="Enter Link">
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button type="button" class="btn btn-danger remove-footer-item">Remove</button>
+                </div>
+            </div>
+        </div>
+        
+    `;
+    
+    // Append the new container to dynamicFooterContainer
+    $('#dynamicFooterContainer').append(newFooterItemContainer);
+    index++;
+});
+
+// Remove dynamic footer item container
+$(document).on('click', '.remove-footer-item', function () {
+    $(this).closest('.footer-item-container').remove();
+});
+
     </script>
 @endpush
