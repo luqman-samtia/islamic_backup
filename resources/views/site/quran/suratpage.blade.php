@@ -65,7 +65,7 @@
                                         Page - {{ $surat->number }}
                                         <br>
                                     </labe>
-                                    <img src="{{ asset('/storage/'.$surat->image) }}" alt="{{ $surat->title }}">
+                                    <img src="{{ asset('storage/'.$surat->image) }}" alt="{{ $surat->title }}">
                                 </div>
                                 <div class="col-md-12 w-100">
                                     @if(@$prev)

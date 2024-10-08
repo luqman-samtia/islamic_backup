@@ -62,7 +62,7 @@
                                         </labe>
                                         <a href="{{ route('quranSurat.page', [$surat->slug, $child->number]) }}" title="">
                                             <br>
-                                            <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
+                                            <img src="{{ asset('storage/'.$child->image) }}" alt="{{ $child->title }}">
                                         </a>
                                     </div>
                                 @endforeach
