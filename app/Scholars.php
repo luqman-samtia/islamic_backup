@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Storage;
 class Scholars extends Model
 {
     protected $fillable = [
-        'name', 'image', 'sort'
+        'name', 'image', 'sort','salary', 'phone', 'cnic', 'notes', 'address'
     ];
-
+    protected $guarded = [];
     protected $appends = ['image_url'];
 
     public function getImageUrlAttribute()

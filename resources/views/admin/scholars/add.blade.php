@@ -22,7 +22,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Salary</label>
-                                <input type="text" name="salary" class="form-control" placeholder="Enter Salary" required>
+                                <input type="number" name="salary" class="form-control" placeholder="Enter Salary" required>
                             </div>
                             <div class="form-group">
                                 <label>Phone </label>

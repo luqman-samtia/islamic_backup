@@ -1,8 +1,12 @@
 @extends('adminlte::page')
 
+
 @section('title', 'Islamic Scholars')
 
 @section('content_header')
+<!-- Add SweetAlert CSS and JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
     <h1>
         Islamic Scholars
         <a href="{{ route('scholars.add') }}" class="btn btn-sm btn-success pull-right"><i class="fa fa-plus"></i> New Scholars</a>
@@ -76,16 +80,49 @@
                 order: [[2, 'asc']]
             });
         // });
+
+        // old delete code>>>>>>>>>>>>>>>>>>>>>
+
+        // $(document).on('click', '.delete', function(){
+        //     let id = $(this).attr('data-id');
+        //     $.ajax({
+        //         url : "{{ route('scholars.delete') }}",
+        //         data: 'id='+id+"&_token={{ csrf_token() }}&parent=1",
+        //         type:"post",
+        //         success: function(output){
+        //             datatable.ajax.reload();
+        //         }
+        //     });
+        // })
         $(document).on('click', '.delete', function(){
-            let id = $(this).attr('data-id');
+    let id = $(this).attr('data-id');
+    
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
                 url : "{{ route('scholars.delete') }}",
                 data: 'id='+id+"&_token={{ csrf_token() }}&parent=1",
-                type:"post",
+                type: "post",
                 success: function(output){
+                    Swal.fire(
+                        'Deleted!',
+                        'The scholar has been deleted.',
+                        'success'
+                    );
                     datatable.ajax.reload();
                 }
             });
-        })
+        }
+    });
+});
+
     </script>
     @endpush

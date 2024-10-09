@@ -25,6 +25,14 @@ class ScholarsController extends Controller
     public function add(Request $request){
         if ($request->post()){
             $data = $request->except('image');
+              // Add new fields to $data array
+            $data['salary'] = $request->input('salary');
+            $data['phone'] = $request->input('phone');
+            $data['cnic'] = $request->input('cnic');
+            $data['notes'] = $request->input('notes');
+            $data['address'] = $request->input('address');
+            // dd($data);
+            // exit();
             if ($request->hasFile('image')){
                 $path = $request->image->store('scholars/images');
                 $data['image'] = $path;
