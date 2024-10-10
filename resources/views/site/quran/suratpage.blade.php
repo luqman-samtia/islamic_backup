@@ -65,19 +65,50 @@
                                         Page - {{ $surat->number }}
                                         <br>
                                     </labe>
-                                    <img src="{{ asset('storage/'.$surat->image) }}" alt="{{ $surat->title }}">
+                                    <img src="{{ asset('storage/'.$surat->image) }}" alt="{{ $surat->title }}" width="500px">
                                 </div>
-                                <div class="col-md-12 w-100">
+                                {{-- <div class="col-md-12 w-100">
                                     @if(@$prev)
                                         <div>
                                             <a href="{{ route('quranSurat.page', [$surat->getParent->slug, $prev->number]) }}" class="thm-btn brd-rd40 mt-2 pull-left" type="submit">Previous</a>
                                         </div>
                                     @endif
+                                    <div>
+                                        <a href="{{ route('quranSurat', $surat->getParent->slug) }}" 
+                                           class="thm-btn brd-rd40 mt-2">{{ $surat->getParent->title }}</a>
+                                    </div>
                                     @if(@$next)
                                         <div>
                                             <a href="{{ route('quranSurat.page', [$surat->getParent->slug, $next->number ]) }}" class="thm-btn brd-rd40 mt-2 pull-right" type="submit">Next</a>
                                         </div>
                                     @endif
+                                </div> --}}
+                                <div class="col-md-12 w-100 text-center">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Previous Button -->
+                                        <div>
+                                            @if(@$prev)
+                                                <a href="{{ route('quranSurat.page', [$surat->getParent->slug, $prev->number]) }}" 
+                                                   class="thm-btn brd-rd40 mt-2" 
+                                                   type="submit">Previous</a>
+                                            @endif
+                                        </div>
+                                        
+                                        <!-- Center Button -->
+                                        <div>
+                                            <a href="{{ route('quranSurat', $surat->getParent->slug) }}" 
+                                               class="thm-btn brd-rd40 mt-2">{{ $surat->getParent->title }}</a>
+                                        </div>
+                                
+                                        <!-- Next Button -->
+                                        <div>
+                                            @if(@$next)
+                                                <a href="{{ route('quranSurat.page', [$surat->getParent->slug, $next->number ]) }}" 
+                                                   class="thm-btn brd-rd40 mt-2" 
+                                                   type="submit">Next</a>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

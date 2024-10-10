@@ -3,6 +3,8 @@
 @section('title', 'Footer Information')
 
 @section('content_header')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
     <h1>
         Footer Information
     </h1>
@@ -295,7 +297,7 @@ $('#addFooterItem').click(function () {
     // Create a new footer item container
     const newFooterItemContainer = `
 
-        <div class="col-md-4 footer-item-container custom-col" style="width:31% !important;">
+        <div class="col-md-4 footer-item-container custom-col" style="width:32% !important;">
             <div class="box box-primary custom-box">
                 <div class="box-header with-border">
                     <input type="text" name="dynamic_footer_items[${index}][type]" class="form-control" placeholder="Enter Type">
@@ -336,7 +338,13 @@ $('#dynamicFooterForm').submit(function (e) {
         data: $(this).serialize(), // Serializes the form's elements
         success: function(response) {
             // alert('Update successful!');
-            $('#updateSuccessModal').modal('show');
+            // $('#updateSuccessModal').modal('show');
+
+            Swal.fire(
+                        'Success!',
+                        'The footer information has been updated.',
+                        'success'
+                    );
         },
         error: function(xhr) {
             alert('An error occurred: ' + xhr.responseText);

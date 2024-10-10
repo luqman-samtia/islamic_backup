@@ -10,13 +10,33 @@
         .contact-form > form input, .contact-form > form select, .contact-form > form textarea{
             border: 1px solid #ededed;
         }
+        .toast {
+    position: fixed;
+    top: 20px; /* Change this from bottom to top */
+    right: 20px; /* Keep this for right positioning */
+    background-color: #eb0909;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+.toast.visible {
+    opacity: 1;
+}
+
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 @stop
 
 @section('content')
     <main>
         @include('site.inc.loader')
         @include('site.inc.header')
+       
         @include('site.inc.header_responsive')
 
         <section>
@@ -75,6 +95,54 @@
                                     {{ $error }}
                                 </div>
                                     @endif
+                                    <div class="col-md-12 w-100 text-center">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <!-- Previous Button -->
+                                            <div>
+                                                @if(@$previous)
+                                                    <a href="{{ route('search', $previous) }}" 
+                                                       class="thm-btn brd-rd40 mt-2" 
+                                                       type="submit">Previous</a>
+                                                @endif
+                                            </div>
+                                            
+                                            <!-- Center Button -->
+                                            <div>
+                                                <a href="{{ route('quranSurat', $parent_slug) }}" 
+                                                   class="thm-btn brd-rd40 mt-2">{{ $parent_surat }}</a>
+                                            </div>
+                                    
+                                            <!-- Next Button -->
+                                            <div>
+                                                @if(@$next)
+                                                    <a href="{{ route('search', $next ) }}" 
+                                                       class="thm-btn brd-rd40 mt-2" 
+                                                       type="submit">Next</a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="col-md-12 w-100">
+                                        @if(@$previous)
+                                        <div>
+                                            <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40 mt-2 pull-left" type="submit">Previous</a>
+                                        </div>
+                                        @endif
+                                        <div>
+                                            @if(isset($parent_surat) && !empty($parent_surat))
+                                                <a href="{{ route('quranSurat', $parent_slug) }}" 
+                                                   class="thm-btn brd-rd40 mt-2">{{ $parent_surat }}</a>
+                                            @else
+                                                <!-- Display a default message or link if $parent_surat is not set -->
+                                                <a href="#" class="thm-btn brd-rd40 mt-2">No Parent</a>
+                                            @endif
+                                        </div>
+                                        @if(@$next)
+                                        <div>
+                                            <a href="{{ route('search', $next) }}" class="thm-btn brd-rd40 mt-2 pull-right" type="submit">Next</a>
+                                        </div>
+                                        @endif
+                                    </div> --}}
                                 @foreach($search as $child)
                                     <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
                                         <labe>
@@ -85,21 +153,36 @@
                                         </labe>
 {{--                                        <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">--}}
                                             <br>
-                                            <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
+                                            <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}" width="500px">
 {{--                                        </a>--}}
                                     </div>
                                 @endforeach
-                                    <div class="col-md-12 w-100">
-                                        @if(@$previous)
-                                        <div>
-                                            <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40 mt-2 pull-left" type="submit">Previous</a>
+                                    <div class="col-md-12 w-100 text-center">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <!-- Previous Button -->
+                                            <div>
+                                                @if(@$previous)
+                                                    <a href="{{ route('search', $previous) }}" 
+                                                       class="thm-btn brd-rd40 mt-2" 
+                                                       type="submit">Previous</a>
+                                                @endif
+                                            </div>
+                                            
+                                            <!-- Center Button -->
+                                            <div>
+                                                <a href="{{ route('quranSurat', $parent_slug) }}" 
+                                                   class="thm-btn brd-rd40 mt-2">{{ $parent_surat }}</a>
+                                            </div>
+                                    
+                                            <!-- Next Button -->
+                                            <div>
+                                                @if(@$next)
+                                                    <a href="{{ route('search', $next ) }}" 
+                                                       class="thm-btn brd-rd40 mt-2" 
+                                                       type="submit">Next</a>
+                                                @endif
+                                            </div>
                                         </div>
-                                        @endif
-                                        @if(@$next)
-                                        <div>
-                                            <a href="{{ route('search', $next) }}" class="thm-btn brd-rd40 mt-2 pull-right" type="submit">Next</a>
-                                        </div>
-                                        @endif
                                     </div>
                             </div>
                         </div>
@@ -126,5 +209,28 @@
                 $('.contact-form-row').removeClass('sticky');
             }
         });
+       
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('visible');
+            }, 100);
+            setTimeout(() => {
+                toast.classList.remove('visible');
+                document.body.removeChild(toast);
+            }, 5000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('error'))
+                showToast('{{ session('error') }}');
+            @endif
+        });
+
+
+
     </script>
 @stop

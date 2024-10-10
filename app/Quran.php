@@ -43,6 +43,10 @@ class Quran extends Model
     {
         return $this->hasOne(Quran::class, 'id', 'parent_id');
     }
+    public function SearchgetParent()
+    {
+        return $this->belongsTo(Quran::class, 'parent_id');
+    }
 
     public function delete(){
         @unlink(public_path("/storage/".$this->image));
