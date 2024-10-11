@@ -57,4 +57,18 @@ class InformationController extends Controller
          // Return a JSON response for success
          return response()->json(['success' => true]);
     }
+    public function removeFooterItem(Request $request)
+    {
+        $index = $request->input('index');
+
+        $info = Information::find(1);
+        $currentArray = $info->dynamic_footer_items;
+
+        unset($currentArray[$index]);
+
+        $info->dynamic_footer_items = array_values($currentArray);
+        $info->save();
+
+        return response()->json(['message' => 'Item removed successfully!']);
+    }
 }

@@ -5,6 +5,8 @@
 @section('content_header')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
     <h1>
         Footer Information
     </h1>
@@ -209,25 +211,26 @@
 
 
         {{-- Dynamic Fileds for Footer --}}
-        <div class="container">
-            <form id="dynamicFooterForm" method="POST" action="{{route('information.update')}}">
+        {{-- <div class="container"> --}}
+            <form id="dynamicFooterForm" method="POST" action="{{route('information.update')}}" class="container-fluid ">
                 @csrf <!-- CSRF token for security -->
                 <div id="dynamicFooterContainer" class="row">
                     @if(!empty($info->dynamic_footer_items))
                         @foreach($info->dynamic_footer_items as $index => $item)
-                            <div class="col-md-4 footer-item-container" style="width:32% !important;">
+                            <div class="col-md-4 footer-item-container" style="">
                                 <div class="box box-primary">
                                     <div class="box-header with-border">
-                                        <input type="text" name="dynamic_footer_items[{{ $index }}][type]" value="{{ $item['type'] }}" class="form-control" placeholder="Enter Type">
+                                        <input type="hidden" name="dynamic_footer_items[{{ $index }}][type]" value="Footer Links" class="form-control" placeholder="Enter Type">
+                                        <h3 class="box-title">Footer Links</h3>
                                     </div>
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label>Title</label>
-                                            <input type="text" name="dynamic_footer_items[{{ $index }}][title]" value="{{ $item['title'] }}" class="form-control" placeholder="Enter Title">
+                                            <input type="text" id="titleField" name="dynamic_footer_items[{{ $index }}][title]" value="{{ $item['title'] }}" class="form-control" placeholder="Enter Title" autocomplete="off">
                                         </div>
                                         <div class="form-group">
                                             <label>Link</label>
-                                            <input type="text" name="dynamic_footer_items[{{ $index }}][link]" value="{{ $item['link'] }}" class="form-control" placeholder="Enter Link">
+                                            <input type="text" id="linkField" name="dynamic_footer_items[{{ $index }}][link]" value="{{ $item['link'] }}" class="form-control" placeholder="Enter Link" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="box-footer">
@@ -243,7 +246,7 @@
                     <button type="submit" class="btn btn-primary">Update All</button>
                 </div>
             </form>
-        </div>
+        {{-- </div> --}}
         {{-- end box         --}}
         
     </div>
@@ -297,19 +300,21 @@ $('#addFooterItem').click(function () {
     // Create a new footer item container
     const newFooterItemContainer = `
 
-        <div class="col-md-4 footer-item-container custom-col" style="width:32% !important;">
+        <div class="col-md-4 footer-item-container " style="" >
             <div class="box box-primary custom-box">
                 <div class="box-header with-border">
-                    <input type="text" name="dynamic_footer_items[${index}][type]" class="form-control" placeholder="Enter Type">
+                    <input type="hidden" name="dynamic_footer_items[${index}][type]" value="Footer Links" class="form-control" placeholder="Enter Type">
+                        <h3 class="box-title">Footer Links</h3>
+                    
                 </div>
                 <div class="box-body">
                     <div class="form-group">
                         <label>Title</label>
-                        <input type="text" name="dynamic_footer_items[${index}][title]" class="form-control" placeholder="Enter Title">
+                        <input type="text" id="titleField" name="dynamic_footer_items[${index}][title]" class="form-control" placeholder="Enter Title" autocomplete="off" >
                     </div>
                     <div class="form-group">
                         <label>Link</label>
-                        <input type="text" name="dynamic_footer_items[${index}][link]" class="form-control" placeholder="Enter Link">
+                        <input type="text" id="linkField" name="dynamic_footer_items[${index}][link]" class="form-control" placeholder="Enter Link" autocomplete="off" >
                     </div>
                 </div>
                 <div class="box-footer">
@@ -325,31 +330,86 @@ $('#addFooterItem').click(function () {
     index++;
 });
 
-// Remove dynamic footer item container
-$(document).on('click', '.remove-footer-item', function () {
-    $(this).closest('.footer-item-container').remove();
+// Remove dynamic footer item container old code meaning less
+// $(document).on('click', '.remove-footer-item', function () {
+//     $(this).closest('.footer-item-container').remove();
+// });
+
+    // Add event listener to remove button
+    $(document).on('click', '.remove-footer-item', function() {
+    // Get the parent container of the remove button
+    var parentContainer = $(this).closest('.footer-item-container');
+    
+    // Get the index of the parent container
+    var currentIndex = parentContainer.index();
+    
+    // Make an AJAX request to remove the item from the array column
+    $.ajax({
+        type: 'POST',
+        url: '/admin/information/remove-footer-item', // URL of the PHP script that handles the removal
+        data: { index: currentIndex },
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+        success: function(response) {
+            // Remove the parent container from the DOM
+            parentContainer.remove();
+            
+            // Decrement the index
+            index--;
+        }
+    });
 });
 
 $('#dynamicFooterForm').submit(function (e) {
     e.preventDefault();
+    
+    let hasError = false;
+    
+    // Loop through each dynamically added footer item to validate
+    $('#dynamicFooterContainer .footer-item-container').each(function () {
+        const title = $(this).find('#titleField').val();
+        const link = $(this).find('#linkField').val();
+        
+        if (!title || !link) {
+            Swal.fire(
+                'Error!',
+                'Title and link fields cannot be empty.',
+                'error'
+            );
+            hasError = true;
+            return false; // Break out of each loop if validation fails
+        }
+    });
+    
+    // If there was a validation error, stop the submission
+    if (hasError) return;
+
+    // Use FormData to handle the submission
+    const formData = new FormData(this);
+
     $.ajax({
         url: "{{ route('information.update') }}",
         type: "POST",
-        data: $(this).serialize(), // Serializes the form's elements
+        data: formData,
+        contentType: false, // Important: Required when using FormData
+        processData: false, // Important: Required when using FormData
         success: function(response) {
-            // alert('Update successful!');
-            // $('#updateSuccessModal').modal('show');
-
             Swal.fire(
-                        'Success!',
-                        'The footer information has been updated.',
-                        'success'
-                    );
+                'Success!',
+                'The footer information has been updated.',
+                'success'
+            );
         },
         error: function(xhr) {
-            alert('An error occurred: ' + xhr.responseText);
+            Swal.fire(
+                'Error!',
+                'An error occurred: ' + xhr.responseText,
+                'error'
+            );
         }
     });
 });
+
     </script>
 @endpush

@@ -62,6 +62,8 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::prefix('information')->group(function (){
         Route::get('/', 'InformationController@index')->name('information');
         Route::post('update', 'InformationController@update')->name('information.update');
+        Route::post('remove-footer-item', 'InformationController@removeFooterItem')->name('information.footer-item.destroy');
+
     });
 
     Route::prefix('scholars')->group(function (){
