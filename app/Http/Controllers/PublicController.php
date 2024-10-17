@@ -203,8 +203,10 @@ class PublicController extends Controller
                 $search->WhereRaw("({$request->ayat_to} between surat.ayat_from and surat.ayat_to OR {$request->ayat_to} >= surat.ayat_to)");
                 
             }
-            $data['parent_surat'] = $parent->title;
-            $data['parent_slug'] = $parent->slug;
+            if ($parent) {
+                $data['parent_surat'] = $parent->title;
+                $data['parent_slug'] = $parent->slug;
+            }
         }
         if($request->page){
             $prev = DB::table('quran')->whereNotNull('parent_id')->where('number', $request->page - 1)->count();

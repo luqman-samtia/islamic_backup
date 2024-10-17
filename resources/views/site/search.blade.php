@@ -108,9 +108,9 @@
                                             
                                             <!-- Center Button -->
                                             <div>
-                                                @if($request->page != null)
+                                                @if($request->page)
                                                 <a href="{{ route('quranSurat', $parent_slug) }}" 
-                                                   class="thm-btn brd-rd40 mt-2">{{ $parent_surat }}</a>
+                                                   class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
                                                    @endif
                                             </div>
                                     
@@ -172,8 +172,10 @@
                                             
                                             <!-- Center Button -->
                                             <div>
+                                                @if($request->page)
                                                 <a href="{{ route('quranSurat', $parent_slug) }}" 
                                                    class="thm-btn brd-rd40 mt-2">{{ $parent_surat }}</a>
+                                                   @endif
                                             </div>
                                     
                                             <!-- Next Button -->
