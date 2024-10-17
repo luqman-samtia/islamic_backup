@@ -108,8 +108,10 @@
                                             
                                             <!-- Center Button -->
                                             <div>
+                                                @if($request->page != null)
                                                 <a href="{{ route('quranSurat', $parent_slug) }}" 
                                                    class="thm-btn brd-rd40 mt-2">{{ $parent_surat }}</a>
+                                                   @endif
                                             </div>
                                     
                                             <!-- Next Button -->

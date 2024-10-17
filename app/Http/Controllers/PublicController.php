@@ -189,7 +189,11 @@ class PublicController extends Controller
         
         $search = DB::table('quran')->select('surat.*')
             ->join('quran as surat', 'surat.parent_id', '=', 'quran.id');
-       
+            $parent = DB::table('quran')
+            ->join('quran as surat', 'surat.parent_id', '=', 'quran.id')
+            ->select('quran.title', 'quran.slug') // Adjusting to fetch the parent 'quran' title and slug
+            ->where('quran.slug', $request->surat) // Make sure to reference 'surat' for the slug check
+            ->first();
         if (!$request->page) {
             $search->where('quran.slug', $request->surat);
             if($request->ayat_from){
@@ -197,16 +201,15 @@ class PublicController extends Controller
             }
             if($request->ayat_to){
                 $search->WhereRaw("({$request->ayat_to} between surat.ayat_from and surat.ayat_to OR {$request->ayat_to} >= surat.ayat_to)");
+                
             }
+            $data['parent_surat'] = $parent->title;
+            $data['parent_slug'] = $parent->slug;
         }
         if($request->page){
             $prev = DB::table('quran')->whereNotNull('parent_id')->where('number', $request->page - 1)->count();
             $next = DB::table('quran')->whereNotNull('parent_id')->where('number', $request->page + 1)->count();
-            $parent = DB::table('quran')
-            ->join('quran as surat', 'surat.parent_id', '=', 'quran.id')
-            ->select('quran.title', 'quran.slug') // Adjusting to fetch the parent 'quran' title and slug
-            ->where('quran.slug', $request->surat) // Make sure to reference 'surat' for the slug check
-            ->first();
+            
             // dd($prev, $next, $parent);
             if ($prev) {
                 $url['page'] = $request->page - 1;
