@@ -61,9 +61,9 @@
                             <div class="row contact-form-row">
                                 <div class="col-md-12">
                                     <div class="contact-form mb-5">
-                                        <form action="{{ route('search') }}">
+                                        <form id="searchForm" action="{{ route('search') }}">
                                             <div class="row mrg20">
-                                                <div class="col-md-4 col-sm-6 col-lg-4">
+                                                <div class="col-md-2 col-sm-6 col-lg-2">
                                                     <select name="surat" >
                                                         <option value="">-- Select Option --</option>
                                                         @foreach($quran as $surat)
@@ -78,14 +78,40 @@
                                                     <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
                                                 </div>
                                                 <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    <input type="number" name="page" placeholder="Page" value="{{ $request->page }}">
+                                                    {{-- {{ $request->page }} --}}
+                                                    <input type="number" name="page" placeholder="Page" value="">
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-lg-2">
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                 </div>
+                                                <div class="col-md-2 col-sm-12 col-lg-2">
+                                                    <button type="button" class="thm-btn brd-rd40 mt-3" id="goToPageButton">Page</button>
+
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
+                                     <!-- Modal -->
+                                <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="pageModalLabel">Go to Page</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="number" id="pageInput" placeholder="Enter page number">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn thm-btn " id="confirmPageButton">Go to Page</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- End Modal --}} 
                                 </div>
                             </div>
 
@@ -108,7 +134,7 @@
                                             
                                             <!-- Center Button -->
                                             <div>
-                                                @if($request->page)
+                                                @if($request->surat )
                                                 <a href="{{ route('quranSurat', $parent_slug) }}" 
                                                    class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
                                                    @endif
@@ -172,7 +198,7 @@
                                             
                                             <!-- Center Button -->
                                             <div>
-                                                @if($request->page)
+                                                @if($request->surat )
                                                 <a href="{{ route('quranSurat', $parent_slug) }}" 
                                                    class="thm-btn brd-rd40 mt-2">{{ $parent_surat }}</a>
                                                    @endif
@@ -235,6 +261,25 @@
         });
 
 
+        // Page Modal code
+        $(document).ready(function() {
+        // Show the modal when the "Go to Page" button is clicked
+        $('#goToPageButton').on('click', function() {
+            $('#pageModal').modal('show');
+        });
 
+        // When the "Go to Page" button in the modal is clicked
+        $('#confirmPageButton').on('click', function() {
+            var pageNumber = $('#pageInput').val();
+            if (pageNumber) {
+                // Set the page input in the form
+                $('input[name="page"]').val(pageNumber);
+                // Submit the form
+                $('#searchForm').submit();
+            } else {
+                alert('Please enter a page number');
+            }
+        });
+    });
     </script>
 @stop
