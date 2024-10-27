@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,23 +12,34 @@
 |
 */
 
+
+// Student Login Routes
+Route::post('student/register', [StudentController::class, 'register'])->name('student.register');
+Route::post('student/login', [StudentController::class, 'login'])->name('student.login');
+// If using web routes
+Route::post('student/logout', [StudentController::class, 'logout'])->name('student.logout');
+
+
+Route::get('admin/verify-student/{id}', [StudentController::class, 'verifyStudent'])->name('admin.verifyStudent');
+
+// END
 Route::get('/', 'PublicController@index')->name('site');
 Route::match(['GET', 'POST'],'/contactUs', 'PublicController@contactUs')->name('contactUs');
-Route::get('/page/{slug}', 'PublicController@page')->name('page');
-Route::get('/quran', 'PublicController@quran')->name('quranPage');
-Route::prefix('quran')->group(function(){
-    Route::prefix('{surat}')->group(function(){
+Route::get('/page/{slug}', 'PublicController@page')->middleware('student.auth')->name('page');
+Route::get('/quran', 'PublicController@quran')->middleware('student.auth')->name('quranPage');
+Route::prefix('quran')->middleware('student.auth')->group(function(){
+    Route::prefix('{surat}')->middleware('student.auth')->group(function(){
         Route::get('/', 'PublicController@quranSurat')->name('quranSurat');
         Route::get('page/{page}', 'PublicController@quranSuratPage')->name('quranSurat.page');
     });
 });
 
-Route::prefix('tajweed-quran')->group(function(){
+Route::prefix('tajweed-quran')->middleware('student.auth')->group(function(){
     Route::get('search', 'PublicController@tajweedQuranSearch')->name('tajweedQuranSearch');
     Route::get('/', 'PublicController@tajweedQuran')->name('tajweedQuran');
    
 
-    Route::prefix('{surat}')->group(function(){
+    Route::prefix('{surat}')->middleware('student.auth')->group(function(){
         Route::get('/', 'PublicController@tajweedQuranSurat')->name('tajweedQuranSurat');
         Route::get('page/{page}', 'PublicController@tajweedQuranSuratPage')->name('tajweedQuranSurat.page');
     });
@@ -35,10 +47,10 @@ Route::prefix('tajweed-quran')->group(function(){
 
 Route::get('/faq', 'PublicController@faq')->name('faq');
 Route::get('/charges', 'PublicController@charges')->name('charges');
-Route::get('/islamicmedia/{slug}', 'PublicController@media')->name('islamicmedia');
+Route::get('/islamicmedia/{slug}', 'PublicController@media')->middleware('student.auth')->name('islamicmedia');
 Route::get('/terms', 'PublicController@terms')->name('terms');
 Route::get('/article/{slug}', 'PublicController@artical')->name('artical');
-Route::get('/search', 'PublicController@search')->name('search');
+Route::get('/search', 'PublicController@search')->middleware('student.auth')->name('search');
 
 Auth::routes();
 
@@ -47,6 +59,31 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/pages', 'HomeController@pages')->name('pages');
     Route::get('/emails', 'HomeController@emails')->name('emails');
+    
+    // Students>>>>>>>>
+    Route::get('/students', 'StudentController@students')->name('admin.student');
+    Route::post('/students/destroy', 'StudentController@students_destroy')->name('admin.student.destroy');
+    Route::get('/student/add-links/{id}','StudentController@showAddLinksForm')->name('admin.student.addLinks');
+
+
+    Route::post('/student/update-links', 'StudentController@update')->name('admin.student.update');
+    Route::post('/student/remove-student-item', 'StudentController@removeStudentItem')->name('information.student-item.destroy');
+    Route::get('/student/show/info', 'StudentController@StudentDataShow')->name('information.student-data.show');
+    Route::get('/student/update-password',  function () {
+        return view('admin.students.updatepassword');
+    })->name('student.update-password');
+    Route::post('/student/update-password', 'StudentController@StudentUpdatePassword')->name('information.student.update-password');
+    Route::get('/student/submit-feedback', function(){
+        $feedback = Feedback::where('user_id', Auth::id())->first();
+        return view('admin.students.feedback',compact('feedback'));
+    })->name('student.feedback.submit');
+    Route::get('/student/submit-feedback','StudentController@showFeedback')->name('student.feedback.submit');
+    Route::post('/student/submit-feedback','StudentController@submitFeedback')->name('feedback.submit');
+    Route::get('/feedback/{id}', 'StudentController@getFeedback')->name('feedback.get');
+
+
+    
+
 
 
     Route::prefix('resources')->group(function (){
@@ -63,6 +100,7 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::get('/', 'InformationController@index')->name('information');
         Route::post('update', 'InformationController@update')->name('information.update');
         Route::post('remove-footer-item', 'InformationController@removeFooterItem')->name('information.footer-item.destroy');
+        Route::post('remove-student-item', 'InformationController@removeStudentItem')->name('information.student-item.destroy');
 
     });
 

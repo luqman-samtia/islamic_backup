@@ -246,6 +246,46 @@
                     <button type="submit" class="btn btn-primary">Update All</button>
                 </div>
             </form>
+
+            <hr> <!-- Separator between forms -->
+
+            <!-- Student Form -->
+            {{-- <form id="dynamicStudentForm" method="POST" action="{{ route('information.update') }}" class="container-fluid">
+                @csrf
+                <div id="dynamicStudentContainer" class="row">
+                    <!-- Dynamic student items will be added here -->
+                    @if(!empty($info->student_items))
+                        @foreach($info->student_items as $index => $item)
+                            <div class="col-md-4 student-item-container" style="">
+                                <div class="box box-info">
+                                    <div class="box-header with-border">
+                                        <input type="hidden" name="student_items[{{$index}}][type]" value="Student" class="form-control">
+                                        <h3 class="box-title">Student</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label>Title</label>
+                                            <input type="text" id="titleField" name="student_items[{{$index}}][title]" value="{{ $item['title'] }}" class="form-control" placeholder="Enter Title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Link</label>
+                                            <input type="text" id="linkField" name="student_items[{{$index}}][link]" value="{{ $item['link'] }}" class="form-control" placeholder="Enter Link">
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="box-footer">
+                                        <button type="button" class="btn btn-danger remove-student-item">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+                <div class="box-footer text-center">
+                    <button type="button" id="addStudentItem" class="btn btn-info">Add Student Item</button>
+                    <button type="submit" class="btn btn-success">Submit Students</button>
+                </div>
+            </form> --}}
         {{-- </div> --}}
         {{-- end box         --}}
         
@@ -411,5 +451,117 @@ $('#dynamicFooterForm').submit(function (e) {
     });
 });
 
+
+                //  COde for Students 
+                let studentIndex = {{ !empty($info->student_items) ? count($info->student_items) : 0 }};
+
+// Add new student item
+$('#addStudentItem').click(function () {
+    const newStudentItemContainer = `
+        <div class="col-md-4 student-item-container">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <input type="hidden" name="student_items[${studentIndex}][type]" value="Student" class="form-control">
+                    <h3 class="box-title">Student</h3>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="titleField" name="student_items[${studentIndex}][title]" class="form-control" placeholder="Enter Title">
+                    </div>
+                    <div class="form-group">
+                        <label>Link</label>
+                        <input type="text" id="linkField" name="student_items[${studentIndex}][link]" class="form-control" placeholder="Enter Link">
+                    </div>
+                    
+                </div>
+                <div class="box-footer">
+                    <button type="button" class="btn btn-danger remove-student-item">Remove</button>
+                </div>
+            </div>
+        </div>`;
+    
+    $('#dynamicStudentContainer').append(newStudentItemContainer);
+    studentIndex++;
+});
+// Ajax student item
+$('#dynamicStudentForm').submit(function (e) {
+    e.preventDefault();
+    
+    let hasError = false;
+    
+    // Loop through each dynamically added footer item to validate
+    $('#dynamicStudentContainer .student-item-container').each(function () {
+        const title = $(this).find('#titleField').val();
+        const link = $(this).find('#linkField').val();
+        
+        if (!title || !link) {
+            Swal.fire(
+                'Error!',
+                'Title and link fields cannot be empty.',
+                'error'
+            );
+            hasError = true;
+            return false; // Break out of each loop if validation fails
+        }
+    });
+    
+    // If there was a validation error, stop the submission
+    if (hasError) return;
+
+    // Use FormData to handle the submission
+    const formData = new FormData(this);
+
+    $.ajax({
+        url: "{{ route('information.update') }}",
+        type: "POST",
+        data: formData,
+        contentType: false, // Important: Required when using FormData
+        processData: false, // Important: Required when using FormData
+        success: function(response) {
+            Swal.fire(
+                'Success!',
+                'The footer information has been updated.',
+                'success'
+            );
+        },
+        error: function(xhr) {
+            Swal.fire(
+                'Error!',
+                'An error occurred: ' + xhr.responseText,
+                'error'
+            );
+        }
+    });
+});
+
+
+
+    // Remove Student
+    // Add event listener to remove button
+    $(document).on('click', '.remove-student-item', function() {
+    // Get the parent container of the remove button
+    var parentContainer = $(this).closest('.student-item-container');
+    
+    // Get the index of the parent container
+    var currentIndex = parentContainer.index();
+    
+    // Make an AJAX request to remove the item from the array column
+    $.ajax({
+        type: 'POST',
+        url: '/admin/information/remove-student-item', // URL of the PHP script that handles the removal
+        data: { index: currentIndex },
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+        success: function(response) {
+            // Remove the parent container from the DOM
+            parentContainer.remove();
+            
+            // Decrement the index
+            index--;
+        }
+    });
+});
     </script>
 @endpush

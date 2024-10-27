@@ -8,6 +8,36 @@
 
 @section('content')
     <div class="row">
+        @if (Auth::check() && Auth::user()->type=='student')
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-blue">
+                <div class="inner">
+                    {{-- <h3>{{ $resources }}</h3> --}}
+
+                    <p>Student Info</p>
+                </div>
+              
+                <a href="{{route('information.student-data.show')}}" class="small-box-footer">
+                    GO TO <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+                <div class="inner">
+                    {{-- <h3>{{ $surah }}</h3> --}}
+
+                    <p>Update Password</p>
+                </div>
+               
+                <a href="{{route('student.update-password')}}" class="small-box-footer">
+                    GO TO <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        @else
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-blue">
@@ -24,7 +54,6 @@
                 </a>
             </div>
         </div>
-        <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-green">
@@ -58,6 +87,9 @@
                 </a>
             </div>
         </div>
+        @endif
+        <!-- ./col -->
+        
         <!-- ./col -->
         {{--<div class="col-lg-3 col-xs-6">
             <!-- small box -->

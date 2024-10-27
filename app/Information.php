@@ -25,6 +25,7 @@ class Information extends Model
         'email' => 'array',
         'youtube' => 'array',
         'dynamic_footer_items' => 'array',
+        'student_items' => 'array',
     ];
 
     public function delete(){

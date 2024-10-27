@@ -19,6 +19,7 @@ class UserController extends Controller
         if ($request->post()){
             $data = $request->all();
             $data['password'] = Hash::make($request->password);
+            $data['type'] = 'admin'; 
             $user = User::create($data);
             $user->assignRole('Normal');
             return redirect()->route('users');
@@ -42,6 +43,7 @@ class UserController extends Controller
         if ($request->post()){
             $user->name = $request->name;
             $user->email = $request->email;
+            $user->type = 'admin';  
             if($request->password)
                 $user->password = Hash::make($request->password);
             $user->save();

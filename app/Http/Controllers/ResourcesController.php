@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;
 use DataTables;
+use Auth;
 
 class ResourcesController extends Controller
 {
@@ -29,6 +30,7 @@ class ResourcesController extends Controller
                 return ($query->image) ? asset('storage/'.$query->image) : null;
             })->make(true);
         }
+       
         return view('admin.resources.index');
     }
 

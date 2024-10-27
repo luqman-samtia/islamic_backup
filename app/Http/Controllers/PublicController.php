@@ -240,7 +240,7 @@ class PublicController extends Controller
         if ($data['search']->isEmpty()) {
             // Store the error message in the session
             $data['error'] = 'No results found for your search.';
-            session()->flash('error', 'No results found for your search.');
+            // session()->flash('error', 'No results found for your search.');
         } else {
             $data['search'] = $search->orderBy('number', 'asc')->get();
         }
@@ -253,6 +253,11 @@ class PublicController extends Controller
         $url = request()->all();
         $search = DB::table('tajweed_quran')->select('surat.*')
             ->join('tajweed_quran as surat', 'surat.parent_id', '=', 'tajweed_quran.id');
+            $parent = DB::table('tajweed_quran')
+            ->join('tajweed_quran as surat', 'surat.parent_id', '=', 'tajweed_quran.id')
+            ->select('tajweed_quran.title', 'tajweed_quran.slug') // Adjusting to fetch the parent 'quran' title and slug
+            ->where('tajweed_quran.slug', $request->surat) // Make sure to reference 'surat' for the slug check
+            ->first();
         if (!$request->page) {
             $search->where('tajweed_quran.slug', $request->surat);
             if($request->ayat_from){
@@ -260,6 +265,10 @@ class PublicController extends Controller
             }
             if($request->ayat_to){
                 $search->WhereRaw("({$request->ayat_to} between surat.ayat_from and surat.ayat_to OR {$request->ayat_to} >= surat.ayat_to)");
+            }
+            if ($parent) {
+                $data['parent_surat'] = $parent->title;
+                $data['parent_slug'] = $parent->slug;
             }
         }
         if($request->page){
@@ -272,6 +281,10 @@ class PublicController extends Controller
             if ($next) {
                 $url['page'] = $request->page + 1;
                 $data['next'] = http_build_query($url);
+            }
+            if ($parent) {
+                $data['parent_surat'] = $parent->title;
+                $data['parent_slug'] = $parent->slug;
             }
             $search->where('surat.number', $request->page);
         }

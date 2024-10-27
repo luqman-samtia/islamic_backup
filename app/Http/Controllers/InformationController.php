@@ -44,6 +44,11 @@ class InformationController extends Controller
              // Store the dynamic footer items as an array
              $information->dynamic_footer_items = $request->input('dynamic_footer_items');
          }
+         // Check for dynamic footer items in the request
+         if ($request->has('student_items')) {
+             // Store the dynamic footer items as an array
+             $information->student_items = $request->input('student_items');
+         }
      
          // Save other existing fields if needed
          if ($request->has('info')) {
@@ -67,6 +72,20 @@ class InformationController extends Controller
         unset($currentArray[$index]);
 
         $info->dynamic_footer_items = array_values($currentArray);
+        $info->save();
+
+        return response()->json(['message' => 'Item removed successfully!']);
+    }
+
+    public function removeStudentItem(Request $request){
+        $index = $request->input('index');
+
+        $info = Information::find(1);
+        $currentArray = $info->student_items;
+
+        unset($currentArray[$index]);
+
+        $info->student_items = array_values($currentArray);
         $info->save();
 
         return response()->json(['message' => 'Item removed successfully!']);

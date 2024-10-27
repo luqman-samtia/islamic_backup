@@ -64,7 +64,7 @@
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-lg-2">
-                                                    <button type="button" class="thm-btn brd-rd40 mt-3" id="goToPageButton">Page</button>
+                                                    <button type="button" class="thm-btn brd-rd40 mt-3" onclick="openPageModal()">Page</button>
 
                                                 </div>
                                             </div>
@@ -86,11 +86,41 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn thm-btn " id="confirmPageButton">Go to Page</button>
+                                                <button type="button" class="btn thm-btn " onclick="confirmPage()">Go to Page</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <script>
+
+                                    function openPageModal() {
+                                            $('#pageModal').modal('show')
+                                            .on('shown.bs.modal', function () {
+                                                // Add and remove classes once the modal is fully shown
+                                                $('.modal-backdrop').remove();
+                                            });
+                                        }
+                                    
+                                        
+                                            function confirmPage() {
+                                            var pageNumber = document.getElementById('pageInput').value;
+                                            if (pageNumber) {
+                                                // Set the page input in the form
+                                                var input = document.createElement('input');
+                                                input.type = 'hidden';
+                                                input.name = 'page';
+                                                input.value = pageNumber;
+                                                document.getElementById('searchForm').appendChild(input);
+        
+                                                // Submit the form
+                                                document.getElementById('searchForm').submit();
+                                            } else {
+                                                alert('Please enter a page number');
+                                            }
+                                        }
+                                        
+                                    </script>
+                                        {{-- End Modal --}} 
                                 {{-- End Modal --}}
                                 </div>
                             </div>
@@ -133,25 +163,6 @@
             }
         });
 
-        // page modal
-        $(document).ready(function() {
-        // Show the modal when the "Go to Page" button is clicked
-        $('#goToPageButton').on('click', function() {
-            $('#pageModal').modal('show');
-        });
-
-        // When the "Go to Page" button in the modal is clicked
-        $('#confirmPageButton').on('click', function() {
-            var pageNumber = $('#pageInput').val();
-            if (pageNumber) {
-                // Set the page input in the form
-                $('input[name="page"]').val(pageNumber);
-                // Submit the form
-                $('#searchForm').submit();
-            } else {
-                alert('Please enter a page number');
-            }
-        });
-    });
+   
     </script>
 @stop

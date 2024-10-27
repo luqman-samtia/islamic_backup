@@ -30,6 +30,7 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 @stop
 
 @section('content')
@@ -85,32 +86,64 @@
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-lg-2">
-                                                    <button type="button" class="thm-btn brd-rd40 mt-3" id="goToPageButton">Page</button>
+                                                    <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"   >Page</button>
 
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                      <!-- Modal -->
-                                <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="pageModalLabel">Go to Page</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <input type="number" id="pageInput" placeholder="Enter page number">
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn thm-btn " id="confirmPageButton">Go to Page</button>
-                                            </div>
+                              <!-- Modal -->
+                            <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="pageModalLabel">Go to Page</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="number" id="pageInput" placeholder="Enter page number" class="form-control">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn thm-btn" onclick="confirmPage()">Go to Page</button>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            <!-- JavaScript -->
+                            <script>
+
+                            function openPageModal() {
+                                    $('#pageModal').modal('show')
+                                    .on('shown.bs.modal', function () {
+                                        // Add and remove classes once the modal is fully shown
+                                        $('.modal-backdrop').remove();
+                                    });
+                                }
+                            
+                                
+                                    function confirmPage() {
+                                    var pageNumber = document.getElementById('pageInput').value;
+                                    if (pageNumber) {
+                                        // Set the page input in the form
+                                        var input = document.createElement('input');
+                                        input.type = 'hidden';
+                                        input.name = 'page';
+                                        input.value = pageNumber;
+                                        document.getElementById('searchForm').appendChild(input);
+
+                                        // Submit the form
+                                        document.getElementById('searchForm').submit();
+                                    } else {
+                                        alert('Please enter a page number');
+                                    }
+                                }
+                                
+                            </script>
                                 {{-- End Modal --}} 
                                 </div>
                             </div>
@@ -150,27 +183,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-md-12 w-100">
-                                        @if(@$previous)
-                                        <div>
-                                            <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40 mt-2 pull-left" type="submit">Previous</a>
-                                        </div>
-                                        @endif
-                                        <div>
-                                            @if(isset($parent_surat) && !empty($parent_surat))
-                                                <a href="{{ route('quranSurat', $parent_slug) }}" 
-                                                   class="thm-btn brd-rd40 mt-2">{{ $parent_surat }}</a>
-                                            @else
-                                                <!-- Display a default message or link if $parent_surat is not set -->
-                                                <a href="#" class="thm-btn brd-rd40 mt-2">No Parent</a>
-                                            @endif
-                                        </div>
-                                        @if(@$next)
-                                        <div>
-                                            <a href="{{ route('search', $next) }}" class="thm-btn brd-rd40 mt-2 pull-right" type="submit">Next</a>
-                                        </div>
-                                        @endif
-                                    </div> --}}
+                               
                                 @foreach($search as $child)
                                     <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
                                         <labe>
@@ -261,25 +274,5 @@
         });
 
 
-        // Page Modal code
-        $(document).ready(function() {
-        // Show the modal when the "Go to Page" button is clicked
-        $('#goToPageButton').on('click', function() {
-            $('#pageModal').modal('show');
-        });
-
-        // When the "Go to Page" button in the modal is clicked
-        $('#confirmPageButton').on('click', function() {
-            var pageNumber = $('#pageInput').val();
-            if (pageNumber) {
-                // Set the page input in the form
-                $('input[name="page"]').val(pageNumber);
-                // Submit the form
-                $('#searchForm').submit();
-            } else {
-                alert('Please enter a page number');
-            }
-        });
-    });
     </script>
 @stop

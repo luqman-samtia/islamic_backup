@@ -115,6 +115,20 @@ return [
             'url'  => 'admin/home',
             'can' => 'homecontroller.index'
         ],
+        // [
+        //     'text' => 'Change Password',
+        //     'icon' => 'lock',
+        //     'url'  => 'student/change-password',
+        //     'can' => 'student.change-password' // Assuming you have a permission defined for this
+        // ],
+        // [
+        //     'text' => 'Add Information',
+        //     'icon' => 'info',
+        //     'url'  => 'student/add-info',
+        //     'can' => 'student.add-info' // Assuming you have a permission defined for this
+        // ],
+       
+        
 //        [
 //            'text'        => 'Pages',
 //            'url'         => 'pages',
@@ -163,6 +177,8 @@ return [
             'icon'        => 'info',
             'can' => 'resourcescontroller.index'
         ],
+        
+       
         [
             'text'        => 'Testimonials',
             'url'         => 'admin/testimonials',

@@ -1,9 +1,9 @@
 <?php
 
-
 namespace App\Filters;
 
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Support\Facades\Auth; // Import Auth facade
 use JeroenNoten\LaravelAdminLte\Menu\Builder;
 use JeroenNoten\LaravelAdminLte\Menu\Filters\FilterInterface;
 
@@ -27,6 +27,24 @@ class CustomGateFilter implements FilterInterface
 
     protected function isVisible($item)
     {
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            // Allow access to 'admin/home' for students
+            // if ($item['url'] === 'admin/home' && $user->type === 'student') {
+            //     return true; // Allow access for students
+            // }
+            if ($user->type === 'student' && in_array($item['url'], [
+                'admin/home',
+                'student/change-password',
+                'student/add-info',
+            ])) {
+                return true; // Allow access for students
+            }
+        }
+
+        // Existing permission checks
         if (! isset($item['can'])) {
             return true;
         }
@@ -35,12 +53,16 @@ class CustomGateFilter implements FilterInterface
             return $this->gate->allows($item['can'], $item['model']);
         }
 
-        if(is_array($item['can'])){
-            foreach ($item['can'] as $permission)
-                if ($this->gate->allows($permission))
+        if (is_array($item['can'])) {
+            foreach ($item['can'] as $permission) {
+                if ($this->gate->allows($permission)) {
                     return true;
-        }else {
+                }
+            }
+        } else {
             return $this->gate->allows($item['can']);
         }
+
+        return false; // Deny access if none of the conditions are met
     }
 }
