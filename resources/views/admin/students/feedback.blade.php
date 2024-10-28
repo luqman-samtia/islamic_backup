@@ -17,7 +17,7 @@
 @stop
 
 @section('content')
-<div class="container">
+{{-- <div class="container">
     <h2>Submit Feedback</h2>
     <form id="feedbackForm">
         @csrf
@@ -41,7 +41,38 @@
             <i class="fa fa-comments"></i> Submit Feedback
         </button>
     </form>
+</div> --}}
+
+<div class="container">
+    <h2 class="text-center my-4" style="max-width: 600px;">Submit Feedback</h2>
+    <form id="feedbackForm" class="mx-auto" style="max-width: 600px;">
+        @csrf
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input 
+                id="title" 
+                name="title" 
+                value="@if(!empty($feedback->title)){{$feedback->title}}@endif"
+                class="form-control" 
+                placeholder="Enter title here"
+            >
+        </div>
+        <div class="form-group">
+            <label for="feedback">Feedback:</label>
+            <textarea 
+                rows="5" 
+                id="feedback" 
+                name="feedback" 
+                class="form-control" 
+                placeholder="Enter your feedback here"
+            >@if(!empty($feedback->feedback)){{$feedback->feedback}}@endif</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+            <i class="fa fa-comments"></i> Submit Feedback
+        </button>
+    </form>
 </div>
+
     <div class="rolesModal"></div>
 @stop
 

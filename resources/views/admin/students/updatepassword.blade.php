@@ -17,7 +17,7 @@
 @stop
 
 @section('content')
-<div class="container">
+{{-- <div class="container">
     <h2>Update Password</h2>
     <form id="updatePasswordForm">
         <div class="form-group">
@@ -34,7 +34,27 @@
         </div>
         <button type="submit" class="btn btn-primary">Update Password</button>
     </form>
+</div> --}}
+
+<div class="container">
+    <form id="updatePasswordForm" class="mx-auto" style="max-width: 500px;">
+        <h2 class="text-center ">Update Password</h2>
+        <div class="form-group">
+            <label for="current_password">Current Password</label>
+            <input type="password" class="form-control" id="current_password" name="current_password" >
+        </div>
+        <div class="form-group">
+            <label for="new_password">New Password</label>
+            <input type="password" class="form-control" id="new_password" name="new_password" >
+        </div>
+        <div class="form-group">
+            <label for="new_password_confirmation">Confirm New Password</label>
+            <input type="password" class="form-control" id="new_password_confirmation" name="new_password_confirmation" >
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Update Password</button>
+    </form>
 </div>
+
     <div class="rolesModal"></div>
 @stop
 
