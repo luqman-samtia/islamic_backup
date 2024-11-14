@@ -30,7 +30,7 @@
                     <br>
                     <span style="font-size: small;padding:0px;margin:0px;text-align:center;">{{Auth::user()->name}}</span>
                     <div class="dropdown-menu" aria-labelledby="profileImage">
-                        <a class="dropdown-item" href="admin/home">Dashboard</a>
+                        <a class="dropdown-item" href="{{url('admin/home')}}">Dashboard</a>
                         <a class="dropdown-item" href="javascript:void(0);" id="logoutButton">Logout</a>
                        
                     </div>
@@ -89,11 +89,13 @@
             <h3>Login</h3>
             <form id="loginData" action="{{ route('student.login') }}" method="POST">
                 @csrf
-                <input class="form-control" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;">
+                <label for="email">Email</label>
+                <input class="form-control" id="email" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;">
                 @error('email')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
-                <input class="form-control"  type="password" name="password" placeholder="Password"  style="margin-bottom: 10px;">
+                 <label for="password">Password</label>
+                <input class="form-control" id="password"  type="password" name="password" placeholder="Password"  style="margin-bottom: 10px;">
                 @error('password')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
@@ -107,23 +109,28 @@
             <h3>Sign Up</h3>
             <form id="registerForm" action="{{ route('student.register') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input class="form-control" type="text" name="name" placeholder="Full Name"  style="margin-bottom: 10px;">
+                <label for="name">Name</label>
+                <input class="form-control" id="name" type="text" name="name" placeholder="Full Name"  style="margin-bottom: 10px;">
                 @error('name')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
-                <input class="form-control"  type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;">
+                 <label for="email">Email</label>
+                <input class="form-control" id="email" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;">
                 @error('email')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
-                <input class="form-control"  type="password" name="password" placeholder="Password"  style="margin-bottom: 10px;">
+                 <label for="password">Password</label>
+                <input class="form-control" id="password" type="password" name="password" placeholder="Password"  style="margin-bottom: 10px;">
                 @error('password')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
-                <input class="form-control"  type="password" name="password_confirmation" placeholder="Confirm Password"  style="margin-bottom: 10px;">
+                 <label for="cPassword">Confirm Password</label>
+                <input class="form-control" id="cPassword" type="password" name="password_confirmation" placeholder="Confirm Password"  style="margin-bottom: 10px;">
                 @error('password_confirmation')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
-                <input class="form-control"  type="file" name="image" placeholder="Select File" accept="image/*"  style="margin-bottom: 10px;" required>
+                 <label for="image">Image</label>
+                <input class="form-control" id="image" type="file" name="image" placeholder="Select File" accept="image/*"  style="margin-bottom: 10px;" required>
                 @error('image')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror

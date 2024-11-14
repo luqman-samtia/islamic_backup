@@ -85,7 +85,7 @@
                                             <input type="number" id="pageInput" placeholder="Enter page number" class="form-control">
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
                                             <button type="button" class="btn thm-btn" onclick="confirmPage()">Go to Page</button>
                                         </div>
                                     </div>
@@ -145,10 +145,17 @@
                                         
                                         <!-- Center Button -->
                                         <div>
-                                            @if($request->surat )
-                                            <a href="{{ route('quranSurat', $parent_slug) }}" 
+                                            @if($parent_slug)
+                                            <a href="{{ route('tajweedQuranSurat', $parent_slug) }}" 
                                                class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
                                                @endif
+
+                                               {{-- @if(!empty($parent_slug))
+                                                <a href="{{ route('tajweedQuran', ['surat' => $parent_slug]) }}" 
+                                                class="thm-btn brd-rd40 mt-4">
+                                                {{ $parent_surat }}
+                                                </a>
+                                            @endif --}}
                                         </div>
                                 
                                         <!-- Next Button -->
@@ -200,10 +207,11 @@
                                             
                                             <!-- Center Button -->
                                             <div>
-                                                @if($request->surat )
-                                                <a href="{{ route('quranSurat', $parent_slug) }}" 
+                                                @if($parent_slug)
+                                                <a href="{{ route('tajweedQuranSurat', $parent_slug) }}" 
                                                    class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
                                                    @endif
+    
                                             </div>
                                     
                                             <!-- Next Button -->

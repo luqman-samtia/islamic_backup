@@ -186,7 +186,8 @@ class PublicController extends Controller
         $url = request()->all();
         $surat = Quran::find($request->page);
 
-        
+        $data['parent_surat'] = null;
+       $data['parent_slug'] = null;
         $search = DB::table('quran')->select('surat.*')
             ->join('quran as surat', 'surat.parent_id', '=', 'quran.id');
             $parent = DB::table('quran')
@@ -206,6 +207,8 @@ class PublicController extends Controller
             if ($parent) {
                 $data['parent_surat'] = $parent->title;
                 $data['parent_slug'] = $parent->slug;
+                // $data['parent_surat'] = $parent->title;
+                // $data['parent_slug'] = $parent->slug;
             }
         }
         if($request->page){
@@ -251,6 +254,11 @@ class PublicController extends Controller
         $data['request'] = $request;
         $data['quran'] = TajweedQuran::parent(null)->get();
         $url = request()->all();
+        $surat =Quran::find($request->page);
+
+        $data['parent_surat'] = null;
+        $data['parent_slug'] = null;
+        
         $search = DB::table('tajweed_quran')->select('surat.*')
             ->join('tajweed_quran as surat', 'surat.parent_id', '=', 'tajweed_quran.id');
             $parent = DB::table('tajweed_quran')
@@ -299,4 +307,76 @@ class PublicController extends Controller
         }
         return view('site.tajweed-quran.search', $data);
     }
+
+//     public function tajweedQuranSearch(Request $request)
+// {
+//     $data['request'] = $request;
+//     $data['quran'] = TajweedQuran::parent(null)->get();
+//     $url = request()->all();
+//     $surat = Quran::find($request->page);
+
+//     // Initialize parent slug and title to avoid undefined variable error
+//     $data['parent_surat'] = null;
+//     $data['parent_slug'] = null;
+
+//     // Build the search query
+//     $search = DB::table('tajweed_quran')->select('surat.*')
+//         ->join('tajweed_quran as surat', 'surat.parent_id', '=', 'tajweed_quran.id');
+
+//     $parent = DB::table('tajweed_quran')
+//         ->join('tajweed_quran as surat', 'surat.parent_id', '=', 'tajweed_quran.id')
+//         ->select('tajweed_quran.title', 'tajweed_quran.slug') 
+//         ->where('tajweed_quran.slug', $request->surat)
+//         ->first();
+
+//     if (!$request->page) {
+//         $search->where('tajweed_quran.slug', $request->surat);
+
+//         if ($request->ayat_from) {
+//             $search->whereRaw("({$request->ayat_from} between surat.ayat_from and surat.ayat_to OR {$request->ayat_from} <= surat.ayat_to)");
+//         }
+
+//         if ($request->ayat_to) {
+//             $search->whereRaw("({$request->ayat_to} between surat.ayat_from and surat.ayat_to OR {$request->ayat_to} >= surat.ayat_to)");
+//         }
+
+//         if ($parent) {
+//             $data['parent_surat'] = $parent->title;
+//             $data['parent_slug'] = $parent->slug;
+//         }
+//     }
+
+//     if ($request->page) {
+//         $prev = DB::table('tajweed_quran')->whereNotNull('parent_id')->where('number', $request->page - 1)->count();
+//         $next = DB::table('tajweed_quran')->whereNotNull('parent_id')->where('number', $request->page + 1)->count();
+
+//         if ($prev) {
+//             $url['page'] = $request->page - 1;
+//             $data['previous'] = http_build_query($url);
+//         }
+
+//         if ($next) {
+//             $url['page'] = $request->page + 1;
+//             $data['next'] = http_build_query($url);
+//         }
+
+//         if ($parent) {
+//             $data['parent_surat'] = $parent->title;
+//             $data['parent_slug'] = $parent->slug;
+//         }
+
+//         $search->where('surat.number', $request->page);
+//     }
+
+//     $data['search'] = $search->orderBy('number', 'asc')->get();
+
+//     if ($data['search']->isEmpty()) {
+//         $data['error'] = 'No results found for your search.';
+//     } else {
+//         $data['search'] = $search->orderBy('number', 'asc')->get();
+//     }
+
+//     return view('site.tajweed-quran.search', $data);
+// }
+
 }

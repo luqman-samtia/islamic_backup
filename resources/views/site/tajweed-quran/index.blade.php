@@ -85,7 +85,7 @@
                                             <input type="number" id="pageInput" placeholder="Enter page number" class="form-control">
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
                                             <button type="button" class="btn thm-btn" onclick="confirmPage()">Go to Page</button>
                                         </div>
                                     </div>

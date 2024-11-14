@@ -33,7 +33,7 @@
                     </div>
                     @else
                     <div>
-                        <p>  No dynamic student data available.</p>
+                        <p>  No student info available.</p>
                     </div>
                   
                     @endif

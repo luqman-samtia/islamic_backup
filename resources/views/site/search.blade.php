@@ -10,23 +10,22 @@
         .contact-form > form input, .contact-form > form select, .contact-form > form textarea{
             border: 1px solid #ededed;
         }
-        .toast {
-    position: fixed;
-    top: 20px; /* Change this from bottom to top */
-    right: 20px; /* Keep this for right positioning */
-    background-color: #eb0909;
-    color: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-    z-index: 9999; /* Ensure it appears above other elements */
+     
+        /* Default styles for the contact form row */
+.contact-form-row {
+    transition: all 0.3s ease; /* Smooth transition */
 }
 
-.toast.visible {
-    opacity: 1;
+/* Sticky styles */
+.sticky {
+    position: fixed; /* Fixes the form to the top */
+    top: 0; /* Aligns it to the top */
+    left: 0; /* Aligns it to the left */
+    width: 100%; /* Ensures it takes the full width */
+    z-index: 1000; /* Keeps it above other content */
+    background-color: white; /* Background color for visibility */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
 }
-
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -59,9 +58,9 @@
                 <div class="container">
                     <div class="prtfl-wrap">
                         <div class="serv-wrap remove-ext3">
-                            <div class="row contact-form-row">
+                            <div class="row contact-form-row" id="stickyFormContainer" >
                                 <div class="col-md-12">
-                                    <div class="contact-form mb-5">
+                                    <div class="contact-form mb-5" id="stickyForm">
                                         <form id="searchForm" action="{{ route('search') }}">
                                             <div class="row mrg20">
                                                 <div class="col-md-2 col-sm-6 col-lg-2">
@@ -92,9 +91,13 @@
                                             </div>
                                         </form>
                                     </div>
-                                     <!-- Modal -->
+                                     
+                                </div>
+                            </div>
+
+                             <!-- Modal -->
                               <!-- Modal -->
-                            <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModalLabel" aria-hidden="true">
+                              <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -107,7 +110,7 @@
                                             <input type="number" id="pageInput" placeholder="Enter page number" class="form-control">
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
                                             <button type="button" class="btn thm-btn" onclick="confirmPage()">Go to Page</button>
                                         </div>
                                     </div>
@@ -142,19 +145,18 @@
                                         alert('Please enter a page number');
                                     }
                                 }
+                              
                                 
-                            </script>
-                                {{-- End Modal --}} 
-                                </div>
-                            </div>
-
+                    
+                                                        </script>
+                                {{-- End Modal --}}
                             <div class="row">
                                 @if(isset($error))
                                 <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
                                     {{ $error }}
                                 </div>
                                     @endif
-                                    <div class="col-md-12 w-100 text-center">
+                                    {{-- <div class="col-md-12 w-100 text-center">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <!-- Previous Button -->
                                             <div>
@@ -167,7 +169,8 @@
                                             
                                             <!-- Center Button -->
                                             <div>
-                                                @if($request->surat )
+                                               
+                                                @if($parent_slug)
                                                 <a href="{{ route('quranSurat', $parent_slug) }}" 
                                                    class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
                                                    @endif
@@ -183,7 +186,44 @@
                                             </div>
                                         </div>
                                     </div>
+                                --}}
+
                                
+                                        <!-- Your navigation content -->
+                                        <div class="col-md-12 col-lg-12 w-100 text-center">
+                                            <div class="navbar-container">
+                                                <div id="navbar" class="navbar"> <!-- Ensure this ID is present -->
+                                                    <div class="col-md-12 w-100 text-center">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <!-- Previous Button -->
+                                                            <div>
+                                                                @if(@$previous)
+                                                                    <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40 mt-2" type="submit">Previous</a>
+                                                                @endif
+                                                            </div>
+                                                            <!-- Center Button -->
+                                                            <div>
+                                                                @if($parent_slug)
+                                                                    <a href="{{ route('quranSurat', $parent_slug) }}" class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
+                                                                @endif
+                                                            </div>
+                                                            <!-- Next Button -->
+                                                            <div>
+                                                                @if(@$next)
+                                                                    <a href="{{ route('search', $next) }}" class="thm-btn brd-rd40 mt-2" type="submit">Next</a>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                       
+                                
+                        
+                                
+                                
                                 @foreach($search as $child)
                                     <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
                                         <labe>
@@ -211,7 +251,7 @@
                                             
                                             <!-- Center Button -->
                                             <div>
-                                                @if($request->surat )
+                                                @if($parent_slug )
                                                 <a href="{{ route('quranSurat', $parent_slug) }}" 
                                                    class="thm-btn brd-rd40 mt-2">{{ $parent_surat }}</a>
                                                    @endif
@@ -239,7 +279,24 @@
 @stop
 
 @section('custom_js')
-    <script !src="">
+    <script >
+  $(document).ready(function() {
+        // Get the offset position of the contact form row
+        var contactFormRow = $('#stickyFormContainer').offset().top;
+
+        // Add the scroll event listener
+        $(window).on('scroll', function() {
+            var scroll = $(window).scrollTop();
+
+            if (scroll >= contactFormRow) {
+                $('#stickyFormContainer').addClass('sticky');
+            } else {
+                $('#stickyFormContainer').removeClass('sticky');
+            }
+        });
+    });
+
+
         var contactFormRow = ($('.contact-form-row').offset().top - 92);
 
         //===== Sticky =====//
@@ -252,7 +309,7 @@
                 $('.contact-form-row').removeClass('sticky');
             }
         });
-       
+    
         function showToast(message) {
             const toast = document.createElement('div');
             toast.className = 'toast';
@@ -272,7 +329,20 @@
                 showToast('{{ session('error') }}');
             @endif
         });
+// Get the navbar
+var navbar = document.getElementById("navbar");
 
+// Get the offset position of the navbar
+var sticky = navbar.offsetTop;
+
+// Add the scroll event listener
+window.onscroll = function() {
+    if (window.pageYOffset > sticky) {
+        navbar.classList.add("sticky");
+    } else {
+        navbar.classList.remove("sticky");
+    }
+};
 
     </script>
 @stop
