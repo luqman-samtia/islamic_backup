@@ -14,7 +14,7 @@ class AddTypeToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('type', ['admin', 'student'])->default('student'); // Add type field
+            $table->enum('type', ['admin', 'student'])->default('admin'); // Add type field
         });
     }
 
