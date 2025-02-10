@@ -28,7 +28,7 @@
                                             </li>
                                         @endforeach
                                     @else
-                                        <li>No dynamic footer items available.</li>
+                                        <li>No footer links available.</li>
                                     @endif
                                     </ul>
                                 </div>
