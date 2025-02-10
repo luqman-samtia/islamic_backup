@@ -35,13 +35,37 @@ class CustomGateFilter implements FilterInterface
             // if ($item['url'] === 'admin/home' && $user->type === 'student') {
             //     return true; // Allow access for students
             // }
+            // if ($user->type === 'student' && in_array($item['url'], [
+            //     'admin/home',
+            //     'student/change-password',
+            //     'student/add-info',
+            // ])) {
+            //     return true; // Allow access for students
+            // }
+
+            if ($user->type === 'admin' && in_array($item['url'], [
+                'admin/student/update-password',
+                'admin/student/submit-feedback',
+                'admin/student/show/info',
+            ])) {
+                return false;
+            }
+
+            // Admins can see everything else
+            if ($user->type === 'admin') {
+                return true;
+            }
+
+            // Allow only specific routes for students
             if ($user->type === 'student' && in_array($item['url'], [
                 'admin/home',
-                'student/change-password',
-                'student/add-info',
+                'admin/student/update-password',
+                'admin/student/submit-feedback',
+                'admin/student/show/info',
             ])) {
-                return true; // Allow access for students
+                return true;
             }
+
         }
 
         // Existing permission checks

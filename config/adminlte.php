@@ -129,6 +129,32 @@ return [
         // ],
        
         
+        [
+            'text' => 'Update Password',
+            'icon' => 'lock',
+            'url'  => 'admin/student/update-password',
+            'can' => 'studentcontroller.change-password' // Assuming you have a permission defined for this
+        ],
+        [
+            'text' => 'Add Information',
+            'icon' => 'graduation-cap',
+            'url'  => 'admin/student/show/info',
+            'can' => 'studentcontroller.add-info' // Assuming you have a permission defined for this
+        ],
+        [
+            'text' => 'Add Feedback',
+            'icon' => 'comment',
+            'url'  => 'admin/student/submit-feedback',
+            'can' => 'studentcontroller.showFeedback' // Assuming you have a permission defined for this
+        ],
+        [
+            'text' => 'Students',
+            'icon' => 'graduation-cap',
+            'url'  => 'admin/students',
+            'can' => 'studentcontroller.StudentDataShow' // Assuming you have a permission defined for this
+        ],
+
+
 //        [
 //            'text'        => 'Pages',
 //            'url'         => 'pages',
