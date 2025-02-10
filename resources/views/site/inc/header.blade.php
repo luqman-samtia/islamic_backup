@@ -129,11 +129,11 @@
                 @error('password_confirmation')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
-                 <label for="image">Image</label>
-                <input class="form-control" id="image" type="file" name="image" placeholder="Select File" accept="image/*"  style="margin-bottom: 10px;" required>
+                 {{-- <label for="image">Image</label>
+                <input class="form-control" id="image" type="file" name="image" placeholder="Select File" accept="image/*"  style="margin-bottom: 10px;" >
                 @error('image')
                 <div class="text-danger">{{ $message }}</div>
-                 @enderror
+                 @enderror --}}
                 <button class="btn btn-info" type="submit" style="margin-bottom: 10px;background:#d1ad3c;color:white;border:none;border-radius:50px;">Sign Up</button>
             </form>
             <p>Already have an account? <button onclick="showLogin()" class="" style="">Login</button></p>
