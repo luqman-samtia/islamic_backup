@@ -36,7 +36,7 @@ $normalPermissions = [
     \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.add-info'),
     \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.change-password'),
 ];
-];
+
 
 // Define the roles
 $adminRole = \Spatie\Permission\Models\Role::findOrCreate('Admin');
