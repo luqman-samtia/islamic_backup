@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Mail\AdminVerification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StudentVerified;
+use App\Mail\StudentDisable;
 use App\User;
 use Hash;
 use Auth;
@@ -28,7 +29,7 @@ class StudentController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',  // Must be unique
             'password' => 'required|string|min:8|confirmed',  // Password confirmation
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'name.required' => 'The name field is required.',
             'email.required' => 'The email field is required.',
@@ -37,10 +38,10 @@ class StudentController extends Controller
             'password.confirmed' => 'Passwords do not match.',
             'password.min' => 'Password must be at least 8 characters.',
             'password.string' => 'Password must be string.',
-            'image.required' => 'The image field is required.',
-            'image.image' => 'The file must be an image.',
-            'image.mimes' => 'Only jpeg, png, jpg, and gif formats are allowed.',
-            'image.max' => 'Image size must not exceed 2MB.',
+            // 'image.required' => 'The image field is required.',
+            // 'image.image' => 'The file must be an image.',
+            // 'image.mimes' => 'Only jpeg, png, jpg, and gif formats are allowed.',
+            // 'image.max' => 'Image size must not exceed 2MB.',
         ]);
 
        
@@ -49,13 +50,13 @@ class StudentController extends Controller
         $validatedData['is_verified'] = 0;   // Mark as not verified
 
         // Handle the image upload
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            // Move the image to storage/app/public/images/students
-            $image->storeAs('images/students', $imageName, 'public');
-            $validatedData['image'] = $imageName; // Store image name in the database
-        }
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $imageName = time() . '.' . $image->getClientOriginalExtension();
+        //     // Move the image to storage/app/public/images/students
+        //     $image->storeAs('images/students', $imageName, 'public');
+        //     $validatedData['image'] = $imageName; // Store image name in the database
+        // }
             $user = User::create($validatedData);
           
             // Send email to admin for verification
@@ -89,9 +90,9 @@ class StudentController extends Controller
         }
     
         // Check if the user is an admin
-        if ($user->type === 'admin') {
-            return response()->json(['error' => 'You are not a student.'], 403);
-        }
+        // if ($user->type === 'admin') {
+        //     return response()->json(['error' => 'You are not a student.'], 403);
+        // }
     
         // Check if the student is verified
         if ($user->type === 'student' && !$user->is_verified) {
@@ -116,6 +117,68 @@ class StudentController extends Controller
         Mail::to($user->email)->send(new StudentVerified($user));
     
         return redirect()->route('site')->with('success', 'Student verified successfully!');
+    }
+
+
+    public function adminVerifyStudent(Request $request){
+    $user = User::find($request->id);
+    
+    if (!$user) {
+        return response()->json(['error' => 'Student not found!'], 404);
+    }
+
+    if ($user->is_verified == 1) {
+        return response()->json(['error' => 'Student is already verified!'], 400);
+    }
+    // if ($user) {
+        $user->is_verified = 1;
+        $user->save();
+
+        Mail::to($user->email)->send(new StudentVerified($user));
+
+        return response()->json(['success' => 'Student verified successfully!']);
+    // }
+
+    // return response()->json(['error' => 'Student not found!'], 404);
+    }
+    public function adminDisableStudent(Request $request){
+    $user = User::find($request->id);
+    
+    if (!$user) {
+        return response()->json(['error' => 'Student not found!'], 404);
+    }
+
+    if ($user->is_verified == 0) {
+        return response()->json(['error' => 'Student is already Disble!'], 400);
+    }
+        $user->is_verified = 0;
+        $user->save();
+
+        Mail::to($user->email)->send(new StudentDisable($user));
+
+        return response()->json(['success' => 'Student Disabled successfully!']);
+    
+    }
+   
+    public function checkStudentStatus($id)
+    {
+        $user = User::find($id);
+    
+        if (!$user) {
+            return response()->json(['error' => 'Student not found!'], 404);
+        }
+    
+        return response()->json(['is_verified' => $user->is_verified == 1]);
+    }
+    public function checkStudentDisable($id)
+    {
+        $user = User::find($id);
+    
+        if (!$user) {
+            return response()->json(['error' => 'Student not found!'], 404);
+        }
+    
+        return response()->json(['is_verified' => $user->is_verified == 0]);
     }
 
     public function logout(Request $request)
@@ -144,12 +207,12 @@ class StudentController extends Controller
             if ($request->ajax()) {
         
                 $data = DataTables::of(User::where('type', 'student'))
-                ->addColumn('image', function($query) {
-                    return ($query->image) 
-                        ? '<img src="' . asset('storage/images/students/' . $query->image) . '" width="50" height="50" alt="Student Image">' 
-                        : null;
-                })
-                ->rawColumns(['image']) // Allow HTML rendering for the image column
+                // ->addColumn('image', function($query) {
+                //     return ($query->image) 
+                //         ? '<img src="' . asset('storage/images/students/' . $query->image) . '" width="50" height="50" alt="Student Image">' 
+                //         : null;
+                // })
+                // ->rawColumns(['image']) 
                 ->make(true);
     
             \Log::info($data); // Log the data to check its structure

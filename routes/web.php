@@ -21,6 +21,11 @@ Route::post('student/logout', [StudentController::class, 'logout'])->name('stude
 
 
 Route::get('admin/verify-student/{id}', [StudentController::class, 'verifyStudent'])->name('admin.verifyStudent');
+Route::get('admin/verify/student/{id}', [StudentController::class, 'adminVerifyStudent'])->name('admin.adminVerifyStudent');
+Route::get('admin/disable/student/{id}', [StudentController::class, 'adminDisableStudent'])->name('admin.adminDisableStudent');
+Route::get('admin/check-student-status/{id}', [StudentController::class, 'checkStudentStatus']);
+Route::get('admin/check-student-disable/{id}', [StudentController::class, 'checkStudentDisable']);
+
 
 // END
 Route::get('/', 'PublicController@index')->name('site');

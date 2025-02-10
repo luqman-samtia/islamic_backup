@@ -16,19 +16,19 @@
         </div>
         <nav>
             <div>
-                @if(Auth::check() && Auth::user()->type === 'student')
+                @if(Auth::check() )
                 <div class="dropdown" style="display: inline-block;">
-                    <img 
-                        src="{{ asset('storage/images/students/'.Auth::user()->image) }}" 
-                        alt="Profile Icon" 
-                        style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer;margin-left:25px;margin-right:18px;margin-top:8px;" 
+                    <a 
+                        {{-- src="{{ asset('storage/images/students/'.Auth::user()->image) }}"  --}}
+                        {{-- alt="Profile Icon"  --}}
+                        class="btn btn-secondary"
+                        type="button"
+                        style="background:#d1ad3c;color:#fff;border:none;border-radius:50px;margin-top:8px;margin-left:20px;" 
                         id="profileImage"
                         data-toggle="dropdown"
                         aria-haspopup="true" 
                         aria-expanded="false"
-                    >
-                    <br>
-                    <span style="font-size: small;padding:0px;margin:0px;text-align:center;">{{Auth::user()->name}}</span>
+                    >{{Auth::user()->name}}</a>
                     <div class="dropdown-menu" aria-labelledby="profileImage">
                         <a class="dropdown-item" href="{{url('admin/home')}}">Dashboard</a>
                         <a class="dropdown-item" href="javascript:void(0);" id="logoutButton">Logout</a>

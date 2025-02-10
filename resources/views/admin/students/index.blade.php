@@ -5,12 +5,19 @@
 
 @section('content_header')
 <!-- Add SweetAlert CSS and JS -->
+<style>
+    .cursor-pointer {
+    cursor: pointer !important;
+}
+</style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
     <h1>
        Student List
@@ -49,7 +56,7 @@
                     <table class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
-                            <td>Image</td>
+                            {{-- <td>Image</td> --}}
                             <td>Name</td>
                             <td>Email</td>
                             <td>Status</td>
@@ -80,7 +87,7 @@
                 serverSide: true,
                 ajax: '{{ route('admin.student') }}',
                 columns: [
-                    { data: 'image', name: 'image', orderable: false, searchable: false },
+                    // { data: 'image' },
                     { data: 'name' },
                     { data: 'email' },
                     { 
@@ -114,7 +121,9 @@
                         render: function(data) {
                             let deleteStudent = '{{ route('admin.student.destroy', ':id') }}';
                             deleteStudent = deleteStudent.replace(':id', data);
-                            
+                    //  <button type="button" data-id="${data}" class="btn btn-success btn-xs verify_student">
+                    //  Verify Student
+                    // </button>    
                             return `
                     <button type="button" data-id="${data}" class="btn btn-danger btn-xs delete">
                         <i class="fa fa-trash-o"></i>
@@ -125,6 +134,19 @@
                     <button type="button" data-id="${data}" class="btn btn-info btn-xs show-feedback">
                     <i class="fa fa-comments"></i> Show Feedback
                     </button>
+                    
+                    <button class="btn btn-danger btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item  verify_student cursor-pointer"  type="button" data-id="${data}" data-action="verify">✅ Verify</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item unverify_student cursor-pointer" type="button" data-id="${data}" data-action="unverify">❌ Disable</a>
+                        </li>
+                    </ul>
+                
                 `;
                         }
                     }
@@ -133,7 +155,7 @@
             });
       
 
-        $(document).on('click', '.delete', function(){
+     $(document).on('click', '.delete', function(){
     let id = $(this).attr('data-id');
     
     Swal.fire({
@@ -163,6 +185,133 @@
     });
     
 });
+
+
+    // verify student by admin button
+    $(document).on('click', '.verify_student', function() {
+    let sid = $(this).attr('data-id');
+
+    // First, check if the student is already verified
+    $.ajax({
+        url: "{{ url('admin/check-student-status') }}/" + sid, // New route to check status
+        type: "GET",
+        success: function(response) {
+            if (response.is_verified) {
+                Swal.fire(
+                    'Error!',
+                    'This student is already verified!',
+                    'error'
+                );
+            } else {
+                // If not verified, then show the confirmation popup
+                Swal.fire({
+                    title: 'Are you sure to verify student?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, verify it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ url('admin/verify/student') }}/" + sid,
+                            type: "GET",
+                            success: function(response) {
+                                Swal.fire(
+                                    'Success!',
+                                    response.success,
+                                    'success'
+                                );
+                                datatable.ajax.reload();
+                            },
+                            error: function(xhr) {
+                                let errorMessage = xhr.responseJSON?.error || 'Something went wrong!';
+                                Swal.fire(
+                                    'Error!',
+                                    errorMessage,
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            }
+        },
+        error: function(xhr) {
+            let errorMessage = xhr.responseJSON?.error || 'Something went wrong!';
+            Swal.fire(
+                'Error!',
+                errorMessage,
+                'error'
+            );
+        }
+    });
+});
+
+// unverify student by admin button
+
+$(document).on('click', '.unverify_student', function() {
+    let sid = $(this).attr('data-id');
+
+    // First, check if the student is already verified
+    $.ajax({
+        url: "{{ url('admin/check-student-disable') }}/" + sid, // New route to check status
+        type: "GET",
+        success: function(response) {
+            if (response.is_verified) {
+                Swal.fire(
+                    'Error!',
+                    'This student is already disabled!',
+                    'error'
+                );
+            } else {
+                // If not verified, then show the confirmation popup
+                Swal.fire({
+                    title: 'Are you sure to disable student?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, disable it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ url('admin/disable/student') }}/" + sid,
+                            type: "GET",
+                            success: function(response) {
+                                Swal.fire(
+                                    'Success!',
+                                    response.success,
+                                    'success'
+                                );
+                                datatable.ajax.reload();
+                            },
+                            error: function(xhr) {
+                                let errorMessage = xhr.responseJSON?.error || 'Something went wrong!';
+                                Swal.fire(
+                                    'Error!',
+                                    errorMessage,
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            }
+        },
+        error: function(xhr) {
+            let errorMessage = xhr.responseJSON?.error || 'Something went wrong!';
+            Swal.fire(
+                'Error!',
+                errorMessage,
+                'error'
+            );
+        }
+    });
+});
+
 
 
     // Event listener for "Show Feedback" button
