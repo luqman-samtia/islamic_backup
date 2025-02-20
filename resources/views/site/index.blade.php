@@ -233,6 +233,7 @@
                                         <img src="{{ asset('/storage/'.$scholar->image) }}" style="width: 120px;height: 120px;object-fit: cover;" alt="team-img2-1.jpg">
                                         <div class="team-info2">
                                             <h4>{{$scholar->name}}</h4>
+                                            <a href="{{route('faq')}}" >Read More <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -296,6 +297,15 @@
                                 <div class="testi-info">
                                     <h4>{{ $testimonial->name }}</h4>
                                     <p><i>"</i>{{ $testimonial->description }}<i>"</i></p>
+                                </div>
+                            </div>
+                            @endforeach
+                            @foreach($feedbacks as $feedback)
+                            <div class="testi-itm">
+                                <i><img src="{{ asset('/storage/'.$feedback->image) }}" style="width: 110px;height: 110px;object-fit: cover;" alt="feedback-img.jpg"></i>
+                                <div class="testi-info">
+                                    <h4>{{ $feedback->title }}</h4>
+                                    <p><i>"</i>{{ $feedback->feedback }}<i>"</i></p>
                                 </div>
                             </div>
                             @endforeach

@@ -12,7 +12,11 @@
                     <span class="__cf_email__" data-cfemail="3851565e57785a514b555154545950165b5755">qarihabib847@gmail.com</span>
                 </a>
             </span>
-            <span><i class="fa fa-phone thm-clr"></i>+92-306-0475163</span>
+            @php($info = \App\Information::query()->first())
+            @if(@$info['whatsapp2']['label'] && @$info['whatsapp2']['value'])      
+           
+            <span><i class="fa fa-phone thm-clr"></i>+{{$info['whatsapp2']['value']}}</span>
+            @endif
         </div>
         <span class="rspn-mnu-btn"><i class="fa fa-list-ul"></i></span>
     </div>

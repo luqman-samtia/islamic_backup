@@ -38,12 +38,12 @@
                 <div class="container">
                     <div class="prtfl-wrap text-center">
                         <div class="serv-wrap text-center remove-ext3">
-                            <div class="row contact-form-row">
+                            <div class="row contact-form-row" id="stickyFormContainer">
                                 <div class="col-md-12">
                                     <div class="contact-form text-center mb-5">
                                         <form id="tajweedSearch" action="{{ route('tajweedQuranSearch') }}">
                                             <div class="row mrg20">
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
+                                                <div class="col-md-4 col-sm-6 col-lg-4">
                                                     <select name="surat">
                                                         <option value="">-- Select Option --</option>
                                                         @foreach($quran as $surat)
@@ -51,13 +51,13 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
+                                                {{-- <div class="col-md-2 col-sm-6 col-lg-2">
                                                     <input type="number" name="ayat_from" placeholder="Ayat From">
                                                 </div>
                                                 <div class="col-md-2 col-sm-6 col-lg-2">
                                                     <input type="number" name="ayat_to" placeholder="Ayat To">
-                                                </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
+                                                </div> --}}
+                                                <div class="col-md-4 col-sm-6 col-lg-4">
                                                     <input type="number" name="page" placeholder="Page">
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-lg-2">

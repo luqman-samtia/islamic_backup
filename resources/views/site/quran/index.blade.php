@@ -38,7 +38,7 @@
                 <div class="container">
                     <div class="prtfl-wrap text-center">
                         <div class="serv-wrap text-center remove-ext3">
-                            <div class="row contact-form-row">
+                            <div class="row contact-form-row" id="stickyFormContainer">
                                 <div class="col-md-12">
                                     <div class="contact-form text-center mb-5">
                                         <form id="searchForm" action="{{ route('search') }}">

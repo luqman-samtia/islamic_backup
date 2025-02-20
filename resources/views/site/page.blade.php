@@ -28,16 +28,32 @@
                     <div class="prtfl-wrap text-center">
                         <div class="prtfl-dta remove-ext1">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 col-sm-12 col-lg-12">
                                     <div class="contact-form text-center mb-5">
-                                        <form action="">
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <input type="number" name="page" placeholder="Enter Page No" value="{{ request()->page }}">
+                                        <form action="" style="max-width: 100% !important;">
+                                            <div class="row" id="stickyFormContainer">
+                                                <div class="col-md-3 col-sm-3">
+                                                    @if($prev)
+                                                    <div>
+                                                        <a href="{{ route('page', [$resource->slug, 'page' => $prev->number]) }}" class="thm-btn brd-rd40 mt-2 mb-5 pull-left" type="submit">Previous</a>
+                                                    </div>
+                                                    @endif
                                                 </div>
-                                                <div class="col-md-6 col-sm-6">
+                                                <div class="col-md-3 col-sm-3">
+                                                    {{-- {{ request()->page }} --}}
+                                                    <input type="number" name="page" placeholder="Enter Page No" value="">
+                                                </div>
+                                                <div class="col-md-3 col-sm-3">
                                                     <button class="thm-btn brd-rd40 mt-3 pull-right" type="submit">Search</button>
                                                 </div>
+                                                <div class="col-md-3 col-sm-3">
+                                                    @if($next)
+                                                    <div>
+                                                        <a href="{{ route('page', [$resource->slug, 'page' => $next->number]) }}" class="thm-btn brd-rd40 mt-2 mb-5 pull-right" type="submit">Next</a>
+                                                    </div>
+                                                    @endif
+                                                </div>
+
                                             </div>
                                         </form>
                                     </div>
@@ -52,11 +68,11 @@
                                     </labe>
                                     @if(request()->page)
                                         <br>
-                                        <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
+                                        <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}" width="100%">
                                     @else
                                         <a href="{{ route('page', [$resource->slug, 'page' => $child->number]) }}" title="">
                                         <br>
-                                            <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
+                                            <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}" width="100%">
                                         </a>
                                     @endif
                                 </div>

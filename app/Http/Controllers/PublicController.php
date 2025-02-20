@@ -11,6 +11,7 @@ use App\Resources;
 use App\Scholars;
 use App\TajweedQuran;
 use App\Testimonials;
+use App\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -31,7 +32,8 @@ class PublicController extends Controller
         $posts = Articals::orderBy('created_at','desc')->take(6)->get();
         $scholars = Scholars::orderBy('sort')->get();
         $testimonials = Testimonials::orderBy('created_at','desc')->get();
-        return view('site.index', compact('posts','scholars','testimonials'));
+        $feedbacks = Feedback::orderBy('created_at','desc')->get();
+        return view('site.index', compact('posts','scholars','testimonials','feedbacks'));
     }
 
     public function page($slug){

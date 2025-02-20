@@ -142,7 +142,7 @@ section {
 }
 .gap {
   float: left;
-  padding: 100px 0;
+  padding: 50px 0;
   position: relative;
   width: 100%;
 }
@@ -634,6 +634,17 @@ nav > div ul ul li.menu-item-has-children:before {
   line-height: 46px;
 }
 /*===== Sticky Header =====*/
+.sticky-form {
+  position: fixed;
+  top: 30px; /* Adjust this value based on your header height */
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: white; /* Or your preferred background color */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 5px 0;
+  transition: all 0.3s ease;
+}
 header.sticky-active {
   -webkit-box-shadow: 0 0 20px rgba(0,0,0,.15);
   -ms-box-shadow: 0 0 20px rgba(0,0,0,.15);
@@ -1789,6 +1800,7 @@ footer {
   margin: 0 2.5px;
 }
 .team-box2:hover .team-info2 > h4,
+.team-box2:hover .team-info2 > a,
 .team-box2:hover .team-info2 > p {color: #fff;}
 .team-box2 .team-scl > a:hover,
 .team-box2 .team-scl > a:focus {background-color: #333 !important;}
@@ -4052,6 +4064,7 @@ nav div > ul li a:focus:before,
 .hstry-desc > span,
 .hstry-desc > strong span,
 .team-info2 > h4,
+.team-info2 > a,
 .sec-title-inner2 > h3,
 .srv-box2 > i,
 .srv-info2 > a,

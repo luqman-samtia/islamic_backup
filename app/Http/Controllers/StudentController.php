@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\StudentVerified;
 use App\Mail\StudentDisable;
 use App\User;
+use App\Scholars;
 use Hash;
 use Auth;
 use Spatie\Permission\Models\Role;
@@ -27,16 +28,20 @@ class StudentController extends Controller
               // Validate the input
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',  // Must be unique
-            'password' => 'required|string|min:8|confirmed',  // Password confirmation
+            'email' => 'required|string|email|max:255|unique:users',  
+            'password' => 'required|string|min:8|confirmed',  
+            'contact_no' => 'required|min:11|unique:users',  
             // 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'name.required' => 'The name field is required.',
             'email.required' => 'The email field is required.',
+            'contact_no.required' => 'The contact field is required.',
             'email.unique' => 'This email is already registered.',
+            'contact_no.unique' => 'This contact is already registered.',
             'password.required' => 'The password field is required.',
             'password.confirmed' => 'Passwords do not match.',
             'password.min' => 'Password must be at least 8 characters.',
+            'contact_no.min' => 'Contact must be at least 11 characters.',
             'password.string' => 'Password must be string.',
             // 'image.required' => 'The image field is required.',
             // 'image.image' => 'The file must be an image.',
@@ -81,39 +86,26 @@ class StudentController extends Controller
             'password.min' => 'Password must be at least 8 characters.',
         ]);
     
-        // Attempt to find the user by email
         $user = User::where('email', $request->email)->first();
     
-        // Check if user exists
         if (!$user) {
             return response()->json(['error' => 'This email is not found in our database.'], 404);
         }
-    
-        // Check if the user is an admin
-        // if ($user->type === 'admin') {
-        //     return response()->json(['error' => 'You are not a student.'], 403);
-        // }
-    
-        // Check if the student is verified
         if ($user->type === 'student' && !$user->is_verified) {
             return response()->json(['error' => 'Your account is not verified by the admin yet.'], 403);
         }
-    
-        // Attempt to log the user in
         if (Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['success' => true, 'message' => 'Login successful'], 200);
         }
     
-        // If authentication fails, return an error response
         return response()->json(['error' => 'Invalid password.'], 401);
     }
     
     public function verifyStudent($id){
         $user = User::find($id);
-        $user->is_verified = 1; // Verify the user
+        $user->is_verified = 1; 
         $user->save();
         
-        // Send verification email to student
         Mail::to($user->email)->send(new StudentVerified($user));
     
         return redirect()->route('site')->with('success', 'Student verified successfully!');
@@ -183,22 +175,19 @@ class StudentController extends Controller
 
     public function logout(Request $request)
 {
-    // Check if the authenticated user is a student
-    if (Auth::check() && Auth::user()->type === 'student') {
-        Auth::logout(); // Log the user out
+   
+    if (Auth::check()) {
+        Auth::logout(); 
 
-        // Invalidate the session
         $request->session()->invalidate();
 
-        // Regenerate the session token to prevent session fixation attacks
         $request->session()->regenerateToken();
 
         session()->flash('success', 'Logout successful!');
-  // Redirect to the site route
           return response()->json(['success' => true, 'redirect' => route('site')]);
     }
 
-    // If the user is not a student or not authenticated
+    
     return redirect()->back()->with('message', 'You are not authorized to log out.');
 }
 
@@ -206,20 +195,41 @@ class StudentController extends Controller
 
             if ($request->ajax()) {
         
-                $data = DataTables::of(User::where('type', 'student'))
-                // ->addColumn('image', function($query) {
-                //     return ($query->image) 
-                //         ? '<img src="' . asset('storage/images/students/' . $query->image) . '" width="50" height="50" alt="Student Image">' 
-                //         : null;
-                // })
-                // ->rawColumns(['image']) 
+                $data = DataTables::of(User::where('type', 'student')
+                ->leftJoin('scholars', 'users.scholar', '=', 'scholars.id')
+                ->select('users.*', 'scholars.name as scholar_name')
+                )
+                ->addColumn('scholar', function($row) {
+                    return $row->scholar_name ?? 'No Scholar';
+                })
                 ->make(true);
     
             \Log::info($data); // Log the data to check its structure
             return $data;
             }
+            $scholars = Scholars::pluck('name', 'id');
             // $students = User::where('type','student');
-            return view('admin.students.index');
+            return view('admin.students.index', compact('scholars'));
+        }
+        public function getStudent($id)
+        {
+            $student = User::where('id', $id)->where('type', 'student')->firstOrFail();
+            return response()->json($student);
+        }
+
+        // Assign scholars to students
+        public function assignScholar(Request $request)
+        {
+            $request->validate([
+                'id' => 'required|exists:users,id',
+                'scholar' => 'required|exists:scholars,id',
+            ]);
+
+            $student = User::find($request->id);
+            $student->scholar = $request->scholar;
+            $student->save();
+
+            return response()->json(['success' => 'Scholar assigned successfully.']);
         }
         public function students_destroy(Request $request){
 
@@ -238,10 +248,11 @@ class StudentController extends Controller
             $data['student_id'] = $id;
          
 
-                $data['info'] = Student::where('user_id',$id)->get();
+            $data['info'] = Student::where('user_id',$id)->get();
            
             return view('admin.students.multiStudent', $data);
         }
+
         public function update(Request $request)
     {
         $studentId =  $request->input('student_id');
@@ -281,7 +292,7 @@ class StudentController extends Controller
     public function StudentDataShow(){
         $student_id = Auth::user()->id;
         $studentData = Student::where('user_id',$student_id)->get();
-
+            // dd($studentData[0]->link);
         return view('admin.students.data',compact('studentData'));
     }
 
@@ -312,13 +323,66 @@ class StudentController extends Controller
 
     }
 
-    public function showFeedback()
-{
-    $feedback = Feedback::where('user_id', Auth::id())->first();
-    return view('admin.students.feedback', compact('feedback'));
-}
+//     public function showFeedback()
+//  {
+//     $feedback = Feedback::where('user_id', Auth::id())->first();
+//     return view('admin.students.feedback.index', compact('feedback'));
+//  }
+
+        public function showFeedback(Request $request)
+        {
+            if ($request->ajax()) {
+                return DataTables::of(
+                    Feedback::where('user_id', Auth::id())
+                )->addColumn('image_complete_url', function($query) {
+                    return ($query->image) ? asset('storage/'.$query->image) : null;
+                })->make(true);
+            }
+
+            return view('admin.students.feedback.index');
+        }
+
+//  new add feedback
+    public function addFeedback(Request $request){
+        if ($request->post()){
+            $data = $request->except('image');
+            $data['user_id'] = auth()->id();
+            // dd($data['user_id']);
+            if ($request->hasFile('image')){
+                $path = $request->image->store('testimonials/images');
+                $data['image'] = $path;
+            }
+            $scholar = Feedback::create($data);
+            return redirect()->route('student.feedback.submit');
+        }
+        return view('admin.students.feedback.add');
+    }
+
+    public function editFeedback(Request $request, Feedback $testimonial){
+        if ($request->post()){
+            $testimonial->title = $request->title;
+            $testimonial->feedback = $request->feedback;
+            if ($request->hasFile('image')){
+                $path = $request->image->store('testimonials/images');
+                $testimonial->image = $path;
+            }
+            $testimonial->save();
+            return redirect()->route('student.feedback.submit');
+        }
+        return view('admin.students.feedback.edit', compact('testimonial'));
+    }
+
+    public function deleteFeedback(Request $request){
+        Feedback::find($request->id)->delete();
+        return ['status' => 200];
+    }
+
+    // End Feedback Methpds
+
+
+
     public function submitFeedback(Request $request)
-{
+ {
     $request->validate([
         'title' => 'required|string|min:1|max:30',
         'feedback' => 'required|string|max:1000',
@@ -356,27 +420,68 @@ class StudentController extends Controller
     ]);
 }
 
-public function getFeedback($id)
+public function getFeedback(Request $request, $id)
 {
     $feedback = Feedback::where('user_id', $id)->first();
     // dd( $student);
     // die;
     if ($feedback) {
         
-        $student = User::where('id',$id)->first(); 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'student_name' => $student->name,
-                'title' => $feedback->title,
-                'feedback' => $feedback->feedback,
-            ],
-        ]);
+        // $student = User::where('id',$id)->first(); 
+        // return response()->json([
+        //     'success' => true,
+        //     'data' => [
+        //         'student_name' => $student->name,
+        //         'title' => $feedback->title,
+        //         'feedback' => $feedback->feedback,
+        //     ],
+        // ]);
+        if ($request->ajax()) {
+            $feedbacks = Feedback::where('user_id', $id)->get();
+            
+            // if ($feedbacks->isEmpty()) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Feedback not added by student yet',
+            //     ], 404);
+            // }
+    
+            return DataTables::of($feedbacks)
+                ->addColumn('image_complete_url', function($query) {
+                    return ($query->image) ? asset('storage/' . $query->image) : null;
+                })->make(true);
+        }
+        return view('admin.students.feedback.index', compact('student'));
+
     } else {
         return response()->json(['success' => false, 'message' => 'Feedback not added by student yet'], 404);
     }
    
 }
+
+public function showStudentFeedbacks(Request $request, $id)
+{
+    if ($request->ajax()) {
+        $feedbacks = Feedback::where('user_id', $id)->get();
+        
+        if ($feedbacks->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Feedback not added by student yet',
+            ], 404);
+        }
+
+        return DataTables::of($feedbacks)
+            ->addColumn('image_complete_url', function($query) {
+                return ($query->image) ? asset('storage/' . $query->image) : null;
+            })->make(true);
+    }
+
+    $student = User::findOrFail($id);
+
+    return view('admin.students.feedback.admin_index', compact('student'));
+}
+
 
 
 }

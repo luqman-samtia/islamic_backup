@@ -13,12 +13,30 @@
         <div class="col-xs-6">
             <div class="box box-primary">
                 <div class="box-body">
+                     {{-- Display Validation Errors --}}
+                     @if ($errors->any())
+                     <div class="alert alert-danger">
+                         <ul>
+                             @foreach ($errors->all() as $error)
+                                 <li>{{ $error }}</li>
+                             @endforeach
+                         </ul>
+                     </div>
+                 @endif
                     <form method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="box-body">
                             <div class="form-group">
                                 <label>Name</label>
                                 <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>E-Mail</label>
+                                <input type="email" name="email" class="form-control" placeholder="Enter email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" name="password" class="form-control" placeholder="Enter Password" required>
                             </div>
                             <div class="form-group">
                                 <label>Salary</label>

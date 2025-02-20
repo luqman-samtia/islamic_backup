@@ -58,42 +58,74 @@
                 <div class="container">
                     <div class="prtfl-wrap">
                         <div class="serv-wrap remove-ext3">
-                            <div class="row contact-form-row" id="stickyFormContainer" >
-                                <div class="col-md-12">
-                                    <div class="contact-form mb-5" id="stickyForm">
-                                        <form id="searchForm" action="{{ route('search') }}">
-                                            <div class="row mrg20">
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    <select name="surat" >
-                                                        <option value="">-- Select Option --</option>
-                                                        @foreach($quran as $surat)
-                                                            <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}">{{ $surat->title }}</option>
-                                                        @endforeach
-                                                    </select>
+                            {{-- <header class="style1"> --}}
+                                <div class="row contact-form-row style1" id="stickyFormContainer" >
+                                    <div class="col-md-12">
+                                        <div class="contact-form " id="stickyForm">
+                                            <form id="searchForm" action="{{ route('search') }}">
+                                                <div class="row mrg20">
+                                                    <div class="col-md-2 col-sm-6 col-lg-2">
+                                                        <select name="surat" >
+                                                            <option value="">-- Select Option --</option>
+                                                            @foreach($quran as $surat)
+                                                                <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}">{{ $surat->title }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-6 col-lg-2">
+                                                        <input type="number" name="ayat_from" placeholder="Ayat From" value="{{ $request->ayat_from }}">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-6 col-lg-2">
+                                                        <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-6 col-lg-2">
+                                                        <input type="number" name="page" placeholder="Page" value="">
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-12 col-lg-2">
+                                                        <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-12 col-lg-2">
+                                                        <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"   >Page</button>
+    
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    <input type="number" name="ayat_from" placeholder="Ayat From" value="{{ $request->ayat_from }}">
-                                                </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
-                                                </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    {{-- {{ $request->page }} --}}
-                                                    <input type="number" name="page" placeholder="Page" value="">
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 col-lg-2">
-                                                    <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
-                                                </div>
-                                                <div class="col-md-2 col-sm-12 col-lg-2">
-                                                    <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"   >Page</button>
+                                            </form>
+                                        </div>
+                                         
+                                    </div>
 
+                                       <!-- Your navigation content -->
+                                       <div class="col-md-12 col-lg-12 w-100 text-center">
+                                        <div class="navbar-container">
+                                            <div id="navbar" class="navbar"> <!-- Ensure this ID is present -->
+                                                <div class="col-md-12 w-100 text-center">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <!-- Previous Button -->
+                                                        <div>
+                                                            @if(@$previous)
+                                                                <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40 mt-2" type="submit">Previous</a>
+                                                            @endif
+                                                        </div>
+                                                        <!-- Center Button -->
+                                                        <div>
+                                                            @if($parent_slug)
+                                                                <a href="{{ route('quranSurat', $parent_slug) }}" class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
+                                                            @endif
+                                                        </div>
+                                                        <!-- Next Button -->
+                                                        <div>
+                                                            @if(@$next)
+                                                                <a href="{{ route('search', $next) }}" class="thm-btn brd-rd40 mt-2" type="submit">Next</a>
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
-                                     
                                 </div>
-                            </div>
+                            {{-- </header> --}}
+                            
 
                              <!-- Modal -->
                               <!-- Modal -->
@@ -189,35 +221,7 @@
                                 --}}
 
                                
-                                        <!-- Your navigation content -->
-                                        <div class="col-md-12 col-lg-12 w-100 text-center">
-                                            <div class="navbar-container">
-                                                <div id="navbar" class="navbar"> <!-- Ensure this ID is present -->
-                                                    <div class="col-md-12 w-100 text-center">
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <!-- Previous Button -->
-                                                            <div>
-                                                                @if(@$previous)
-                                                                    <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40 mt-2" type="submit">Previous</a>
-                                                                @endif
-                                                            </div>
-                                                            <!-- Center Button -->
-                                                            <div>
-                                                                @if($parent_slug)
-                                                                    <a href="{{ route('quranSurat', $parent_slug) }}" class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
-                                                                @endif
-                                                            </div>
-                                                            <!-- Next Button -->
-                                                            <div>
-                                                                @if(@$next)
-                                                                    <a href="{{ route('search', $next) }}" class="thm-btn brd-rd40 mt-2" type="submit">Next</a>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                     
                                         
                        
                                 
@@ -234,7 +238,7 @@
                                         </labe>
 {{--                                        <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">--}}
                                             <br>
-                                            <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}" width="500px">
+                                            <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}" width="100%">
 {{--                                        </a>--}}
                                     </div>
                                 @endforeach
@@ -281,34 +285,21 @@
 @section('custom_js')
     <script >
   $(document).ready(function() {
-        // Get the offset position of the contact form row
         var contactFormRow = $('#stickyFormContainer').offset().top;
-
-        // Add the scroll event listener
+    
         $(window).on('scroll', function() {
             var scroll = $(window).scrollTop();
 
             if (scroll >= contactFormRow) {
-                $('#stickyFormContainer').addClass('sticky');
+                $('#stickyFormContainer').addClass('sticky-active');
             } else {
-                $('#stickyFormContainer').removeClass('sticky');
+                $('#stickyFormContainer').removeClass('sticky-active');
             }
         });
     });
 
 
-        var contactFormRow = ($('.contact-form-row').offset().top - 92);
-
-        //===== Sticky =====//
-        $(window).on('scroll',function () {
-            var scroll = $(window).scrollTop();
-
-            if (scroll >= contactFormRow) {
-                $('.contact-form-row').addClass('sticky');
-            } else {
-                $('.contact-form-row').removeClass('sticky');
-            }
-        });
+      
     
         function showToast(message) {
             const toast = document.createElement('div');

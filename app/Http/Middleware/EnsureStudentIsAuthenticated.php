@@ -21,7 +21,8 @@ class EnsureStudentIsAuthenticated
             return $next($request);
         }
          
-        return redirect()->route('site')->with('error', 'You must be logged in as a student to access this page.');
+        // return redirect()->route('site')->with('error', 'You must be logged in as a student to access this page.');
+        return redirect()->route('site')->with('showLogin', true);
     
     }
 }

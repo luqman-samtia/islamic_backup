@@ -39,11 +39,11 @@
                     <div class="prtfl-wrap">
                         <div class="serv-wrap remove-ext3">
                             <div class="row contact-form-row">
-                                <div class="col-md-12">
-                                    <div class="contact-form mb-5">
+                                <div class="col-md-12" id="stickyFormContainer">
+                                    <div class="contact-form mb-5"  >
                                         <form id="tajweedSearch" action="{{ route('tajweedQuranSearch') }}">
                                             <div class="row mrg20">
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
+                                                <div class="col-md-3 col-sm-6 col-lg-3">
                                                     <select name="surat" >
                                                         <option value="">-- Select Option --</option>
                                                         @foreach($quran as $surat)
@@ -51,19 +51,19 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
+                                                {{-- <div class="col-md-2 col-sm-6 col-lg-2">
                                                     <input type="number" name="ayat_from" placeholder="Ayat From" value="{{ $request->ayat_from }}">
                                                 </div>
                                                 <div class="col-md-2 col-sm-6 col-lg-2">
                                                     <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
-                                                </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
+                                                </div> --}}
+                                                <div class="col-md-3 col-sm-6 col-lg-3">
                                                     <input type="number" name="page" placeholder="Page" >
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 col-lg-2">
+                                                <div class="col-md-3 col-sm-12 col-lg-3">
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 col-lg-2">
+                                                <div class="col-md-3 col-sm-12 col-lg-3">
                                                     <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"  >Page</button>
 
                                                 </div>
@@ -178,7 +178,7 @@
                                         </labe>
 {{--                                        <a href="{{ asset('/storage/'.$child->image) }}" data-fancybox="gallery" title="">--}}
                                             <br>
-                                            <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}">
+                                            <img src="{{ asset('/storage/'.$child->image) }}" alt="{{ $child->title }}" width="100%">
 {{--                                        </a>--}}
                                     </div>
                                 @endforeach

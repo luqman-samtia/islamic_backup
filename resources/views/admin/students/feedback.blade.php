@@ -45,7 +45,7 @@
 
 <div class="container">
     <h2 class="text-center my-4" style="max-width: 600px;">Submit Feedback</h2>
-    <form id="feedbackForm" class="mx-auto" style="max-width: 600px;">
+    <form id="feedbackForm" class="mx-auto" style="max-width: 600px;"  enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="title">Title:</label>
@@ -66,6 +66,10 @@
                 class="form-control" 
                 placeholder="Enter your feedback here"
             >@if(!empty($feedback->feedback)){{$feedback->feedback}}@endif</textarea>
+        </div>
+        <div class="form-group">
+            <label for="image">Image</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
         </div>
         <button type="submit" class="btn btn-primary btn-block">
             <i class="fa fa-comments"></i> Submit Feedback

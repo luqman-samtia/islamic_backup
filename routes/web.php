@@ -67,6 +67,10 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     
     // Students>>>>>>>>
     Route::get('/students', 'StudentController@students')->name('admin.student');
+    // Assign scholar to student   
+    Route::get('/student/{id}', 'StudentController@getStudent')->name('admin.student.get');
+    Route::post('/students/assign-scholar', 'StudentController@assignScholar')->name('admin.student.assign-scholar');
+    // end>>>>>>>>>>
     Route::post('/students/destroy', 'StudentController@students_destroy')->name('admin.student.destroy');
     Route::get('/student/add-links/{id}','StudentController@showAddLinksForm')->name('admin.student.addLinks');
 
@@ -74,17 +78,25 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::post('/student/update-links', 'StudentController@update')->name('admin.student.update');
     Route::post('/student/remove-student-item', 'StudentController@removeStudentItem')->name('information.student-item.destroy');
     Route::get('/student/show/info', 'StudentController@StudentDataShow')->name('information.student-data.show');
-    Route::get('/student/update-password',  function () {
+    Route::get('/student/update/password',  function () {
         return view('admin.students.updatepassword');
     })->name('student.update-password');
     Route::post('/student/update-password', 'StudentController@StudentUpdatePassword')->name('information.student.update-password');
-    Route::get('/student/submit-feedback', function(){
-        $feedback = Feedback::where('user_id', Auth::id())->first();
-        return view('admin.students.feedback',compact('feedback'));
-    })->name('student.feedback.submit');
-    Route::get('/student/submit-feedback','StudentController@showFeedback')->name('student.feedback.submit');
-    Route::post('/student/submit-feedback','StudentController@submitFeedback')->name('feedback.submit');
+    // Route::get('/student/submit-feedback', function(){
+    //     $feedback = Feedback::where('user_id', Auth::id())->first();
+    //     return view('admin.students.feedback',compact('feedback'));
+    // })->name('student.feedback.submit');
+
+    // crud feedback
+    Route::get('/student/submit/feedback','StudentController@showFeedback')->name('student.feedback.submit');
+    Route::match(['GET', 'POST'], '/student/submit-feedback/add', 'StudentController@addFeedback')->name('feedback.add');
+    Route::match(['GET', 'POST'], '/student/submit-feedback/{testimonial}/edit', 'StudentController@editFeedback')->name('feedback.edit');
+    Route::post('/student/submit-feedback/delete', 'StudentController@deleteFeedback')->name('feedback.delete');
+    // end crud feedback
+    // Route::post('/student/submit-feedback','StudentController@submitFeedback')->name('feedback.submit');
     Route::get('/feedback/{id}', 'StudentController@getFeedback')->name('feedback.get');
+    Route::get('/feedbacks/{id}', 'StudentController@showStudentFeedbacks')->name('admin.feedback.show');
+
 
 
     
@@ -114,6 +126,8 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::match(['GET', 'POST'], '/add', 'ScholarsController@add')->name('scholars.add');
         Route::match(['GET', 'POST'], '{scholar}/edit', 'ScholarsController@edit')->name('scholars.edit');
         Route::post('/delete', 'ScholarsController@delete')->name('scholars.delete');
+        // get student associated with scholar
+        Route::get('/students', 'ScholarsController@getStudents')->name('scholars.students');
     });
 
     Route::prefix('testimonials')->group(function (){

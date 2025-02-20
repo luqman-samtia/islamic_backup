@@ -31,21 +31,9 @@ class CustomGateFilter implements FilterInterface
         if (Auth::check()) {
             $user = Auth::user();
 
-            // Allow access to 'admin/home' for students
-            // if ($item['url'] === 'admin/home' && $user->type === 'student') {
-            //     return true; // Allow access for students
-            // }
-            // if ($user->type === 'student' && in_array($item['url'], [
-            //     'admin/home',
-            //     'student/change-password',
-            //     'student/add-info',
-            // ])) {
-            //     return true; // Allow access for students
-            // }
-
             if ($user->type === 'admin' && in_array($item['url'], [
-                'admin/student/update-password',
-                'admin/student/submit-feedback',
+                'admin/student/update/password',
+                'admin/student/submit/feedback',
                 'admin/student/show/info',
             ])) {
                 return false;
@@ -59,9 +47,16 @@ class CustomGateFilter implements FilterInterface
             // Allow only specific routes for students
             if ($user->type === 'student' && in_array($item['url'], [
                 'admin/home',
-                'admin/student/update-password',
-                'admin/student/submit-feedback',
+                'admin/student/update/password',
+                'admin/student/submit/feedback',
                 'admin/student/show/info',
+            ])) {
+                return true;
+            }
+
+             // Allow scholars to access the admin/home route
+            if ($user->type === 'scholar' && in_array($item['url'], [
+                'admin/home',
             ])) {
                 return true;
             }

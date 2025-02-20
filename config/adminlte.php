@@ -132,7 +132,7 @@ return [
         [
             'text' => 'Update Password',
             'icon' => 'lock',
-            'url'  => 'admin/student/update-password',
+            'url'  => 'admin/student/update/password',
             'can' => 'studentcontroller.change-password' // Assuming you have a permission defined for this
         ],
         [
@@ -144,7 +144,7 @@ return [
         [
             'text' => 'Add Feedback',
             'icon' => 'comment',
-            'url'  => 'admin/student/submit-feedback',
+            'url'  => 'admin/student/submit/feedback',
             'can' => 'studentcontroller.showFeedback' // Assuming you have a permission defined for this
         ],
         [

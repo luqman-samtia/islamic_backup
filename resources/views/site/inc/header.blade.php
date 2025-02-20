@@ -114,9 +114,14 @@
                 @error('name')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
-                 <label for="email">Email</label>
+                <label for="email">Email</label>
                 <input class="form-control" id="email" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;">
                 @error('email')
+                <div class="text-danger">{{ $message }}</div>
+                 @enderror
+                <label for="contact">Contact</label>
+                <input class="form-control" id="contact" type="number" name="contact_no" placeholder="Contact Number"  style="margin-bottom: 10px;">
+                @error('contact_no')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
                  <label for="password">Password</label>
@@ -334,7 +339,7 @@ $('#loginData').on('submit', function(e) {
 
 
 
-                    function openModal() {
+    function openModal() {
             document.getElementById('authModal').style.display = "block";
             showLogin(); // Default to showing login form when modal is opened
         }
@@ -363,11 +368,19 @@ $('#loginData').on('submit', function(e) {
 
         @if(Session::has('message'))
         toastr.success("{{ Session::get('message') }}");
-    @endif
+        @endif
 
-    @if(Session::has('error'))
-        toastr.error("{{ Session::get('error') }}");
-    @endif
+        @if(Session::has('error'))
+            toastr.error("{{ Session::get('error') }}");
+        @endif
+
+        @if(session('showLogin'))
+        document.addEventListener('DOMContentLoaded', function() {
+            // console.log('Attempting to show login popup');
+            openModal();
+            showLogin();
+        });
+        @endif
 
 
 

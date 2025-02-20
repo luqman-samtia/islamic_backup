@@ -26,15 +26,17 @@ $adminPermissions = [
     \Spatie\Permission\Models\Permission::findOrCreate('homecontroller.index'),
     \Spatie\Permission\Models\Permission::findOrCreate('homecontroller.pages'),
     \Spatie\Permission\Models\Permission::findOrCreate('homecontroller.emails'),
+    \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.showFeedback'),
     \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.add-info'),
-    \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.change-password'),
+    \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.UpdatePassword'),
 ];
 
 $normalPermissions = [
     \Spatie\Permission\Models\Permission::findOrCreate('homecontroller.index'),
     \Spatie\Permission\Models\Permission::findOrCreate('homecontroller.pages'),
+    \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.showFeedback'),
     \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.add-info'),
-    \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.change-password'),
+    \Spatie\Permission\Models\Permission::findOrCreate('studentcontroller.UpdatePassword'),
 ];
 
 

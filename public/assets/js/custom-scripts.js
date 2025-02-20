@@ -351,15 +351,109 @@ $(window).on('load',function(){
 });//===== Window onLoad Ends =====//
 
 //===== Sticky Header =====//
-$(window).on('scroll',function () {
+// $(window).on('scroll',function () {
+//   'use strict';
+
+//   var header_height = $('header').innerHeight();
+
+//   var scroll = $(window).scrollTop();
+//   if (scroll >= header_height) {
+//     $('header').addClass('sticky-active');
+//   } else {
+//     $('header').removeClass('sticky-active');
+//   }
+
+//   // For search form
+//   var formContainer = $('.contact-form');
+//   var formOffset = formContainer.offset().top;
+//   var stickyOffset = header_height; // Adjust this value as needed
+  
+//   if (scroll > formOffset - stickyOffset) {
+//       formContainer.addClass('sticky-form');
+//       // Add padding to prevent content jump
+//       formContainer.css('padding-top', formContainer.height());
+//   } else {
+//       formContainer.removeClass('sticky-form');
+//       formContainer.css('padding-top', 0);
+//   }
+
+// });
+
+// $(window).on('scroll', function() {
+//   'use strict';
+  
+//   // For header
+//   var header_height = $('header').innerHeight();
+//   var scroll = $(window).scrollTop();
+  
+//   if (scroll >= header_height) {
+//       $('header').addClass('sticky-active');
+//   } else {
+//       $('header').removeClass('sticky-active');
+//   }
+  
+//   // For search form
+//   var formContainer = $('#stickyFormContainer');
+//   var formOffset = formContainer.offset().top;
+//   var stickyOffset = header_height; // Adjust this value as needed
+  
+//   if (scroll > formOffset - stickyOffset) {
+//       formContainer.addClass('sticky-form');
+//       // Add padding to prevent content jump
+//       formContainer.css('padding-top', formContainer.height());
+//   } else {
+//       formContainer.removeClass('sticky-form');
+//       formContainer.css('padding-top', 0);
+//   }
+// });
+
+$(window).on('scroll', function() {
   'use strict';
-
+  
+  // For header
   var header_height = $('header').innerHeight();
-
   var scroll = $(window).scrollTop();
+  
   if (scroll >= header_height) {
-    $('header').addClass('sticky-active');
+      $('header').addClass('sticky-active');
   } else {
-    $('header').removeClass('sticky-active');
+      $('header').removeClass('sticky-active');
   }
-});//===== Window onScroll Ends =====//
+  
+  // For search form
+  var formContainer = $('#stickyFormContainer');
+  var formInitialOffset = formContainer.data('initial-offset') || formContainer.offset().top;
+  var headerHeight = $('header.sticky-active').outerHeight() || header_height;
+  
+  // Store the initial offset first time
+  if (!formContainer.data('initial-offset')) {
+      formContainer.data('initial-offset', formInitialOffset);
+  }
+  
+  if (scroll > formInitialOffset - headerHeight) {
+      formContainer.addClass('sticky-form');
+      $('body').css('padding-top', formContainer.outerHeight());
+      formContainer.css({
+          'top': headerHeight + 'px',
+          'position': 'fixed',
+          'width': '100%',
+          'z-index': '99',
+          'background': 'white',
+          'box-shadow': '0 2px 5px rgba(0,0,0,0.1)',
+          'padding': '10px 0'
+      });
+  } else {
+      formContainer.removeClass('sticky-form');
+      $('body').css('padding-top', '0');
+      formContainer.css({
+          'position': '',
+          'top': '',
+          'width': '',
+          'z-index': '',
+          'background': '',
+          'box-shadow': '',
+          'padding': ''
+      });
+  }
+});
+//===== Window onScroll Ends =====//

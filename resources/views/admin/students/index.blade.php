@@ -9,14 +9,16 @@
     .cursor-pointer {
     cursor: pointer !important;
 }
+.modal {
+    z-index: 1050 !important;
+    opacity: 1 !important;
+}
+.fade{
+    /* opacity: 0.5 !important; */
+}
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
     <h1>
@@ -24,6 +26,47 @@
       
     </h1>
 @stop
+     <!-- Scholar Assignment Modal -->
+<div class="modal fade" id="assignScholarModal" tabindex="-1" role="dialog" aria-labelledby="assignScholarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignScholarModalLabel">Assign Scholar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                {{-- <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"> --}}
+                    {{-- <span aria-hidden="true">&times;</span> --}}
+                {{-- </button> --}}
+            </div>
+            <form id="assignScholarForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="id" >
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="student_name" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" id="student_email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="scholar_id">Assign Scholar</label>
+                        <select class="form-control" name="scholar" id="scholar">
+                            <option value="">Select Scholar</option>
+                            @foreach($scholars as $id => $name)
+                                <option value="{{ $id }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section('content')
 <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
@@ -58,6 +101,7 @@
                         <tr>
                             {{-- <td>Image</td> --}}
                             <td>Name</td>
+                            <td>Scholar</td>
                             <td>Email</td>
                             <td>Status</td>
                             <td>Joined</td>
@@ -77,6 +121,10 @@
 
     <div class="rolesModal"></div>
 
+
+   
+
+
 @stop
 
 @push('js')
@@ -89,6 +137,7 @@
                 columns: [
                     // { data: 'image' },
                     { data: 'name' },
+                    { data: 'scholar' },
                     { data: 'email' },
                     { 
                         data: 'is_verified' ,
@@ -131,11 +180,14 @@
                     <button type="button" data-id="${data}" class="btn btn-primary btn-xs add-links">
                         <i class="fa fa-link"></i> Add Links
                     </button>
+                    <button type="button" data-id="${data}" class="btn btn-success btn-xs assign-scholar">
+                        <i class="fa fa-user"></i> Add scholar
+                    </button>
                     <button type="button" data-id="${data}" class="btn btn-info btn-xs show-feedback">
                     <i class="fa fa-comments"></i> Show Feedback
                     </button>
                     
-                    <button class="btn btn-danger btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-danger btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true">
                         Actions
                     </button>
                     <ul class="dropdown-menu">
@@ -146,7 +198,7 @@
                             <a class="dropdown-item unverify_student cursor-pointer" type="button" data-id="${data}" data-action="unverify">❌ Disable</a>
                         </li>
                     </ul>
-                
+                    
                 `;
                         }
                     }
@@ -313,62 +365,81 @@ $(document).on('click', '.unverify_student', function() {
 });
 
 
+        $(document).on('click', '.show-feedback', function() {
+            let studentId = $(this).data('id');
+            // window.location.href = `/admin/feedbacks/${studentId}`;
+            window.location.href = '{{ route('admin.feedback.show', ':id') }}'.replace(':id', studentId);
+        });
 
-    // Event listener for "Show Feedback" button
-    $(document).on('click', '.show-feedback', function() {
-    let studentId = $(this).data('id');
+$('.table').on('click', '.add-links', function() {
+    // let studentId = $(this).data('id');
+    let studentId = $(this).data('id'); 
+    window.location.href = '{{ route('admin.student.addLinks', ':id') }}'.replace(':id', studentId);
+});
 
-    // AJAX request to fetch feedback
+// Assign scholar to student
+$(document).on('click', '.assign-scholar', function() {
+    var studentId = $(this).data('id');
+
+    console.log($.fn.modal ? 'Bootstrap Modal Detected' : 'Bootstrap Modal Not Found');
+
+    // Fetch student details using AJAX
     $.ajax({
-        headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-        type: 'GET',
-        // url: `/feedback/${studentId}`, // Route to get feedback by student ID
-        url:"{{ route('feedback.get', ':id') }}".replace(':id', studentId),
-        success: function(response) {
-            if (response.success) {
-                // Populate modal with feedback data
-                $('#studentName').text(response.data.student_name);
-                $('#feedbackTitle').text(response.data.title);
-                $('#feedbackMessage').text(response.data.feedback);
+        url: '/admin/student/' + studentId,
+        method: 'GET',
+        success: function(data) {
+            $('#id').val(data.id);
+            $('#student_name').val(data.name);
+            $('#student_email').val(data.email);
+            $('#assignScholarModal').modal('show');
+            // $('#assignScholarModal').modal('show').attr('aria-hidden', 'false').css('display', 'block').focus();
 
-                $('#feedbackModal').modal('show');
-            } else {
-                
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message || 'Feedback not found for this student',
-                });
-            }
-        
-        },
-            error: function(xhr) {
-            let message = 'Failed to retrieve feedback. Please try again later.';
-            if (xhr.status === 404) {
-                message = xhr.responseJSON?.message || message; // Use server-provided message if available
-            }
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: message,
-            });
         }
     });
 });
 
+$('#assignScholarForm').on('submit', function(e) {
+    e.preventDefault();
 
-$('.table').on('click', '.add-links', function() {
-    // let studentId = $(this).data('id');
-    let studentId = $(this).data('id'); // Get the student ID from the button
-    // $('#dynamicStudentForm')[0].reset(); // Clear any previous data in the form
-    // $('#dynamicStudentContainer').empty(); // Clear previous fields from container
-
-    // // Set a hidden input with student ID for submission
-    // $('#dynamicStudentContainer').append(`<input type="hidden" name="student_id" value="${studentId}">`);
-    // Redirect to the add links page with studentId as a parameter
-    window.location.href = '{{ route('admin.student.addLinks', ':id') }}'.replace(':id', studentId);
+    $.ajax({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: '{{ route('admin.student.assign-scholar') }}',
+        method: 'POST',
+        data: $(this).serialize(),
+        success: function(response) {
+            $('#assignScholarModal').modal('hide');
+            // datatable.ajax.reload();
+            // alert(response.success);
+            Swal.fire(
+            'Success!',
+            response.success,
+            'success'
+        );
+        // datatable.ajax.reload();
+        window.location.reload();
+        },
+        error: function(xhr) {
+            alert('An error occurred while assigning the scholar.');
+        }
+    });
 });
+
     </script>
+
+
+{{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- jQuery (required for Bootstrap 4) -->
+{{-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> --}}
+
+<!-- Bootstrap 4 JS -->
+{{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @endpush

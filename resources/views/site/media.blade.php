@@ -31,9 +31,10 @@
                                 <div class="col-md-12">
                                     <div class="contact-form text-center mb-5">
                                         <form action="">
-                                            <div class="row">
+                                            <div class="row" id="stickyFormContainer">
                                                 <div class="col-md-6 col-sm-6">
-                                                    <input type="text" name="q" placeholder="Search" value="{{ request()->q }}">
+                                                    {{-- {{ request()->q }} --}}
+                                                    <input type="text" name="q" placeholder="Search" value="">
                                                 </div>
                                                 <div class="col-md-6 col-sm-6">
                                                     <button class="thm-btn brd-rd40 mt-3 pull-right" type="submit">Search</button>

@@ -146,15 +146,19 @@
     @yield('custom_js')
     <!-- Floating buttons -->
     <div class="floating-buttons">
+        @php($info = \App\Information::query()->first())
         <!-- WhatsApp Button -->
-        <a href="https://wa.me/923001425825" target="_blank" class="whatsapp-button">
+        @if(@$info['whatsapp2']['label'] && @$info['whatsapp2']['value'])      
+        <a href="https://wa.me/{{$info['whatsapp2']['value']}}" target="_blank" class="whatsapp-button">
             <img src="{{ asset('assets/images/whatsapp.png') }}" alt="WhatsApp">
         </a>
-    
+        @endif
         <!-- Skype Button -->
-        <a href="skype:live:live:428db5f55825624c?call" target="_blank" class="skype-button">
+        @if(@$info['skype1']['label'] && @$info['skype1']['value'])        
+        <a href="skype:live:{{$info['skype1']['value']}}?call" target="_blank" class="skype-button">
             <img src="{{ asset('assets/images/skype.png') }}" alt="Skype">
         </a>
+        @endif
     </div>
 </body>
 </html>

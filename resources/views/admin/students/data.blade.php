@@ -18,25 +18,32 @@
         <div class="col-md-8 col-sm-12 col-lg-8">
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-lg-4">
-                    @if(!empty($studentData->title))
+                    @if(!empty($studentData[0]->title))
                     <div class="wdgt-box">
                       
                         <ul style=" display:flex;text-align:centr;justify-content:space-around;flex-direction:row;">        
                        
                                 @foreach($studentData as $item)
+                                {{-- @if(!empty($item['title'])) --}}
                                 <li  style="list-style: none;">
                                     <a style="list-style: none;background:green;margin-left:5px;" href="{{ $item['link'] }}" class="badge badge-success" target="_blank">{{ $item['title'] }}</a>
                                 </li>
+                                {{-- @else
+                                <div>
+                                    <p>  No student info available.</p>
+                                </div>
+                                @endif --}}
                                 @endforeach
                                
                             </ul>
                     </div>
-                    @else
-                    <div>
-                        <p>  No student info available.</p>
-                    </div>
-                  
-                    @endif
+                    
+                  @else
+                <div>
+                    <p>  No student info available.</p>
+                </div>
+                @endif
+                    
                 </div>
     </div>
 </div>

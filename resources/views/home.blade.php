@@ -3,7 +3,16 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <div class="row">
+        <div class="col-md-6 col-12 col-sm-12">
+            <h1>Dashboard</h1>
+        </div>
+        <div class="col-md-6 col-12 col-sm-12 text-right">
+            <h3>Welcome - {{Auth::user()->name}}</h3>
+        </div>
+       
+
+    </div>
 @stop
 
 @section('content')
@@ -33,6 +42,21 @@
                 </div>
                
                 <a href="{{route('student.update-password')}}" class="small-box-footer">
+                    GO TO <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        @elseif (Auth::check() && Auth::user()->type=='scholar')
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-blue">
+                <div class="inner">
+                    {{-- <h3>{{ $resources }}</h3> --}}
+
+                    <p>View Student</p>
+                </div>
+              
+                <a href="{{route('scholars.students')}}" class="small-box-footer">
                     GO TO <i class="fa fa-arrow-circle-right"></i>
                 </a>
             </div>

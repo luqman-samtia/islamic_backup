@@ -22,6 +22,7 @@
                         <thead>
                         <tr>
                             <td>Name</td>
+                            <td>Email</td>
                             <td>Salary</td>
                             <td>Phone</td>
                             <td>Address</td>
@@ -51,6 +52,7 @@
                 ajax: '{!! route('scholars') !!}',
                 columns: [
                     { data: 'name' },
+                    { data: 'email' },
                     { data: 'salary' },
                     { data: 'phone' },
                     { data: 'address' },
