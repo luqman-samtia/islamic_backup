@@ -43,10 +43,7 @@ class StudentController extends Controller
             'password.min' => 'Password must be at least 8 characters.',
             'contact_no.min' => 'Contact must be at least 11 characters.',
             'password.string' => 'Password must be string.',
-            // 'image.required' => 'The image field is required.',
-            // 'image.image' => 'The file must be an image.',
-            // 'image.mimes' => 'Only jpeg, png, jpg, and gif formats are allowed.',
-            // 'image.max' => 'Image size must not exceed 2MB.',
+           
         ]);
 
        
@@ -54,22 +51,21 @@ class StudentController extends Controller
         $validatedData['type'] = 'student';  // Set type to 'student'
         $validatedData['is_verified'] = 0;   // Mark as not verified
 
-        // Handle the image upload
-        // if ($request->hasFile('image')) {
-        //     $image = $request->file('image');
-        //     $imageName = time() . '.' . $image->getClientOriginalExtension();
-        //     // Move the image to storage/app/public/images/students
-        //     $image->storeAs('images/students', $imageName, 'public');
-        //     $validatedData['image'] = $imageName; // Store image name in the database
-        // }
+        
             $user = User::create($validatedData);
           
-            // Send email to admin for verification
-            Mail::to('luqmansamtia617@gmail.com')->send(new AdminVerification($user));
-            
-            return response()->json(['message' => 'Registration successful! Waiting for admin approval.']);
+           
+            try {
+                Mail::to('luqmansamtia617@gmail.com')->send(new AdminVerification($user));
+                $successMessage = 'Registration successful! Waiting for admin approval.';
+            } catch (\Exception $e) {
+                // Log the error for debugging
+                \Log::error('Mail sending failed: ' . $e->getMessage());
+                $successMessage = 'Registration successful! However, we were unable to send an email notification to the admin.';
+            }
+            return response()->json(['message' => $successMessage]);
         }
-        // return view('student.register');
+       
     }
 
     // Student login
@@ -106,9 +102,19 @@ class StudentController extends Controller
         $user->is_verified = 1; 
         $user->save();
         
-        Mail::to($user->email)->send(new StudentVerified($user));
+        // Mail::to($user->email)->send(new StudentVerified($user));
     
-        return redirect()->route('site')->with('success', 'Student verified successfully!');
+        // return redirect()->route('site')->with('success', 'Student verified successfully!');
+        try {
+            Mail::to($user->email)->send(new StudentVerified($user));
+            $successMessage = 'Student verified successfully!';
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Mail sending failed: ' . $e->getMessage());
+            $successMessage = 'Student verified successfully! However, we were unable to send an email notification';
+        }
+        return response()->json(['success' => $successMessage]);
+
     }
 
 
@@ -122,16 +128,21 @@ class StudentController extends Controller
     if ($user->is_verified == 1) {
         return response()->json(['error' => 'Student is already verified!'], 400);
     }
-    // if ($user) {
         $user->is_verified = 1;
         $user->save();
 
-        Mail::to($user->email)->send(new StudentVerified($user));
+        try {
+            Mail::to($user->email)->send(new StudentVerified($user));
+            $successMessage = 'Student verified successfully!';
+        } catch (\Exception $e) {
+            
+            \Log::error('Mail sending failed: ' . $e->getMessage());
+            $successMessage = 'Student verified successfully! However, we were unable to send an email notification';
+        }
+    
+        return redirect()->route('site')->with('success', $successMessage);
+   
 
-        return response()->json(['success' => 'Student verified successfully!']);
-    // }
-
-    // return response()->json(['error' => 'Student not found!'], 404);
     }
     public function adminDisableStudent(Request $request){
     $user = User::find($request->id);
@@ -146,9 +157,17 @@ class StudentController extends Controller
         $user->is_verified = 0;
         $user->save();
 
-        Mail::to($user->email)->send(new StudentDisable($user));
+ 
+        try {
+            Mail::to($user->email)->send(new StudentDisable($user));
+            $successMessage = 'Student Disabled successfully!!';
+        } catch (\Exception $e) {
+         
+            \Log::error('Mail sending failed: ' . $e->getMessage());
+            $successMessage = 'Student Disabled successfully!! However, we were unable to send an email notification';
+        }
 
-        return response()->json(['success' => 'Student Disabled successfully!']);
+        return response()->json(['success' => $successMessage]);
     
     }
    
@@ -204,7 +223,7 @@ class StudentController extends Controller
                 })
                 ->make(true);
     
-            \Log::info($data); // Log the data to check its structure
+            \Log::info($data); 
             return $data;
             }
             $scholars = Scholars::pluck('name', 'id');
