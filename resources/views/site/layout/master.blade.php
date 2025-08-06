@@ -141,7 +141,7 @@
     <script src="{{ asset('assets/js/wow.min.js') }}"></script>
     <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.circliful.min.js') }}"></script>
-    <script src="{{ asset('assets/js/custom-scripts.js') }}"></script>
+    <script src="{{ asset('assets/js/custom-scripts.js') }}?v=2"></script>
 
     @yield('custom_js')
     <!-- Floating buttons -->
