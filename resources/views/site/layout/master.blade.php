@@ -132,15 +132,15 @@
 <body>
     @yield('content')
 {{--<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>--}}
-    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.min.js') }}?v=2"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}?v=2"></script>
     <script src="{{ asset('assets/js/downCount.js') }}"></script>
     <script src="{{ asset('assets/js/fancybox.min.js') }}"></script>
     <script src="{{ asset('assets/js/isotope.pkgd.min.js') }}"></script>
     <script src="{{ asset('assets/js/perfectscrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/wow.min.js') }}"></script>
-    <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.circliful.min.js') }}"></script>
+    <script src="{{ asset('assets/js/owl.carousel.min.js') }}?v=2"></script>
+    <script src="{{ asset('assets/js/jquery.circliful.min.js') }}?v=2"></script>
     <script src="{{ asset('assets/js/custom-scripts.js') }}?v=2"></script>
 
     @yield('custom_js')
