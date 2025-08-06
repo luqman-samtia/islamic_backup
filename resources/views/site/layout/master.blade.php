@@ -132,7 +132,7 @@
 <body>
     @yield('content')
 {{--<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>--}}
-    <script src="{{ asset('assets/js/jquery.min.js') }}?v=2"></script>
+    <script src="{{ asset('assets/js/jquery.min.js') }}?v=3"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/downCount.js') }}"></script>
     <script src="{{ asset('assets/js/fancybox.min.js') }}"></script>
