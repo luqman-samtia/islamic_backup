@@ -17,7 +17,7 @@ class EnsureStudentIsAuthenticated
     public function handle($request, Closure $next)
     {
         // Check if the user is authenticated and has the 'student' role or a specific condition
-        if (Auth::check() && (Auth::user()->type === 'student' || Auth::user()->type === 'admin') ) {
+        if (Auth::check() && (Auth::user()->type === 'student' || Auth::user()->type === 'admin' || Auth::user()->type === 'scholar') ) {
             return $next($request);
         }
          

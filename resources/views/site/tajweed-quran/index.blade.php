@@ -42,9 +42,9 @@
                                 <div class="col-md-12">
                                     <div class="contact-form text-center mb-5">
                                         <form id="tajweedSearch" action="{{ route('tajweedQuranSearch') }}">
-                                            <div class="row mrg20">
+                                            <div class="row mrg20 justify-content-center align-items-center text-center">
                                                 <div class="col-md-4 col-sm-6 col-lg-4">
-                                                    <select name="surat">
+                                                    <select name="surat" onchange="this.form.submit()">
                                                         <option value="">-- Select Option --</option>
                                                         @foreach($quran as $surat)
                                                             <option value="{{ $surat->slug }}">{{ $surat->title }}</option>
@@ -63,10 +63,10 @@
                                                 <div class="col-md-2 col-sm-12 col-lg-2">
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 col-lg-2">
+                                                {{-- <div class="col-md-2 col-sm-12 col-lg-2">
                                                     <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"  >Page</button>
 
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </form>
                                     </div>

@@ -63,31 +63,35 @@
                                     <div class="col-md-12">
                                         <div class="contact-form " id="stickyForm">
                                             <form id="searchForm" action="{{ route('search') }}">
-                                                <div class="row mrg20">
+                                                <div class="row mrg20 justify-content-center align-items-center text-center">
                                                     <div class="col-md-2 col-sm-6 col-lg-2">
-                                                        <select name="surat" >
+                                                        <select name="surat" onchange="this.form.submit()">
                                                             <option value="">-- Select Option --</option>
                                                             @foreach($quran as $surat)
                                                                 <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}">{{ $surat->title }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2 col-sm-6 col-lg-2">
+                                                    {{-- <div class="col-md-2 col-sm-6 col-lg-2">
                                                         <input type="number" name="ayat_from" placeholder="Ayat From" value="{{ $request->ayat_from }}">
                                                     </div>
                                                     <div class="col-md-2 col-sm-6 col-lg-2">
                                                         <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="col-md-2 col-sm-6 col-lg-2">
                                                         <input type="number" name="page" placeholder="Page" value="">
                                                     </div>
+                                                    <div class="col-md-2 col-sm-6 col-lg-2">
+                                                    <input type="number" name="para_no" id="para_no" class="form-control" min="1" max="30" placeholder="Enter Para Number" >
+                                                    </div>
+
                                                     <div class="col-md-2 col-sm-12 col-lg-2">
                                                         <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                     </div>
-                                                    <div class="col-md-2 col-sm-12 col-lg-2">
-                                                        <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"   >Page</button>
+                                                    {{-- <div class="col-md-2 col-sm-12 col-lg-2">
+                                                        <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"   >Search</button>
     
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                             </form>
                                         </div>
@@ -129,58 +133,10 @@
 
                              <!-- Modal -->
                               <!-- Modal -->
-                              <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="pageModalLabel">Go to Page</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <input type="number" id="pageInput" placeholder="Enter page number" class="form-control">
-                                        </div>
-                                        <div class="modal-footer">
-                                            {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                                            <button type="button" class="btn thm-btn" onclick="confirmPage()">Go to Page</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        
 
                             <!-- JavaScript -->
-                            <script>
 
-                            function openPageModal() {
-                                    $('#pageModal').modal('show')
-                                    .on('shown.bs.modal', function () {
-                                        // Add and remove classes once the modal is fully shown
-                                        $('.modal-backdrop').remove();
-                                    });
-                                }
-                            
-                                
-                                    function confirmPage() {
-                                    var pageNumber = document.getElementById('pageInput').value;
-                                    if (pageNumber) {
-                                        // Set the page input in the form
-                                        var input = document.createElement('input');
-                                        input.type = 'hidden';
-                                        input.name = 'page';
-                                        input.value = pageNumber;
-                                        document.getElementById('searchForm').appendChild(input);
-
-                                        // Submit the form
-                                        document.getElementById('searchForm').submit();
-                                    } else {
-                                        alert('Please enter a page number');
-                                    }
-                                }
-                              
-                                
-                    
-                                                        </script>
                                 {{-- End Modal --}}
                             <div class="row">
                                 @if(isset($error))
@@ -188,50 +144,11 @@
                                     {{ $error }}
                                 </div>
                                     @endif
-                                    {{-- <div class="col-md-12 w-100 text-center">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <!-- Previous Button -->
-                                            <div>
-                                                @if(@$previous)
-                                                    <a href="{{ route('search', $previous) }}" 
-                                                       class="thm-btn brd-rd40 mt-2" 
-                                                       type="submit">Previous</a>
-                                                @endif
-                                            </div>
-                                            
-                                            <!-- Center Button -->
-                                            <div>
-                                               
-                                                @if($parent_slug)
-                                                <a href="{{ route('quranSurat', $parent_slug) }}" 
-                                                   class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
-                                                   @endif
-                                            </div>
                                     
-                                            <!-- Next Button -->
-                                            <div>
-                                                @if(@$next)
-                                                    <a href="{{ route('search', $next ) }}" 
-                                                       class="thm-btn brd-rd40 mt-2" 
-                                                       type="submit">Next</a>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                --}}
-
-                               
-                                     
-                                        
-                       
-                                
-                        
-                                
-                                
                                 @foreach($search as $child)
                                     <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
                                         <labe>
-                                            {{ $child->title }}
+                                            {{-- {{ $child->title }} --}}
                                             <br>
                                             Page - {{ $child->number }}
                                             </small>

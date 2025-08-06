@@ -14,6 +14,9 @@ class QuranController extends Controller
     public function quran(Request $request, Quran $quran)
     {
         if ($request->ajax()){
+               if ($request->has('para_no') && $request->para_no !== null) {
+                 $query->where('para_no', $request->para_no);
+              }
             return DataTables::of(Quran::parent($quran->id))->addColumn('image_complete_url', function($query){
                 return ($query->image) ? asset('storage/'.$query->image) : null;
             })->make(true);
@@ -24,6 +27,9 @@ class QuranController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()){
+               if ($request->has('para_no') && $request->para_no !== null) {
+                 $query->where('para_no', $request->para_no);
+              }
             return DataTables::of(Quran::whereNull('parent_id'))->addColumn('image_complete_url', function($query){
                 return ($query->image) ? asset('storage/'.$query->image) : null;
             })->make(true);
@@ -69,12 +75,15 @@ class QuranController extends Controller
         if ($request->post()) {
             $quran->title = $request->title;
             $quran->number = $request->number;
+            $quran->para_no = $request->para_no;
 //            $quran->ayat_from = $request->ayat_from;
 //            $quran->ayat_to = $request->ayat_to;
             if ($request->hasFile('image')) {
                 $path = $request->image->store('quran/images');
                 $quran->image = $path;
             }
+            $quran->para_no = $request->para_no;
+
             $quran->save();
             return redirect()->route('quran');
         }
@@ -86,8 +95,10 @@ class QuranController extends Controller
         if ($request->post()){
             $childQuran->title = $request->title;
             $childQuran->number = $request->number;
-            $childQuran->ayat_from = $request->ayat_from;
-            $childQuran->ayat_to = $request->ayat_to;
+            // $childQuran->ayat_from = $request->ayat_from;
+            // $childQuran->ayat_to = $request->ayat_to;
+            $childQuran->para_no = $request->para_no;
+
             if ($request->hasFile('image')){
                 $path = $request->image->store('quran/images');
                 $childQuran->image = $path;

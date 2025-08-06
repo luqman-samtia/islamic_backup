@@ -32,26 +32,7 @@
 
 @push('js')
     <script>
-        // $(document).ready(function() {
-        //     var datatable = $('#feedbacksTable').DataTable({
-        //         processing: true,
-        //         serverSide: true,
-        //         ajax: '{!! route('admin.feedback.show', $student->id) !!}',
-        //         columns: [
-        //             { data: 'title', name: 'title' },
-        //             {
-        //                 data: 'image_complete_url',
-        //                 name: 'image_complete_url',
-        //                 render: function(data) {
-        //                     return data ? `<img src="${data}" class="img-thumbnail" width="50" height="50">` : 'No Image';
-        //                 }
-        //             },
-        //             { data: 'feedback', name: 'feedback' }
-        //         ],
-        //         order: [[0, 'asc']]
-        //     });
-        // });
-
+     
         $(document).ready(function() {
         var datatable = $('#feedbacksTable').DataTable({
             processing: true,

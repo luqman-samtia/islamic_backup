@@ -42,9 +42,9 @@
                                 <div class="col-md-12" id="stickyFormContainer">
                                     <div class="contact-form mb-5"  >
                                         <form id="tajweedSearch" action="{{ route('tajweedQuranSearch') }}">
-                                            <div class="row mrg20">
+                                            <div class="row mrg20 justify-content-center align-items-center text-center">
                                                 <div class="col-md-3 col-sm-6 col-lg-3">
-                                                    <select name="surat" >
+                                                    <select name="surat" onchange="this.form.submit()">
                                                         <option value="">-- Select Option --</option>
                                                         @foreach($quran as $surat)
                                                             <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}">{{ $surat->title }}</option>
@@ -63,10 +63,10 @@
                                                 <div class="col-md-3 col-sm-12 col-lg-3">
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                 </div>
-                                                <div class="col-md-3 col-sm-12 col-lg-3">
-                                                    <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"  >Page</button>
+                                                {{-- <div class="col-md-3 col-sm-12 col-lg-3">
+                                                    <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"  >Search</button>
 
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </form>
                                     </div>
@@ -171,7 +171,7 @@
                                 @foreach($search as $child)
                                     <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
                                         <labe>
-                                            {{ $child->title }}
+                                            {{-- {{ $child->title }} --}}
                                             <br>
                                             Page - {{ $child->number }}
                                             </small>

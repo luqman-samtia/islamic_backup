@@ -60,7 +60,7 @@
                     <form id="searchForm" action="{{ route('tajweedQuranSearch') }}">
                         <div>    
                             {{-- thm-btn brd-rd40 mt-3 --}}
-                                <button type="button" class="thm-btn brd-rd40 mb-lg-5 pull-right" onclick="openPageModal()">Page</button>
+                                <button type="button" class="thm-btn brd-rd40 mb-lg-5 pull-right" onclick="openPageModal()">Search</button>
 
                         </div>
                         <script>
@@ -103,7 +103,7 @@
                                 @foreach($surat->children as $child)
                                     <div class="col-md-2 col-sm-6 col-lg-2 fltr-itm fltr-itm1 mb-3">
                                         <labe>
-                                            {{ $child->title }}
+                                            {{-- {{ $child->title }} --}}
                                             <br>
                                             Page - {{ $child->number }}
                                             <br>

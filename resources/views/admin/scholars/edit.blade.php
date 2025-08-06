@@ -31,7 +31,7 @@
                             </div>
                             <div class="form-group">
                                 <label>E-Mail</label>
-                                <input type="email" name="email" class="form-control" value="{{ $user->email}}" placeholder="Enter email" required>
+                                <input type="email" name="email" class="form-control" value="{{ $scholar->email}}" placeholder="Enter email" required>
                             </div>
                             <div class="form-group">
                                 <label>Password</label>

@@ -115,43 +115,36 @@ return [
             'url'  => 'admin/home',
             'can' => 'homecontroller.index'
         ],
-        // [
-        //     'text' => 'Change Password',
-        //     'icon' => 'lock',
-        //     'url'  => 'student/change-password',
-        //     'can' => 'student.change-password' // Assuming you have a permission defined for this
-        // ],
-        // [
-        //     'text' => 'Add Information',
-        //     'icon' => 'info',
-        //     'url'  => 'student/add-info',
-        //     'can' => 'student.add-info' // Assuming you have a permission defined for this
-        // ],
-       
-        
+        [
+            'text' => 'Site Home',
+            'icon' => 'home',
+            'url'  => '/',
+            'active' => ['/', 'home', 'site.home'],
+            'target' => '_blank',
+        ],
         [
             'text' => 'Update Password',
             'icon' => 'lock',
             'url'  => 'admin/student/update/password',
-            'can' => 'studentcontroller.change-password' // Assuming you have a permission defined for this
+            'can' => 'studentcontroller.change-password' 
         ],
         [
-            'text' => 'Add Information',
+            'text' => 'Student Report',
             'icon' => 'graduation-cap',
             'url'  => 'admin/student/show/info',
-            'can' => 'studentcontroller.add-info' // Assuming you have a permission defined for this
+            'can' => 'studentcontroller.add-info' 
         ],
         [
             'text' => 'Add Feedback',
             'icon' => 'comment',
             'url'  => 'admin/student/submit/feedback',
-            'can' => 'studentcontroller.showFeedback' // Assuming you have a permission defined for this
+            'can' => 'studentcontroller.showFeedback' 
         ],
         [
             'text' => 'Students',
             'icon' => 'graduation-cap',
             'url'  => 'admin/students',
-            'can' => 'studentcontroller.StudentDataShow' // Assuming you have a permission defined for this
+            'can' => 'studentcontroller.StudentDataShow' 
         ],
 
 

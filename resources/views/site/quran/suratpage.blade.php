@@ -86,7 +86,7 @@
                                         <form id="searchForm" action="{{ route('search') }}">
                                             <div>    
                                                 {{-- thm-btn brd-rd40 mt-3 --}}
-                                                    <button type="button" class="thm-btn brd-rd40 pull-right" onclick="openPageModal()">Page</button>
+                                                    <button type="button" class="thm-btn brd-rd40 pull-right" onclick="openPageModal()">Search</button>
                         
                                             </div>
                                             <script>
@@ -121,7 +121,7 @@
                                 
                                 <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3">
                                     <labe>
-                                        {{ $surat->title }}
+                                        {{-- {{ $surat->title }} --}}
                                         <br>
                                         Page - {{ $surat->number }}
                                         <br>

@@ -42,86 +42,39 @@
                                 <div class="col-md-12">
                                     <div class="contact-form text-center mb-5">
                                         <form id="searchForm" action="{{ route('search') }}">
-                                            <div class="row mrg20">
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    <select name="surat">
+                                            <div class="row mrg20 justify-content-center align-items-center text-center">
+                                                <div class="col-md-3 col-sm-6 col-lg-3">
+                                                    <select name="surat"  onchange="this.form.submit()">
                                                         <option value="">-- Select Option --</option>
                                                         @foreach($quran as $surat)
                                                             <option value="{{ $surat->slug }}">{{ $surat->title }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
+                                                {{-- <div class="col-md-2 col-sm-6 col-lg-2">
                                                     <input type="number" name="ayat_from" placeholder="Ayat From">
                                                 </div>
                                                 <div class="col-md-2 col-sm-6 col-lg-2">
                                                     <input type="number" name="ayat_to" placeholder="Ayat To">
-                                                </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
+                                                </div> --}}
+                                                <div class="col-md-3 col-sm-6 col-lg-3">
                                                     <input type="number" name="page" placeholder="Page">
+                                                </div>
+                                                <div class="col-md-3 col-sm-6 col-lg-3">
+                                                    <input type="number" name="para_no" placeholder="Para No">
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-lg-2">
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                 </div>
-                                                <div class="col-md-2 col-sm-12 col-lg-2">
-                                                    <button type="button" class="thm-btn brd-rd40 mt-3" onclick="openPageModal()">Page</button>
+                                                {{-- <div class="col-md-2 col-sm-12 col-lg-2">
+                                                    <button type="button" class="thm-btn brd-rd40 mt-3" onclick="openPageModal()">Search</button>
 
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </form>
                                     </div>
                                 
-                                <!-- Modal -->
-                                <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="pageModalLabel">Go to Page</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <input type="number" id="pageInput" placeholder="Enter page number">
-                                            </div>
-                                            <div class="modal-footer">
-                                                {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                                                <button type="button" class="btn thm-btn " onclick="confirmPage()">Go to Page</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <script>
-
-                                    function openPageModal() {
-                                            $('#pageModal').modal('show')
-                                            .on('shown.bs.modal', function () {
-                                                // Add and remove classes once the modal is fully shown
-                                                $('.modal-backdrop').remove();
-                                            });
-                                        }
-                                    
-                                        
-                                            function confirmPage() {
-                                            var pageNumber = document.getElementById('pageInput').value;
-                                            if (pageNumber) {
-                                                // Set the page input in the form
-                                                var input = document.createElement('input');
-                                                input.type = 'hidden';
-                                                input.name = 'page';
-                                                input.value = pageNumber;
-                                                document.getElementById('searchForm').appendChild(input);
-        
-                                                // Submit the form
-                                                document.getElementById('searchForm').submit();
-                                            } else {
-                                                alert('Please enter a page number');
-                                            }
-                                        }
-                                        
-                                    </script>
-                                        {{-- End Modal --}} 
-                                {{-- End Modal --}}
+                
                                 </div>
                             </div>
 

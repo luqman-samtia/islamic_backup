@@ -71,17 +71,17 @@
                     <form id="searchForm" action="{{ route('search') }}">
                         <div>    
                             {{-- thm-btn brd-rd40 mt-3 --}}
-                                <button type="button" class="thm-btn brd-rd40 mb-lg-5 pull-right" onclick="openPageModal()">Page</button>
+                                <button type="button" class="thm-btn brd-rd40 mb-lg-5 pull-right" onclick="openPageModal()">Search</button>
 
                         </div>
                         <script>
-    function openPageModal() {
-        $('#pageModal').modal('show')
-        .on('shown.bs.modal', function () {
-            // Add and remove classes once the modal is fully shown
-            $('.modal-backdrop').remove();
-        });
-    }
+                function openPageModal() {
+                    $('#pageModal').modal('show')
+                    .on('shown.bs.modal', function () {
+                        // Add and remove classes once the modal is fully shown
+                        $('.modal-backdrop').remove();
+                    });
+                }
         function confirmPage() {
         var pageNumber = document.getElementById('pageInput').value;
         if (pageNumber) {
@@ -109,7 +109,7 @@
                                 @foreach($surat->children as $child)
                                     <div class="col-md-2 col-sm-6 col-lg-2 fltr-itm fltr-itm1 mb-3">
                                         <labe>
-                                            {{ $child->title }}
+                                            {{-- {{ $child->title }} --}}
                                             <br>
                                             Page - {{ $child->number }}
                                             <br>

@@ -18,6 +18,7 @@
                         <thead>
                         <tr>
                             <td>Surah #</td>
+                            <td>Para No #</td>
                             <td>Title</td>
                             <td>Image</td>
                             <td>Action</td>
@@ -42,6 +43,7 @@
                 ajax: '{!! route('quran') !!}',
                 columns: [
                     { data: 'number' },
+                    { data: 'para_no' },
                     { data: 'title' },
                     {
                         data: 'image',

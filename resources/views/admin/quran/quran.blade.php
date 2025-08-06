@@ -18,9 +18,10 @@
                         <thead>
                         <tr>
                             <td>Page #</td>
+                            <td>Para #</td>
                             <td>Title</td>
-                            <td>Ayat From</td>
-                            <td>Ayat To</td>
+                            {{-- <td>Ayat From</td>
+                            <td>Ayat To</td> --}}
                             <td>Image</td>
                             <td>Action</td>
                         </tr>
@@ -44,9 +45,10 @@
                 ajax: '{!! route('quran.quran', $quran->id) !!}',
                 columns: [
                     { data: 'number' },
+                    { data: 'para_no' },
                     { data: 'title' },
-                    { data: 'ayat_from' },
-                    { data: 'ayat_to' },
+                    // { data: 'ayat_from' },
+                    // { data: 'ayat_to' },
                     {
                         data: 'image',
                         render: function(data, type, row){

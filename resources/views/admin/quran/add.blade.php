@@ -25,6 +25,10 @@
                                 <input type="number" name="number" min="1" class="form-control" placeholder="Enter Surah Number" required>
                             </div>
                             <div class="form-group">
+                                <label>Para No #</label>
+                                <input type="number" name="para_no" min="1" class="form-control" placeholder="Enter Para Number" required>
+                            </div>
+                            <div class="form-group">
                                 <label> Upload Image </label>
 
                                 <input type="file" class="form-control-file" id="image" name="image">

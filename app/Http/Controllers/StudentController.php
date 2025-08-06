@@ -19,13 +19,24 @@ use Illuminate\Support\Facades\Log;
 use App\Information;
 use App\Feedback;
 use App\Student;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class StudentController extends Controller
 {
      // Register new student
      public function register(Request $request){
+        $code = $request->input('country_code');             
+        $raw = ltrim($request->input('contact_raw'), '0');   
+
+        $formattedContact = "($code) $raw";                  
+        $request->merge([
+            'contact_no' => $formattedContact
+        ]);
         if ($request->post()){
-              // Validate the input
+            
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',  
@@ -104,12 +115,10 @@ class StudentController extends Controller
         
         // Mail::to($user->email)->send(new StudentVerified($user));
     
-        // return redirect()->route('site')->with('success', 'Student verified successfully!');
         try {
             Mail::to($user->email)->send(new StudentVerified($user));
             $successMessage = 'Student verified successfully!';
         } catch (\Exception $e) {
-            // Log the error for debugging
             \Log::error('Mail sending failed: ' . $e->getMessage());
             $successMessage = 'Student verified successfully! However, we were unable to send an email notification';
         }
@@ -142,7 +151,6 @@ class StudentController extends Controller
     
         return redirect()->route('site')->with('success', $successMessage);
    
-
     }
     public function adminDisableStudent(Request $request){
     $user = User::find($request->id);
@@ -256,10 +264,6 @@ class StudentController extends Controller
             return ['status' => 200];
             return view('admin.students.index');
         }
-
-
-
-
 
         // Multi Student section
         public function showAddLinksForm(Request $request, $id){
@@ -501,6 +505,54 @@ public function showStudentFeedbacks(Request $request, $id)
     return view('admin.students.feedback.admin_index', compact('student'));
 }
 
+    // FORGOT PASSWORD
+ public function forgotPasswordRequest(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email|exists:users,email',
+    ]);
 
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    if ($status === Password::RESET_LINK_SENT) {
+        return response()->json(['success' => true, 'message' => 'Password reset link sent to your email.']);
+    }
+
+    return response()->json(['error' => 'Unable to send reset link. Try again later.'], 500);
+}
+public function showResetForm(Request $request, $token)
+{
+    return redirect('/?token=' . $token . '&email=' . urlencode($request->email));
+}
+
+public function submitResetPassword(Request $request)
+{
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|confirmed|min:6',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->save();
+        }
+    );
+
+    if ($status === Password::PASSWORD_RESET) {
+        return response()->json(['success' => true, 'message' => 'Password updated successfully. You can now log in.']);
+    } else {
+        return response()->json(['error' => __($status)], 500);
+    }
+}
 
 }

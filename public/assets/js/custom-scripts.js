@@ -350,110 +350,162 @@ $(window).on('load',function(){
   }
 });//===== Window onLoad Ends =====//
 
-//===== Sticky Header =====//
-// $(window).on('scroll',function () {
-//   'use strict';
+//===== Window onScroll Ends =====//
 
-//   var header_height = $('header').innerHeight();
+var isMobile = window.innerWidth <= 768;
+var isTablet = window.innerWidth > 768 && window.innerWidth <= 1000;
 
-//   var scroll = $(window).scrollTop();
-//   if (scroll >= header_height) {
-//     $('header').addClass('sticky-active');
-//   } else {
-//     $('header').removeClass('sticky-active');
-//   }
 
-//   // For search form
-//   var formContainer = $('.contact-form');
-//   var formOffset = formContainer.offset().top;
-//   var stickyOffset = header_height; // Adjust this value as needed
-  
-//   if (scroll > formOffset - stickyOffset) {
-//       formContainer.addClass('sticky-form');
-//       // Add padding to prevent content jump
-//       formContainer.css('padding-top', formContainer.height());
-//   } else {
-//       formContainer.removeClass('sticky-form');
-//       formContainer.css('padding-top', 0);
-//   }
-
-// });
-
-// $(window).on('scroll', function() {
-//   'use strict';
-  
-//   // For header
-//   var header_height = $('header').innerHeight();
-//   var scroll = $(window).scrollTop();
-  
-//   if (scroll >= header_height) {
-//       $('header').addClass('sticky-active');
-//   } else {
-//       $('header').removeClass('sticky-active');
-//   }
-  
-//   // For search form
-//   var formContainer = $('#stickyFormContainer');
-//   var formOffset = formContainer.offset().top;
-//   var stickyOffset = header_height; // Adjust this value as needed
-  
-//   if (scroll > formOffset - stickyOffset) {
-//       formContainer.addClass('sticky-form');
-//       // Add padding to prevent content jump
-//       formContainer.css('padding-top', formContainer.height());
-//   } else {
-//       formContainer.removeClass('sticky-form');
-//       formContainer.css('padding-top', 0);
-//   }
-// });
+$(window).on('resize orientationchange', function() {
+    setTimeout(function() {
+        isMobile = window.innerWidth <= 768;
+        isTablet = window.innerWidth > 768 && window.innerWidth <= 1000;
+    }, 100);
+});
 
 $(window).on('scroll', function() {
-  'use strict';
+    'use strict';
+    
+   
+    var header_height = $('header').innerHeight();
+    var scroll = $(window).scrollTop();
+    
+    if (scroll >= header_height) {
+        $('header').addClass('sticky-active');
+    } else {
+        $('header').removeClass('sticky-active');
+    }
+    
   
-  // For header
-  var header_height = $('header').innerHeight();
-  var scroll = $(window).scrollTop();
-  
-  if (scroll >= header_height) {
-      $('header').addClass('sticky-active');
-  } else {
-      $('header').removeClass('sticky-active');
-  }
-  
-  // For search form
-  var formContainer = $('#stickyFormContainer');
-  var formInitialOffset = formContainer.data('initial-offset') || formContainer.offset().top;
-  var headerHeight = $('header.sticky-active').outerHeight() || header_height;
-  
-  // Store the initial offset first time
-  if (!formContainer.data('initial-offset')) {
-      formContainer.data('initial-offset', formInitialOffset);
-  }
-  
-  if (scroll > formInitialOffset - headerHeight) {
-      formContainer.addClass('sticky-form');
-      $('body').css('padding-top', formContainer.outerHeight());
-      formContainer.css({
-          'top': headerHeight + 'px',
-          'position': 'fixed',
-          'width': '100%',
-          'z-index': '99',
-          'background': 'white',
-          'box-shadow': '0 2px 5px rgba(0,0,0,0.1)',
-          'padding': '10px 0'
-      });
-  } else {
-      formContainer.removeClass('sticky-form');
-      $('body').css('padding-top', '0');
-      formContainer.css({
-          'position': '',
-          'top': '',
-          'width': '',
-          'z-index': '',
-          'background': '',
-          'box-shadow': '',
-          'padding': ''
-      });
-  }
+    var formContainer = $('#stickyFormContainer');
+     if (formContainer.length === 0 || !formContainer.is(':visible')) {
+        return; 
+    }
+    
+    var formOffset = formContainer.offset();
+    if (!formOffset) {
+        return; 
+    }
+     var formInitialOffset = formContainer.data('initial-offset') || formOffset.top;
+    var headerHeight = $('header.sticky-active').outerHeight() || header_height;
+    
+
+    if (!formContainer.data('initial-offset')) {
+        formContainer.data('initial-offset', formInitialOffset);
+    }
+    
+    if (scroll > formInitialOffset - headerHeight) {
+        formContainer.addClass('sticky-form');
+        
+       
+        if (isMobile) {
+            formContainer.addClass('mobile-hidden');
+            $('#navToggleBtn').addClass('show');
+        } 
+       
+        else if (isTablet) {
+            formContainer.addClass('tablet-hidden');
+            $('#navToggleBtn').addClass('show');
+        }
+        
+        else {
+            formContainer.addClass('hidden');
+            $('#navToggleBtn').addClass('show');
+        }
+        // headerHeight
+        $('body').css('padding-top', (isMobile || isTablet) ? '0' : formContainer.outerHeight());
+        formContainer.css({
+            'top': headerHeight +'px',
+            'position': 'fixed',
+            'z-index': '99',
+            'background': 'white',
+            'box-shadow': '0 2px 5px rgba(0,0,0,0.1)',
+            'padding': '10px 0',
+            'width': '100%',
+            'left': '0'
+        });
+    } else {
+        formContainer.removeClass('sticky-form hidden mobile-hidden mobile-visible tablet-hidden tablet-visible');
+        $('#navToggleBtn').removeClass('show active');
+        
+        $('body').css('padding-top', '0');
+        formContainer.css({
+            'position': '',
+            'top': '',
+            'width': '',
+            'z-index': '',
+            'background': '',
+            'box-shadow': '',
+            'padding': '',
+            'left': ''
+        });
+    }
 });
-//===== Window onScroll Ends =====//
+
+
+$(document).ready(function() {
+      $('body').append(`
+        <button id="navToggleBtn" class="nav-toggle-btn">
+            <i class="fas fa-search"></i>
+        </button>
+    `);
+    if (!$("link[href*='font-awesome']").length) {
+    $('head').append('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />');
+}
+    
+   
+    $('#navToggleBtn').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var formContainer = $('#stickyFormContainer');
+        var button = $(this);
+        
+        if (isMobile) {
+            
+            if (formContainer.hasClass('mobile-visible')) {
+                formContainer.removeClass('mobile-visible');
+                button.removeClass('active');
+            } else {
+                formContainer.addClass('mobile-visible');
+                button.addClass('active');
+            }
+        } else if (isTablet) {
+          
+            if (formContainer.hasClass('tablet-visible')) {
+                formContainer.removeClass('tablet-visible');
+                button.removeClass('active');
+            } else {
+                formContainer.addClass('tablet-visible');
+                button.addClass('active');
+            }
+        } else {
+            
+            if (formContainer.hasClass('hidden')) {
+                formContainer.removeClass('hidden');
+                button.addClass('active');
+            } else {
+                formContainer.addClass('hidden');
+                button.removeClass('active');
+            }
+        }
+    });
+    
+  
+    $(document).on('click touchstart', function(e) {
+        if (isMobile || isTablet) {
+            var formContainer = $('#stickyFormContainer');
+            var button = $('#navToggleBtn');
+            
+            if (!formContainer.is(e.target) && 
+                !formContainer.has(e.target).length && 
+                !button.is(e.target) && 
+                !button.has(e.target).length &&
+                (formContainer.hasClass('mobile-visible') || formContainer.hasClass('tablet-visible'))) {
+                
+                formContainer.removeClass('mobile-visible tablet-visible');
+                button.removeClass('active');
+            }
+        }
+    });
+});

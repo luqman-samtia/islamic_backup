@@ -17,6 +17,10 @@ use App\Http\Controllers\StudentController;
 Route::post('student/register', [StudentController::class, 'register'])->name('student.register');
 Route::post('student/login', [StudentController::class, 'login'])->name('student.login');
 // If using web routes
+Route::post('/forgot-password', [StudentController::class, 'forgotPasswordRequest'])->name('student.forgotPassword');
+Route::get('/reset-password/{token}', [StudentController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('/password-reset', [StudentController::class, 'submitResetPassword'])->name('password.reset.submit');
+
 Route::post('student/logout', [StudentController::class, 'logout'])->name('student.logout');
 
 

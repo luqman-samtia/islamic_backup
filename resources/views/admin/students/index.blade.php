@@ -102,6 +102,7 @@
                             {{-- <td>Image</td> --}}
                             <td>Name</td>
                             <td>Scholar</td>
+                            <td>Contact</td>
                             <td>Email</td>
                             <td>Status</td>
                             <td>Joined</td>
@@ -138,6 +139,7 @@
                     // { data: 'image' },
                     { data: 'name' },
                     { data: 'scholar' },
+                    { data: 'contact_no' },
                     { data: 'email' },
                     { 
                         data: 'is_verified' ,

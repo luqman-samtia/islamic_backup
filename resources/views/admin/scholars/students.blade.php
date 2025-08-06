@@ -22,8 +22,6 @@
                         <thead>
                         <tr>
                             <td>Name</td>
-                            <td>Email</td>
-                            <td>Phone</td>
                             {{-- <td>Action</td> --}}
                         </tr>
                         </thead>
@@ -45,12 +43,9 @@
                 serverSide: true,
                 ajax: '{!! route('scholars.students') !!}',
                 columns: [
-                    { data: 'name' },
-                    { data: 'email' },
-                    { data: 'contact_no' },
-                   
+                    { data: 'name' } 
                 ],
-                order: [[2, 'desc']]
+                order: [[0, 'desc']]
             });
         $(document).on('click', '.delete', function(){
     let id = $(this).attr('data-id');

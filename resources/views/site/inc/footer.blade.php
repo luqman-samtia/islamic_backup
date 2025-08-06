@@ -64,10 +64,11 @@
                                         <li><i class="flaticon-call"></i><a href="tel:{{$info['phone2']['value']}}">{{ $info['phone2']['label']  }}</a></li>
                                         @endif
                                         @if(@$info['whatsapp1']['label'] && @$info['whatsapp1']['value'])
-                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/{{$info['whatsapp1']['value']}}"><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">{{ $info['whatsapp1']['label']  }}</span></a></li>
+                                        {{-- <span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587"> --}}
+                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/{{$info['whatsapp1']['value']}}"><span>{{ $info['whatsapp1']['label']  }}</span></a></li>
                                         @endif
                                         @if(@$info['whatsapp2']['label'] && @$info['whatsapp2']['value'])
-                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/{{$info['whatsapp2']['value']}}"><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">{{ $info['whatsapp2']['label']  }}</span></a></li>
+                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/{{$info['whatsapp2']['value']}}"><span>{{ $info['whatsapp2']['label']  }}</span></a></li>
                                         @endif
                                         @if(@$info['email']['label'] && @$info['email']['value'])
                                         <li><i class="flaticon-email"></i><a href="mailto:{{$info['email']['value']}}"><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">{{ $info['email']['label']  }}</span></a></li>
