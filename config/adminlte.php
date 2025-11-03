@@ -135,6 +135,13 @@ return [
             'can' => 'studentcontroller.add-info' 
         ],
         [
+            'text' => 'Students Report',
+            'icon' => 'graduation-cap',
+            'url'  => 'admin/scholars/students/info',
+            'can' => 'scholarscontroller.studentsDetails' 
+        ],
+
+        [
             'text' => 'Add Feedback',
             'icon' => 'comment',
             'url'  => 'admin/student/submit/feedback',

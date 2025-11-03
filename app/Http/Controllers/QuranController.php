@@ -66,7 +66,8 @@ class QuranController extends Controller
             $quranChild->save();
             return redirect()->route('quran.quran', $quran->id);
         }
-        return view('admin.quran.surah.add', compact('quran'));
+         $paras = range(1, 30);
+        return view('admin.quran.surah.add', compact('quran', 'paras'));
     }
 
 
@@ -106,7 +107,8 @@ class QuranController extends Controller
             $childQuran->save();
             return redirect()->route('quran.quran',$childQuran->parent_id);
         }
-        return view('admin.quran.surah.edit', compact('quran', 'childQuran'));
+         $paras = range(1, 30);
+        return view('admin.quran.surah.edit', compact('quran', 'childQuran', 'paras'));
     }
 
 

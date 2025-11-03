@@ -29,6 +29,8 @@ Route::get('admin/verify/student/{id}', [StudentController::class, 'adminVerifyS
 Route::get('admin/disable/student/{id}', [StudentController::class, 'adminDisableStudent'])->name('admin.adminDisableStudent');
 Route::get('admin/check-student-status/{id}', [StudentController::class, 'checkStudentStatus']);
 Route::get('admin/check-student-disable/{id}', [StudentController::class, 'checkStudentDisable']);
+Route::post('admin/student/change-password', [StudentController::class, 'changeStudentPassword'])->name('admin.student.changePassword');
+
 
 
 // END
@@ -37,6 +39,10 @@ Route::match(['GET', 'POST'],'/contactUs', 'PublicController@contactUs')->name('
 Route::get('/page/{slug}', 'PublicController@page')->middleware('student.auth')->name('page');
 Route::get('/quran', 'PublicController@quran')->middleware('student.auth')->name('quranPage');
 Route::prefix('quran')->middleware('student.auth')->group(function(){
+     Route::get('/para/list', 'PublicController@quranParaList')->name('quran.paraList');
+    
+    Route::get('/para/{para_no}', 'PublicController@quranParaShow')->name('quran.para');
+
     Route::prefix('{surat}')->middleware('student.auth')->group(function(){
         Route::get('/', 'PublicController@quranSurat')->name('quranSurat');
         Route::get('page/{page}', 'PublicController@quranSuratPage')->name('quranSurat.page');
@@ -132,6 +138,7 @@ Route::middleware('auth')->prefix('admin')->group(function(){
         Route::post('/delete', 'ScholarsController@delete')->name('scholars.delete');
         // get student associated with scholar
         Route::get('/students', 'ScholarsController@getStudents')->name('scholars.students');
+        Route::get('/students/info', 'ScholarsController@studentsDetails')->name('scholars.studentsDetails');
     });
 
     Route::prefix('testimonials')->group(function (){

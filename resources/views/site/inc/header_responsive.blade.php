@@ -8,7 +8,7 @@
         <div class="rspn-cnt">
             <span>
                 <i class="fa fa-envelope thm-clr"></i>
-                <a href="mailto:info@equraninstitute.com" title="">
+                <a href="mailto:qarihabib847@gmail.com" title="">
                     <span class="__cf_email__" data-cfemail="3851565e57785a514b555154545950165b5755">qarihabib847@gmail.com</span>
                 </a>
             </span>
@@ -23,12 +23,9 @@
     <div class="rsnp-mnu">
         <span class="rspn-mnu-cls"><i class="fa fa-times"></i></span>
 
-        {{-- && Auth::user()->type === 'student' --}}
         @if(Auth::check() )
         <div class="dropdown" style="display: inline-block;">
             <a 
-                {{-- src="{{ asset('storage/images/students/'.Auth::user()->image) }}"  --}}
-                {{-- alt="Profile Icon"  --}}
                 class="btn btn-secondary"
                 type="button"
                 style="background:#d1ad3c;color:#fff;border:none;border-radius:50px;margin-top:8px;margin-left:20px;" 
@@ -39,14 +36,28 @@
             >{{Auth::user()->name}}</a>
             <div class="dropdown-menu" aria-labelledby="profileImage">
                 <a class="dropdown-item" href="{{url('admin/home')}}">Dashboard</a>
-                <a class="dropdown-item" href="javascript:void(0);" id="logoutButton">Logout</a>
+                <a class="dropdown-item" href="javascript:void(0);" id="logoutButton_mobile">Logout</a>
                
             </div>
         
         </div>
  
     @else
-        <a class="btn btn-danger" href="javascript:void(0);" onclick="openModal()" title="" style="background:#d1ad3c;color:white;border:none;border-radius:50px;margin-left:5px;margin-top:8px; cursor:pointer;">Login</a>
+        <div class="dropdown" style="display: inline-block;">
+            <a class="btn btn-danger dropdown-toggle"
+                href="javascript:void(0);"
+                style="background:#d1ad3c;color:white;border:none;border-radius:50px;margin-left:5px;margin-top:8px; cursor:pointer;"
+                id="loginDropdown"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+            >Login</a>
+            <div class="dropdown-menu" aria-labelledby="loginDropdown">
+                <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('student')">Student</a>
+                <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('scholar')">Scholar</a>
+                <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('admin')">Admin</a>
+            </div>
+        </div>
     @endif
         <ul>
             <li><a href="{{ route('site') }}" title="">Home</a></li>
@@ -66,8 +77,6 @@
                     @endforeach
                 </ul>
             </li>
-            {{-- <li><a href="{{ route('quranPage') }}" title="">Read Quran</a></li>
-            <li><a href="{{ route('tajweedQuran') }}" title="">Tajweed Quran</a></li> --}}
             <li class="menu-item-has-children">
                 <a href="#" title="">Read Quran</a>
                 <ul>
@@ -83,16 +92,43 @@
                     @endforeach
                 </ul>
             </li>
-{{--            <li><a href="{{ route('charges') }}" title="">Charges</a></li>--}}
             <li><a href="{{ route('contactUs') }}" title="">Contact Us</a></li>
-            {{-- <li><a href="" title="">Login</a></li> --}}
         </ul>
     </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+        const currentUser = '{{ Auth::user()->name ?? "guest" }}';
 
+       // Logout handler
+    document.getElementById('logoutButton_mobile')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        fetch('{{ route("student.logout") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('User ' + currentUser + ' logged out at:', new Date().toISOString());
+                window.location.href = data.redirect;
+            }
+        })
+        .catch(error => console.error('Logout Error:', error));
+    });
+});
+</script>
 @section('custom_js')
+<script>
+    // logoutButton
 
+
+</script>
 @if(session('error'))
     <script>
         Swal.fire({
@@ -114,26 +150,22 @@
 
  <script>
 
-
-
 // Register ajax
 $('#registerForm').on('submit', function(e) {
     e.preventDefault();
     
     var formData = new FormData(this);
 
-
     $.ajax({
         headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         url: "{{ route('student.register') }}",
         method: "POST",
         data: formData, 
         processData: false, 
         contentType: false, 
         beforeSend: function() {
-            // Show loading SweetAlert
             Swal.fire({
                 title: 'Processing...',
                 text: 'Please wait while we register your account.',
@@ -145,39 +177,32 @@ $('#registerForm').on('submit', function(e) {
             });
         },
         success: function(response) {
-            // SweetAlert for success
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
                 text: response.message,
             }).then(function() {
                 document.getElementById('signupForm').style.display = "none";
-                // location.reload();
                 document.getElementById('loginForm').style.display = "block";
-                
             });
-
         },
         error: function(xhr) {
-            if (xhr.status === 422) { // Laravel validation error status code
+            if (xhr.status === 422) { 
                 let errors = xhr.responseJSON.errors;
                 let errorMessage = '';
                 
-                // Collect all error messages into a single string
                 $.each(errors, function (key, errorMessages) {
                     errorMessages.forEach(function (errorMessageItem) {
                         errorMessage += errorMessageItem + '\n';
                     });
                 });
 
-                // SweetAlert for validation errors
                 Swal.fire({
                     icon: 'error',
                     title: 'Validation Error',
                     text: errorMessage,
                 });
             } else {
-                // SweetAlert for general error
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -191,62 +216,72 @@ $('#registerForm').on('submit', function(e) {
 
 // Login ajax
 $('#loginData').on('submit', function(e) {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
+    
+    var loginType = document.getElementById('loginType').value;
     
     $.ajax({
         headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-        url: "{{ route('student.login') }}", // Ensure this is the correct route for login
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: "{{ route('student.login') }}", 
         method: "POST",
         data: $(this).serialize(),
+        beforeSend: function() {
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait...',
+                icon: 'info',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        },
         success: function(response) {
-            // SweetAlert for successful login
             Swal.fire({
                 icon: 'success',
                 title: 'Login Successful',
                 text: response.message,
             }).then(function() {
-                location.reload(); // Reload or redirect the page on successful login
+                location.reload();
             });
         },
         error: function(xhr) {
-            if (xhr.status === 422) { // Laravel validation error
+            if (xhr.status === 422) { 
                 let errors = xhr.responseJSON.errors;
                 let errorMessage = '';
                 
-                // Collect all error messages into a single string
                 $.each(errors, function (key, errorMessages) {
                     errorMessages.forEach(function (errorMessageItem) {
                         errorMessage += errorMessageItem + '\n';
                     });
                 });
 
-                // SweetAlert for validation errors
                 Swal.fire({
                     icon: 'error',
                     title: 'Validation Error',
                     text: errorMessage,
                 });
-            } else if (xhr.status === 404) { // Account not verified
+            } else if (xhr.status === 404) { 
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: xhr.responseJSON.error,
                 });
-            } else if (xhr.status === 403) { // Account not verified
+            } else if (xhr.status === 403) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Access Denied',
+                    text: xhr.responseJSON.error || 'You do not have permission to login as ' + loginType,
+                });
+            } else if (xhr.status === 401) { 
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: xhr.responseJSON.error,
                 });
-            }else if (xhr.status === 401) { // Account not verified
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: xhr.responseJSON.error,
-                });
-            }else { // Other errors
+            } else { 
                 Swal.fire({
                     icon: 'error',
                     title: 'Login Failed',
@@ -257,70 +292,71 @@ $('#loginData').on('submit', function(e) {
     });
 });
 
-        // Logout ajax
-        $('#logoutButton').on('click', function(e) {
-    e.preventDefault();
-
-            $.ajax({
-                url: '{{ route("student.logout") }}',  // Change this to your actual route name
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}'  // CSRF token for security
-                },
-                success: function(response) {
-                    // On success, redirect the user to the desired route (e.g., the site homepage)    
-                    if (response.success) {
-                // Redirect to the site route after logout
-                window.location.href = response.redirect;
-                  }
-                },
-                error: function(xhr) {
-                    // Handle any errors
-                    console.log(xhr.responseText);
-                }
-            });
-        });
 
 
 
-                    function openModal() {
-            document.getElementById('authModal').style.display = "block";
-            showLogin(); // Default to showing login form when modal is opened
-        }
+function openModal(userType = 'student') {
+    document.getElementById('authModal').style.display = "block";
+    updateLoginForm(userType);
+    showLogin();
+}
 
-        function closeModal() {
-            document.getElementById('authModal').style.display = "none";
-        }
+function updateLoginForm(userType) {
+    const typeMap = {
+        'student': 'Student',
+        'scholar': 'Scholar',
+        'admin': 'Admin'
+    };
 
-        function showSignup() {
-            document.getElementById('loginForm').style.display = "none";
-            document.getElementById('signupForm').style.display = "block";
-        }
+    document.getElementById('loginType').value = userType;
+    document.getElementById('registerType').value = userType;
+    document.getElementById('forgotType').value = userType;
+    document.getElementById('loginTitle').textContent = typeMap[userType] + ' Login';
 
-        function showLogin() {
-            document.getElementById('signupForm').style.display = "none";
-            document.getElementById('loginForm').style.display = "block";
-        }
+    const loginForm = document.getElementById('loginData');
+    loginForm.action = "{{ route('student.login') }}";
+}
 
-        // Close the modal if the user clicks outside the modal content
-        window.onclick = function(event) {
-            var modal = document.getElementById('authModal');
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+function closeModal() {
+    document.getElementById('authModal').style.display = "none";
+}
 
-        @if(Session::has('message'))
-        toastr.success("{{ Session::get('message') }}");
-    @endif
+function showSignup() {
+    document.getElementById('loginForm').style.display = "none";
+    document.getElementById('signupForm').style.display = "block";
+    document.getElementById('forgotPasswordForm').style.display = "none";
+    document.getElementById('resetPasswordForm').style.display = "none";
+}
 
-    @if(Session::has('error'))
-        toastr.error("{{ Session::get('error') }}");
-    @endif
+function showLogin() {
+    document.getElementById('signupForm').style.display = "none";
+    document.getElementById('loginForm').style.display = "block";
+    document.getElementById('forgotPasswordForm').style.display = "none";
+    document.getElementById('resetPasswordForm').style.display = "none";
+}
 
+function showForgotPassword() {
+    document.getElementById('loginForm').style.display = "none";
+    document.getElementById('signupForm').style.display = "none";
+    document.getElementById('resetPasswordForm').style.display = "none";
+    document.getElementById('forgotPasswordForm').style.display = "block";
+}
 
+window.onclick = function(event) {
+    var modal = document.getElementById('authModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+@if(Session::has('message'))
+    toastr.success("{{ Session::get('message') }}");
+@endif
+
+@if(Session::has('error'))
+    toastr.error("{{ Session::get('error') }}");
+@endif
 
 </script>
-
 
 @stop

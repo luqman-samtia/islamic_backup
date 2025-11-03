@@ -57,7 +57,8 @@ class CustomGateFilter implements FilterInterface
              // Allow scholars to access the admin/home route
             if ($user->type === 'scholar' && in_array($item['url'], [
                 'admin/home',
-                'admin/student/show/info',
+                'admin/scholars/students',
+                'admin/scholars/students/info',
             ])) {
                 return true;
             }

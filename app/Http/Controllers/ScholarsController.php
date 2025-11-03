@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Scholars;
-use App\User;
-use App\Slug;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Role;
-use DataTables;
 use Auth;
-use Illuminate\Support\Facades\Validator;
+use App\Slug;
+use App\User;
+use DataTables;
+use App\Student;
+use App\Scholars;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class ScholarsController extends Controller
 {
@@ -134,6 +135,75 @@ class ScholarsController extends Controller
         }
         return view('admin.scholars.students');
     }
+
+    /**
+ * Get students details - Title and Link with filters
+ */
+public function studentsDetails(Request $request){
+    $user = Auth::user();
+    
+    if ($user->type === 'admin') {
+        $studentUsers = User::where('type', 'student')->pluck('id');
+    } else {
+        $user_email = $user->email;
+        $scholar = Scholars::where('email', $user_email)->first();
+        
+        if (!$scholar) {
+            return response()->json(['error' => 'Scholar not found'], 404);
+        }
+
+        $scholar_id = $scholar->id;
+        $studentUsers = User::where('scholar', $scholar_id)
+                           ->where('type', 'student')
+                           ->pluck('id');
+    }
+
+    $query = Student::whereIn('user_id', $studentUsers)
+                    ->select('id', 'user_id', 'title', 'link', 'created_at')
+                    ->orderBy('created_at', 'desc');
+
+    if ($request->has('year') && $request->year != '') {
+        $query->whereYear('created_at', $request->year);
+    }
+
+    if ($request->has('month') && $request->month != '') {
+        $query->whereMonth('created_at', $request->month);
+    }
+
+    if ($request->has('student_id') && $request->student_id != '') {
+        $query->where('user_id', $request->student_id);
+    }
+
+    $studentsData = $query->get();
+
+    $years = Student::whereIn('user_id', $studentUsers)
+                    ->selectRaw('YEAR(created_at) as year')
+                    ->distinct()
+                    ->orderBy('year', 'desc')
+                    ->pluck('year');
+
+    $students = User::whereIn('id', $studentUsers)
+                    ->select('id', 'name')
+                    ->orderBy('name')
+                    ->get();
+
+    $monthColors = [
+        1 => '#FF6B6B',   
+        2 => '#FF8E72',
+        3 => '#FFA726',
+        4 => '#FFD54F',
+        5 => '#81C784',
+        6 => '#64B5F6',
+        7 => '#42A5F5',
+        8 => '#7E57C2',
+        9 => '#AB47BC',
+        10 => '#EC407A',
+        11 => '#29B6F6',
+        12 => '#26C6DA'    
+    ];
+
+    return view('admin.scholars.students_details', compact('studentsData', 'years', 'students', 'monthColors'));
+}
     public function delete(Request $request)
 {
     $scholar = Scholars::find($request->id);

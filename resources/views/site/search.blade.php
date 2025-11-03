@@ -81,9 +81,6 @@
                                                     <div class="col-md-2 col-sm-6 col-lg-2">
                                                         <input type="number" name="page" placeholder="Page" value="">
                                                     </div>
-                                                    <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    <input type="number" name="para_no" id="para_no" class="form-control" min="1" max="30" placeholder="Enter Para Number" >
-                                                    </div>
 
                                                     <div class="col-md-2 col-sm-12 col-lg-2">
                                                         <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>

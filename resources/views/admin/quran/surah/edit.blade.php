@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Edit '. $childQuran->title)
+@section('title', 'Edit ' . $childQuran->title)
 
 @section('content_header')
     <h1>
@@ -18,15 +18,25 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label>Title</label>
-                                <input type="text" name="title" value="{{ $childQuran->title }}" class="form-control" autocomplete="title" autofocus>
+                                <input type="text" name="title" value="{{ $childQuran->title }}" class="form-control"
+                                    autocomplete="title" autofocus>
                             </div>
                             <div class="form-group">
                                 <label>Page #</label>
-                                <input type="number" name="number" value="{{ $childQuran->number }}" min="1" class="form-control" placeholder="Enter Page Number" required>
+                                <input type="number" name="number" value="{{ $childQuran->number }}" min="1"
+                                    class="form-control" placeholder="Enter Page Number" required>
                             </div>
-                              <div class="form-group">
+                            <div class="form-group">
                                 <label for="para_no">Para Number</label>
-                                <input type="number" name="para_no" class="form-control" value="{{ old('para_no', $quran->para_no ?? '') }}" min="1" max="30">
+                                <select name="para_no" id="para_no" class="form-control" required>
+                                    <option value="">-- Select Para --</option>
+                                    @foreach ($paras as $para)
+                                        <option value="{{ $para }}"
+                                            {{ $childQuran->para_no == $para ? 'selected' : '' }}>
+                                            Para {{ $para }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             {{-- <div class="form-group">
                                 <label>Ayat From</label>
@@ -39,16 +49,16 @@
                             <div class="form-group">
                                 <label> Edit Image </label>
                                 <div class="d-flex">
-                                    @if($childQuran->image)
-                                    <img src="{{ asset('storage/'.$childQuran->image) }}" style="width: 200px;"/>
+                                    @if ($childQuran->image)
+                                        <img src="{{ asset('storage/' . $childQuran->image) }}" style="width: 200px;" />
                                     @endif
-                                    <input type="file" class="form-control-file" id="image" name="image" >
+                                    <input type="file" class="form-control-file" id="image" name="image">
                                 </div>
                             </div>
                         </div>
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Update</button>
-                            <a href="{{ route('quran.quran',$childQuran->parent_id) }}" class="btn btn-default">Cancel</a>
+                            <a href="{{ route('quran.quran', $childQuran->parent_id) }}" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

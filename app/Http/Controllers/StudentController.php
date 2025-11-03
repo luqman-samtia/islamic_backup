@@ -92,9 +92,14 @@ class StudentController extends Controller
             'password.required' => 'The password field is required.',
             'password.min' => 'Password must be at least 8 characters.',
         ]);
-    
+
+        $loginType = $request->login_type;
         $user = User::where('email', $request->email)->first();
-    
+         if ($user->type !== $loginType) {
+            return response()->json([
+                'error' => 'You are not authorized to login as ' . $loginType . '. Your account type is ' . $user->type . '.'
+            ], 403);
+        }
         if (!$user) {
             return response()->json(['error' => 'This email is not found in our database.'], 404);
         }
@@ -218,7 +223,7 @@ class StudentController extends Controller
     return redirect()->back()->with('message', 'You are not authorized to log out.');
 }
 
-        public function students(Request $request){
+    public function students(Request $request){
 
             if ($request->ajax()) {
         
@@ -229,15 +234,46 @@ class StudentController extends Controller
                 ->addColumn('scholar', function($row) {
                     return $row->scholar_name ?? 'No Scholar';
                 })
+                ->addColumn('password_action', function($row) {
+                    return '<button type="button" data-id="'.$row->id.'" class="btn btn-warning btn-xs change-password">
+                                <i class="fa fa-key"></i> Change Password
+                            </button>';
+                })
+                ->rawColumns(['password_action'])
                 ->make(true);
     
             \Log::info($data); 
+            
             return $data;
             }
             $scholars = Scholars::pluck('name', 'id');
             // $students = User::where('type','student');
             return view('admin.students.index', compact('scholars'));
+    }
+
+    /**
+     * Change student password
+     */
+    public function changeStudentPassword(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|exists:users,id',
+            'new_password' => 'required|min:8|confirmed'
+        ]);
+
+        $user = User::find($request->student_id);
+
+        if ($user->type !== 'student') {
+            return response()->json(['error' => 'Invalid user'], 403);
         }
+
+        $user->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return response()->json(['success' => 'Password updated successfully']);
+    }
+
         public function getStudent($id)
         {
             $student = User::where('id', $id)->where('type', 'student')->firstOrFail();
@@ -283,7 +319,6 @@ class StudentController extends Controller
         $studentItems = $request->input('student_items', []);
 
         foreach ($studentItems as $item) {
-            // Using updateOrCreate to add or update each link entry based on student_id and title
             Student::updateOrCreate([         
               'user_id'=>$studentId,
             'type' => $item['type'],
@@ -292,35 +327,64 @@ class StudentController extends Controller
         ]);
         }
 
-         // Return a JSON response for success
          return response()->json(['success' => true]);
     }
     
     public function removeStudentItem(Request $request){
-        // Get the ID of the student item to delete
-        $itemId = $request->input('item_id'); // This should be the ID of the record
+        $itemId = $request->input('item_id'); 
     
-        // Find the specific student item
         $studentItem = Student::find($itemId);
     
         if ($studentItem) {
             $studentItem->delete();
             return response()->json(['success' => true, 'message' => 'Item deleted successfully']);
         } else {
-            // Optionally, you can log this event or handle it differently
             return response()->json(['success' => true, 'message' => 'Item not found, but treated as deleted'], 200);
         }
     }
 
-    public function StudentDataShow(){
-        $student_id = Auth::user()->id;
-        $studentData = Student::where('user_id',$student_id)->get();
-            // dd($studentData[0]->link);
-        return view('admin.students.data',compact('studentData'));
+   public function StudentDataShow(Request $request){
+    $student_id = Auth::user()->id;
+    
+    $query = Student::where('user_id', $student_id)
+                    ->select('id', 'user_id', 'title', 'link', 'created_at')
+                    ->orderBy('created_at', 'desc');
+
+    if ($request->has('year') && $request->year != '') {
+        $query->whereYear('created_at', $request->year);
     }
 
+    if ($request->has('month') && $request->month != '') {
+        $query->whereMonth('created_at', $request->month);
+    }
+
+    $studentData = $query->get();
+
+    $years = Student::where('user_id', $student_id)
+                    ->selectRaw('YEAR(created_at) as year')
+                    ->distinct()
+                    ->orderBy('year', 'desc')
+                    ->pluck('year');
+
+    $monthColors = [
+        1 => '#FF6B6B',    
+        2 => '#FF8E72',
+        3 => '#FFA726',
+        4 => '#FFD54F',
+        5 => '#81C784',
+        6 => '#64B5F6',
+        7 => '#42A5F5',
+        8 => '#7E57C2',
+        9 => '#AB47BC',
+        10 => '#EC407A',
+        11 => '#29B6F6',
+        12 => '#26C6DA'    
+    ];
+
+    return view('admin.students.data', compact('studentData', 'years', 'monthColors'));
+}
+
     public function StudentUpdatePassword(Request $request){
-      // Validate the input data for password update
       $request->validate([
         'current_password' => 'required',
         'new_password' => 'required|string|min:8|confirmed',
@@ -333,25 +397,16 @@ class StudentController extends Controller
 
     $user = Auth::user();
 
-    // Check if the current password is correct
     if (!Hash::check($request->current_password, $user->password)) {
         return response()->json(['error' => 'Current password is incorrect.'], 400);
     }
 
-    // Update the password
     $user->password = Hash::make($request->new_password);
     $user->save();
 
     return response()->json(['success' => true, 'message' => 'Password updated successfully.']);
 
     }
-
-//     public function showFeedback()
-//  {
-//     $feedback = Feedback::where('user_id', Auth::id())->first();
-//     return view('admin.students.feedback.index', compact('feedback'));
-//  }
-
         public function showFeedback(Request $request)
         {
             if ($request->ajax()) {
@@ -365,12 +420,10 @@ class StudentController extends Controller
             return view('admin.students.feedback.index');
         }
 
-//  new add feedback
     public function addFeedback(Request $request){
         if ($request->post()){
             $data = $request->except('image');
             $data['user_id'] = auth()->id();
-            // dd($data['user_id']);
             if ($request->hasFile('image')){
                 $path = $request->image->store('testimonials/images');
                 $data['image'] = $path;
@@ -400,10 +453,6 @@ class StudentController extends Controller
         return ['status' => 200];
     }
 
-    // End Feedback Methpds
-
-
-
     public function submitFeedback(Request $request)
  {
     $request->validate([
@@ -411,19 +460,16 @@ class StudentController extends Controller
         'feedback' => 'required|string|max:1000',
     ]);
 
-    // Retrieve feedback for the authenticated user, if it exists
     $feedback = Feedback::where('user_id', Auth::id())->first();
     $message = '';
 
     if ($feedback) {
-        // Update existing feedback
         $feedback->update([
             'title' => $request->title,
             'feedback' => $request->feedback,
         ]);
         $message = 'Feedback updated successfully';
     } else {
-        // Create new feedback entry
         $feedback = Feedback::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
@@ -432,7 +478,6 @@ class StudentController extends Controller
         $message = 'Feedback submitted successfully';
     }
 
-    // Return success response with feedback data for immediate display
     return response()->json([
         'success' => true,
         'message' => $message,
@@ -446,28 +491,12 @@ class StudentController extends Controller
 public function getFeedback(Request $request, $id)
 {
     $feedback = Feedback::where('user_id', $id)->first();
-    // dd( $student);
-    // die;
+   
     if ($feedback) {
         
-        // $student = User::where('id',$id)->first(); 
-        // return response()->json([
-        //     'success' => true,
-        //     'data' => [
-        //         'student_name' => $student->name,
-        //         'title' => $feedback->title,
-        //         'feedback' => $feedback->feedback,
-        //     ],
-        // ]);
         if ($request->ajax()) {
             $feedbacks = Feedback::where('user_id', $id)->get();
-            
-            // if ($feedbacks->isEmpty()) {
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => 'Feedback not added by student yet',
-            //     ], 404);
-            // }
+    
     
             return DataTables::of($feedbacks)
                 ->addColumn('image_complete_url', function($query) {
@@ -505,7 +534,6 @@ public function showStudentFeedbacks(Request $request, $id)
     return view('admin.students.feedback.admin_index', compact('student'));
 }
 
-    // FORGOT PASSWORD
  public function forgotPasswordRequest(Request $request)
 {
     $validator = Validator::make($request->all(), [

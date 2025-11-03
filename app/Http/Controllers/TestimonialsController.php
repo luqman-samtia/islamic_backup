@@ -2,21 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Testimonials;
 use App\Slug;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Role;
 use DataTables;
+use App\Feedback;
+use App\Testimonials;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\File;
 
 class TestimonialsController extends Controller
 {
 
     public function index(Request $request){
         if ($request->ajax()){
-            return DataTables::of(Testimonials::query())->addColumn('image_complete_url', function($query){
-                return ($query->image) ? asset('storage/'.$query->image) : null;
-            })->make(true);
+            // Create a unified query using UNION
+            $testimonials = Testimonials::select(
+                'id',
+                'name',
+                'description',
+                'image',
+                'created_at',
+                'updated_at',
+                DB::raw("'testimonial' as source_type")
+            );
+
+            $feedbacks = Feedback::select(
+                'id',
+                'title as name',
+                'feedback as description',
+                'image',
+                'created_at',
+                'updated_at',
+                DB::raw("'feedback' as source_type")
+            )->unionAll($testimonials);
+
+            return DataTables::of($feedbacks)
+                ->addColumn('image_complete_url', function($query){
+                    return ($query->image) ? asset('storage/'.$query->image) : null;
+                })
+                ->addColumn('source_type', function($query){
+                    return ucfirst($query->source_type);
+                })
+                ->make(true);
         }
         return view('admin.testimonials.index');
     }

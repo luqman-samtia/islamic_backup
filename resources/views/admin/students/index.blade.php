@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
@@ -68,13 +68,50 @@
     </div>
 </div>
 
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Student Password</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="changePasswordForm">
+                <div class="modal-body">
+                    <input type="hidden" name="student_id" id="student_id">
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input type="text" class="form-control" id="student_name_display" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" class="form-control" name="new_password" id="new_password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="change-password" type="submit" class="btn btn-primary">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 @section('content')
 <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="feedbackModalLabel">Student Feedback</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -85,7 +122,7 @@
                 <p id="feedbackMessage"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -106,7 +143,7 @@
                             <td>Email</td>
                             <td>Status</td>
                             <td>Joined</td>
-                            
+                            <td>Change Password</td>
                             <td>Action</td>
                         </tr>
                         </thead>
@@ -118,7 +155,6 @@
         </div>
     </div>
  
-    {{-- <button type="button" onclick="$('#feedbackModal').modal('show');">Test Modal</button> --}}
 
     <div class="rolesModal"></div>
 
@@ -167,6 +203,7 @@
                             return `${day}-${month}-${year}`;
                         }
                      },
+                     { data: 'password_action' },
                     {
                         data: 'id',
                         render: function(data) {
@@ -208,6 +245,70 @@
               
             });
       
+
+            // Show password
+    $(document).on('click', '.password-hidden', function() {
+        let studentId = $(this).data('id');
+        
+        $.ajax({
+            url: '/admin/student/' + studentId,
+            method: 'GET',
+            success: function(data) {
+                $('#show_student_name').text(data.name);
+                $('#show_student_email').text(data.email);
+                $('#show_password').text(data.password);
+                $('#showPasswordModal').modal('show');
+            }
+        });
+    });
+
+    // Change password button
+    $(document).on('click', '.change-password', function() {
+        let studentId = $(this).data('id');
+        
+        $.ajax({
+            url: '/admin/student/' + studentId,
+            method: 'GET',
+            success: function(data) {
+                $('#student_id').val(data.id);
+                $('#student_name_display').val(data.name);
+                $('#new_password').val('');
+                $('#new_password_confirmation').val('');
+                $('#changePasswordModal').modal('show');
+            }
+        });
+    });
+
+    // Change password form submit
+    $('#changePasswordForm').on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '{{ route('admin.student.changePassword') }}',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#changePasswordModal').modal('hide');
+                Swal.fire(
+                    'Success!',
+                    response.success,
+                    'success'
+                );
+                datatable.ajax.reload();
+            },
+            error: function(xhr) {
+                let error = xhr.responseJSON?.error || 'Error occurred';
+                Swal.fire(
+                    'Error!',
+                    error,
+                    'error'
+                );
+            }
+        });
+    });
 
      $(document).on('click', '.delete', function(){
     let id = $(this).attr('data-id');

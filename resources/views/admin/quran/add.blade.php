@@ -26,7 +26,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Para No #</label>
-                                <input type="number" name="para_no" min="1" class="form-control" placeholder="Enter Para Number" required>
+                                <input type="number" name="para_no" min="1" class="form-control" placeholder="Enter Para Number" >
                             </div>
                             <div class="form-group">
                                 <label> Upload Image </label>
