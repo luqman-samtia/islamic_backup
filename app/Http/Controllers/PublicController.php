@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Articals;
-use App\Mail\ContacMail;
 use App\Media;
-use App\PaymentMethod;
 use App\Quran;
-use App\Resources;
+use App\Articals;
+use App\Feedback;
 use App\Scholars;
+use App\Resources;
 use App\TajweedQuran;
 use App\Testimonials;
-use App\Feedback;
+use App\PaymentMethod;
+use App\Mail\ContacMail;
 use Illuminate\Http\Request;
+use App\Constants\QuranParas;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
@@ -73,123 +74,237 @@ class PublicController extends Controller
     /**
      * Display Quran Index with Surahs
      */
-    public function quran()
-    {
-        $quran = Quran::whereNull('parent_id')->orderBy('number', 'asc')->get();
-        return view('site.quran.index', compact('quran'));
-    }
+    // public function quran()
+    // {
+    //     $quran = Quran::whereNull('parent_id')->orderBy('number', 'asc')->get();
+    //     return view('site.quran.index', compact('quran'));
+    // }
 
-    /**
-     * Get Para List via AJAX
-     */
-    public function quranParaList()
-    {
+    // /**
+    //  * Get Para List via AJAX
+    //  */
+    // public function quranParaList()
+    // {
         
-        $paraIds = Quran::whereNotNull('para_no')
-                        ->whereNotNull('parent_id')
-                        ->groupBy('para_no')
-                        ->selectRaw('MIN(id) as id')
-                        ->pluck('id');
+    //     $paraIds = Quran::whereNotNull('para_no')
+    //                     ->whereNotNull('parent_id')
+    //                     ->groupBy('para_no')
+    //                     ->selectRaw('MIN(id) as id')
+    //                     ->pluck('id');
 
-        $paras = Quran::whereIn('id', $paraIds)
-                      ->orderBy('para_no', 'asc')
-                      ->get();
+    //     $paras = Quran::whereIn('id', $paraIds)
+    //                   ->orderBy('para_no', 'asc')
+    //                   ->get();
+
+    //     if (request()->ajax()) {
+    //         return view('site.quran.para_list', compact('paras'));
+    //     }
+    //     return view('site.quran.index', compact('paras'));
+    // }
+
+    // /**
+    //  * Display Para Show Page (Like Surah)
+    //  */
+    // public function quranParaShow($para_no)
+    // {
+    //     // Validate para number
+    //     if ($para_no < 1 || $para_no > 30) {
+    //         abort(404);
+    //     }
+
+    //     // Get first page of this para for reference
+    //     $para_info = Quran::where('para_no', $para_no)
+    //                       ->whereNotNull('parent_id')
+    //                       ->orderBy('id', 'asc')
+    //                       ->first();
+
+    //     if (!$para_info) {
+    //         abort(404);
+    //     }
+
+    //     // Get all pages in this para
+    //     $pages = Quran::where('para_no', $para_no)
+    //                   ->whereNotNull('parent_id')
+    //                   ->with('getParent')
+    //                   ->orderBy('number', 'asc')
+    //                   ->get();
+    //     // Get prev/next para
+    //     $prev = Quran::where('para_no', '<', $para_no)
+    //                  ->whereNotNull('para_no')
+    //                  ->whereNotNull('parent_id')
+    //                  ->orderBy('para_no', 'desc')
+    //                  ->value('para_no');
+
+    //     $next = Quran::where('para_no', '>', $para_no)
+    //                  ->whereNotNull('para_no')
+    //                  ->whereNotNull('parent_id')
+    //                  ->orderBy('para_no', 'asc')
+    //                  ->value('para_no');
+
+    //     return view('site.quran.para_show', [
+    //         'para_no' => $para_no,
+    //         'para_info' => $para_info,
+    //         'pages' => $pages,
+    //         'prev' => $prev,
+    //         'next' => $next
+    //     ]);
+    // }
+
+    // /**
+    //  * Display Surah with all its pages
+    //  */
+    // public function quranSurat($slug){
+    //     $data['surat'] = Quran::with(['children' => function($query){
+    //         $query->orderBy('number', 'asc');
+    //     }])->findBySlug($slug)->first();
+
+    //     if(!$data['surat'])
+    //         abort(404);
+
+    //     $prev = Quran::where('id', '<', $data['surat']->id)->whereNull('parent_id')->orderBy('id','desc')->first();
+    //     $next = Quran::where('id', '>', $data['surat']->id)->whereNull('parent_id')->orderBy('id')->first();
+
+    //     $data['prev'] = $prev;
+    //     $data['next'] = $next;
+
+    //     return view('site.quran.surat', $data);
+    // }
+
+    // /**
+    //  * Display specific page of Surah
+    //  */
+    // public function quranSuratPage($slug, $page){
+
+    //     $data['surat'] = Quran::whereHas('getParent', function($q) use ($slug){
+    //         $q->where('slug', $slug);
+    //     })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+
+    //     if(!$data['surat'])
+    //         abort(404);
+
+    //     $prev = Quran::where('id', '<', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id','desc')->first();
+    //     $next = Quran::where('id', '>', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id')->first();
+
+    //     $data['prev'] = $prev;
+    //     $data['next'] = $next;
+
+    //     return view('site.quran.suratpage', $data);
+    // }
+public function quran()
+{
+    $quran = Quran::whereNull('parent_id')->orderBy('number', 'asc')->get();
+    return view('site.quran.index', compact('quran'));
+}
+
+public function quranParaList()
+{
+    $paraIds = Quran::whereNotNull('para_no')
+                    ->whereNotNull('parent_id')
+                    ->groupBy('para_no')
+                    ->selectRaw('MIN(id) as id')
+                    ->pluck('id');
+
+    $paras = Quran::whereIn('id', $paraIds)
+                  ->orderBy('para_no', 'asc')
+                  ->get()
+                  ->map(function($para) {
+                      $para['para_name'] = QuranParas::getParaName($para->para_no);
+                      return $para;
+                  });
 
         if (request()->ajax()) {
-            return view('site.quran.para_list', compact('paras'));
+            return response()->json($paras);
         }
-        return view('site.quran.index', compact('paras'));
+        
+        return view('site.quran.para_list', compact('paras'));
+}
+
+public function quranParaShow($para_no)
+{
+    if ($para_no < 1 || $para_no > 30) {
+        abort(404);
     }
 
-    /**
-     * Display Para Show Page (Like Surah)
-     */
-    public function quranParaShow($para_no)
-    {
-        // Validate para number
-        if ($para_no < 1 || $para_no > 30) {
-            abort(404);
-        }
-
-        // Get first page of this para for reference
-        $para_info = Quran::where('para_no', $para_no)
-                          ->whereNotNull('parent_id')
-                          ->orderBy('id', 'asc')
-                          ->first();
-
-        if (!$para_info) {
-            abort(404);
-        }
-
-        // Get all pages in this para
-        $pages = Quran::where('para_no', $para_no)
+    $para_name = QuranParas::getParaName($para_no);
+    $para_info = Quran::where('para_no', $para_no)
                       ->whereNotNull('parent_id')
-                      ->with('getParent')
-                      ->orderBy('number', 'asc')
-                      ->get();
-        // Get prev/next para
-        $prev = Quran::where('para_no', '<', $para_no)
-                     ->whereNotNull('para_no')
-                     ->whereNotNull('parent_id')
-                     ->orderBy('para_no', 'desc')
-                     ->value('para_no');
+                      ->orderBy('id', 'asc')
+                      ->first();
 
-        $next = Quran::where('para_no', '>', $para_no)
-                     ->whereNotNull('para_no')
-                     ->whereNotNull('parent_id')
-                     ->orderBy('para_no', 'asc')
-                     ->value('para_no');
-
-        return view('site.quran.para_show', [
-            'para_no' => $para_no,
-            'para_info' => $para_info,
-            'pages' => $pages,
-            'prev' => $prev,
-            'next' => $next
-        ]);
+    if (!$para_info) {
+        return back()->with('error', 'No para information found for this para.');
     }
 
-    /**
-     * Display Surah with all its pages
-     */
-    public function quranSurat($slug){
-        $data['surat'] = Quran::with(['children' => function($query){
-            $query->orderBy('number', 'asc');
-        }])->findBySlug($slug)->first();
+    $pages = Quran::where('para_no', $para_no)
+                  ->whereNotNull('parent_id')
+                  ->with('getParent')
+                  ->orderBy('number', 'asc')
+                  ->get();
+    if ($pages->isEmpty()) {
+        return back()->with('error', 'No pages found for this para.');
+    }
+    $prev = Quran::where('para_no', '<', $para_no)
+                 ->whereNotNull('para_no')
+                 ->whereNotNull('parent_id')
+                 ->orderBy('para_no', 'desc')
+                 ->value('para_no');
 
-        if(!$data['surat'])
-            abort(404);
+    $next = Quran::where('para_no', '>', $para_no)
+                 ->whereNotNull('para_no')
+                 ->whereNotNull('parent_id')
+                 ->orderBy('para_no', 'asc')
+                 ->value('para_no');
 
-        $prev = Quran::where('id', '<', $data['surat']->id)->whereNull('parent_id')->orderBy('id','desc')->first();
-        $next = Quran::where('id', '>', $data['surat']->id)->whereNull('parent_id')->orderBy('id')->first();
-
-        $data['prev'] = $prev;
-        $data['next'] = $next;
-
-        return view('site.quran.surat', $data);
+     $allParas = [];
+    for ($i = 1; $i <= 30; $i++) {
+        $allParas[] = [
+            'para_no' => $i,
+            'para_name' => QuranParas::getParaName($i)
+        ];
     }
 
-    /**
-     * Display specific page of Surah
-     */
-    public function quranSuratPage($slug, $page){
+    return view('site.quran.para_show', [
+        'para_name' => $para_name,
+        'para_no' => $para_no,
+        'para_info' => $para_info,
+        'pages' => $pages,
+        'prev' => $prev,
+        'next' => $next,
+        'allParas' => $allParas 
+    ]);
+}
 
-        $data['surat'] = Quran::whereHas('getParent', function($q) use ($slug){
-            $q->where('slug', $slug);
-        })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+public function quranSurat($slug)
+{
+    $quran = Quran::whereNull('parent_id')->orderBy('number', 'asc')->get();
+    
+    $surat = Quran::with(['children' => function($query){
+        $query->orderBy('number', 'asc');
+    }])->where('slug', $slug)->first(); 
 
-        if(!$data['surat'])
-            abort(404);
+    if(!$surat)
+        abort(404);
 
-        $prev = Quran::where('id', '<', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id','desc')->first();
-        $next = Quran::where('id', '>', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id')->first();
+    $prev = Quran::where('id', '<', $surat->id)->whereNull('parent_id')->orderBy('id','desc')->first();
+    $next = Quran::where('id', '>', $surat->id)->whereNull('parent_id')->orderBy('id')->first();
 
-        $data['prev'] = $prev;
-        $data['next'] = $next;
+    return view('site.quran.surat', compact('surat', 'prev', 'next', 'quran'));
+}
 
-        return view('site.quran.suratpage', $data);
-    }
+public function quranSuratPage($slug, $page)
+{
+    $surat = Quran::whereHas('getParent', function($q) use ($slug){
+        $q->where('slug', $slug);
+    })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
 
+    if(!$surat)
+        abort(404);
+
+    $prev = Quran::where('id', '<', $surat->id)->where('parent_id', $surat->parent_id)->orderBy('id','desc')->first();
+    $next = Quran::where('id', '>', $surat->id)->where('parent_id', $surat->parent_id)->orderBy('id')->first();
+
+    return view('site.quran.suratpage', compact('surat', 'prev', 'next'));
+}
     public function tajweedQuran(){
         $quran = TajweedQuran::parent(null)->orderAsc('number')->get();
         return view('site.tajweed-quran.index', compact('quran'));
@@ -282,9 +397,7 @@ class PublicController extends Controller
         ->where('quran.slug', $request->surat)
         ->first();
 
-    // Search by surat or para_no (without page number)
     if (!$request->page) {
-        // If surat is specified, search within that surat
         if ($request->surat) {
             $search->where('quran.slug', $request->surat);
             
@@ -293,14 +406,11 @@ class PublicController extends Controller
                 $data['parent_slug'] = $parent->slug;
             }
         }
-        
-        // Add para_no filter - this will search ALL surahs under this para
-      
+              
     }
       if ($request->para_no) {
             $search->where('surat.para_no', $request->para_no);
         }
-    // Search by specific page number
     if($request->page){
         $prev = DB::table('quran')->whereNotNull('parent_id')->where('number', $request->page - 1)->count();
         $next = DB::table('quran')->whereNotNull('parent_id')->where('number', $request->page + 1)->count();
@@ -320,7 +430,6 @@ class PublicController extends Controller
         
         $search->where('surat.number', $request->page);
         
-        // Add para_no filter for page search as well
         if ($request->para_no) {
             $search->where('surat.para_no', $request->para_no);
         }
@@ -366,7 +475,6 @@ class PublicController extends Controller
     if (!$request->page) {
         $search->where('tajweed_quran.slug', $request->surat);
         
-        // Add para_no filter if provided
         if ($request->para_no) {
             $search->where('surat.para_no', $request->para_no);
         }
@@ -377,7 +485,6 @@ class PublicController extends Controller
         }
     }
     
-    // Search by specific page number
     if($request->page){
         $prev = DB::table('tajweed_quran')->whereNotNull('parent_id')->where('number', $request->page - 1)->count();
         $next = DB::table('tajweed_quran')->whereNotNull('parent_id')->where('number', $request->page + 1)->count();

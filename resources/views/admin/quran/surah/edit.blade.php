@@ -30,10 +30,10 @@
                                 <label for="para_no">Para Number</label>
                                 <select name="para_no" id="para_no" class="form-control" required>
                                     <option value="">-- Select Para --</option>
-                                    @foreach ($paras as $para)
-                                        <option value="{{ $para }}"
-                                            {{ $childQuran->para_no == $para ? 'selected' : '' }}>
-                                            Para {{ $para }}
+                                    @foreach ($paras as $number => $para)
+                                        <option value="{{ $number }}"
+                                            {{ $childQuran->para_no == $number ? 'selected' : '' }}>
+                                             {{ $para }}
                                         </option>
                                     @endforeach
                                 </select>

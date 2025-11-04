@@ -38,7 +38,9 @@
                                 <div class="box box-info">
                                     <div class="box-header with-border">
                                         <input type="hidden" name="student_items[{{$index}}][type]" value="Student" class="form-control">
+
                                         <input type="hidden" name="student_id" value="{{$student_id}}" class="form-control">
+
 
                                         <h3 class="box-title">Student</h3>
                                     </div>
@@ -51,7 +53,10 @@
                                             <label>Link</label>
                                             <input type="text" id="linkField" name="student_items[{{$index}}][link]" value="{{ $item['link'] }}" class="form-control" placeholder="Enter Link">
                                         </div>
-                                        
+                                        <div>
+                                            <label>Date: </label>
+                                             <input type="date" id="createdAtField" name='student_items[{{$index}}][created_at]' value="{{ date('Y-m-d', strtotime($item['created_at'])) }}" class='form-control' >
+                                        </div>
                                     </div>
                                     <div class="box-footer">
                                         <button type="button" data-id="{{ $item->id }}" class="btn btn-danger remove-student-item">Remove</button>
@@ -123,7 +128,9 @@ $('#addStudentItem').click(function () {
                         <label>Link</label>
                         <input type="text" id="linkField" name="student_items[${studentIndex}][link]" class="form-control" placeholder="Enter Link">
                     </div>
-                    
+                    <div class="form-group">
+                        <label>Date: </label>
+                       <input type="date" id="createdAtField" name='student_items[${studentIndex}][created_at]' class='form-control' >
                 </div>
                 <div class="box-footer">
                     <button type="button" data-id="${studentIndex}" class="btn btn-danger remove-student-item">Remove</button>
@@ -144,30 +151,30 @@ $('#dynamicStudentForm').submit(function (e) {
     $('#dynamicStudentContainer .student-item-container').each(function () {
         const title = $(this).find('#titleField').val();
         const link = $(this).find('#linkField').val();
-        
-        if (!title || !link) {
+        const createdAt = $(this).find('#createdAtField').val();
+
+        if (!title || !link || !createdAt) {
             Swal.fire(
                 'Error!',
-                'Title and link fields cannot be empty.',
+                'Title, link, and created at fields cannot be empty.',
                 'error'
             );
             hasError = true;
-            return false; // Break out of each loop if validation fails
+            return false; 
         }
     });
     
-    // If there was a validation error, stop the submission
+ 
     if (hasError) return;
 
-    // Use FormData to handle the submission
     const formData = new FormData(this);
 
     $.ajax({
         url: "{{ route('admin.student.update') }}",
         type: "POST",
         data: formData,
-        contentType: false, // Important: Required when using FormData
-        processData: false, // Important: Required when using FormData
+        contentType: false, 
+        processData: false, 
         success: function(response) {
             Swal.fire(
                 'Success!',
@@ -186,66 +193,8 @@ $('#dynamicStudentForm').submit(function (e) {
 });
 
 
-
-    // Remove Student
-    // Add event listener to remove button
-//     $(document).on('click', '.remove-student-item', function() {
-//     // Get the parent container of the remove button
-//     var parentContainer = $(this).closest('.student-item-container');
-//     var studentId = $(this).data('id');
-//     // Get the index of the parent container
-//     var currentIndex = parentContainer.index();
-    
-//     // Make an AJAX request to remove the item from the array column
-//     $.ajax({
-//         type: 'POST',
-//         url: '/admin/student/remove-student-item/' + studentId, // URL of the PHP script that handles the removal
-//         data: { index: currentIndex },
-//         headers: {
-//         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//     },
-//         success: function(response) {
-//             // Remove the parent container from the DOM
-//             parentContainer.remove();
-            
-//             // Decrement the index
-//             index--;
-//         }
-//     });
-// });
-// $(document).on('click', '.remove-student-item', function() {
-//     var itemId = $(this).data('id'); // This should hold the ID of the student item
-//     var parentContainer = $(this).closest('.student-item-container');
-//     $.ajax({
-//         type: 'POST',
-//         url: '/admin/student/remove-student-item',
-//         data: {
-//             item_id: itemId,
-//         },
-//         headers: {
-//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//         },
-//         success: function(response) {
-//             if (response.success) {
-//                 Swal.fire(
-//                 'Success!',
-//                 'The footer information has been updated.',
-//                 'success'
-//             );
-//                 // Optionally remove the item from the DOM
-                
-//                 // $(this).closest('.student-item-container').remove();
-//                 parentContainer.remove();
-//             }
-//         },
-//         error: function(xhr) {
-//             alert(xhr.responseJSON.message);
-//         }
-//     });
-// });
-
 $(document).on('click', '.remove-student-item', function() {
-    var itemId = $(this).data('id'); // This should hold the ID of the student item
+    var itemId = $(this).data('id'); 
     var parentContainer = $(this).closest('.student-item-container');
     $.ajax({
         type: 'POST',
@@ -257,7 +206,6 @@ $(document).on('click', '.remove-student-item', function() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            // Remove the item from the DOM regardless of response
             parentContainer.remove();
             Swal.fire(
                 'Success!',

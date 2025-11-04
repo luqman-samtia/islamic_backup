@@ -1,6 +1,6 @@
 @extends('site.layout.master')
 
-@section('title', 'Para ' . $para_no)
+@section('title', 'Para ' . $para_name)
 
 @section('custom_css')
     <style>
@@ -44,11 +44,11 @@
                 <div class="fixed-bg" style="background-image: url('{{ asset('assets/images/parallax12.jpg') }}');"></div>
                 <div class="container">
                     <div class="page-title-wrap">
-                        <h2>Para {{ $para_no }}</h2>
+                        <h2> {{ $para_name }}</h2>
                         <ul class="breadcrumbs">
                             <li><a href="{{ route('site') }}" title="">Home</a></li>
                             <li><a href="{{ route('quranPage') }}" title="">Quran</a></li>
-                            <li>Para {{ $para_no }}</li>
+                            <li> {{ $para_name }}</li>
                         </ul>
                     </div>
                 </div>
@@ -57,41 +57,28 @@
         <section>
             <div class="mt-lg-5">
                 <div class="col-md-12 w-100 contact-form-row" id="stickyFormContainer">
-                    @if($prev)
-                        <div>
-                            <a href="{{ route('quran.para', $prev) }}" class="thm-btn brd-rd40 mb-lg-5 pull-left" type="submit">Previous</a>
-                        </div>
-                    @endif
-                    @if($next)
-                        <div>
-                            <a href="{{ route('quran.para', $next) }}" class="thm-btn brd-rd40 mb-lg-5 pull-right" type="submit">Next</a>
-                        </div>
-                    @endif
                     <form id="searchForm" action="{{ route('search') }}">
-                        <div>    
-                            <button type="button" class="thm-btn brd-rd40 mb-lg-5 pull-right" onclick="openPageModal()">Search</button>
+                        <div class="row mrg20 justify-content-center align-items-center text-center">
+                            <!-- Para Select - Populated from PHP -->
+                            <div id="para-select-container" class="col-md-3 col-sm-6 col-lg-3">
+                                <select name="para" id="para-select" onchange="changeParaPage(this.value)">
+                                    <option value="">-- Select Para --</option>
+                                    @foreach($allParas as $para)
+                                        <option value="{{ $para['para_no'] }}" {{ $para['para_no'] == $para_no ? 'selected' : '' }}>
+                                            {{ $para['para_name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Page Input -->
+                            <div class="col-md-3 col-sm-6 col-lg-3">
+                                <input type="number" name="page" placeholder="Page">
+                            </div>
+                            <!-- Search Button -->
+                            <div class="col-md-2 col-sm-12 col-lg-2">
+                                <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
+                            </div>
                         </div>
-                        <script>
-                            function openPageModal() {
-                                $('#pageModal').modal('show')
-                                    .on('shown.bs.modal', function () {
-                                        $('.modal-backdrop').remove();
-                                    });
-                            }
-                            function confirmPage() {
-                                var pageNumber = document.getElementById('pageInput').value;
-                                if (pageNumber) {
-                                    var input = document.createElement('input');
-                                    input.type = 'hidden';
-                                    input.name = 'page';
-                                    input.value = pageNumber;
-                                    document.getElementById('searchForm').appendChild(input);
-                                    document.getElementById('searchForm').submit();
-                                } else {
-                                    alert('Please enter a page number');
-                                }
-                            }
-                        </script>
                     </form>
                 </div>
                 <div class="container">
@@ -122,18 +109,31 @@
     </main>
 @stop
 
-@section('custom_js')
-    <script !src="">
-        var contactFormRow = ($('.contact-form-row').offset().top - 92);
-
-        $(window).on('scroll',function () {
-            var scroll = $(window).scrollTop();
-
-            if (scroll >= contactFormRow) {
-                $('.contact-form-row').addClass('sticky');
-            } else {
-                $('.contact-form-row').removeClass('sticky');
+<script>
+     function changeParaPage(paraNo) {
+            if (paraNo) {
+                window.location.href = "{{ route('quran.para', '') }}/" + paraNo;
             }
+        }
+</script>
+@section('custom_js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            var contactFormRow = ($('.contact-form-row').offset().top - 92);
+
+            $(window).on('scroll', function () {
+                var scroll = $(window).scrollTop();
+
+                if (scroll >= contactFormRow) {
+                    $('.contact-form-row').addClass('sticky');
+                } else {
+                    $('.contact-form-row').removeClass('sticky');
+                }
+            });
         });
+
+        // Function to change para
+       
     </script>
 @stop

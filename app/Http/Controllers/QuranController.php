@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Quran;
 use App\Slug;
+use App\Quran;
 use Illuminate\Http\Request;
+use App\Constants\QuranParas;
 use Yajra\DataTables\Facades\DataTables;
 
 class QuranController extends Controller
@@ -19,8 +20,15 @@ class QuranController extends Controller
               }
             return DataTables::of(Quran::parent($quran->id))->addColumn('image_complete_url', function($query){
                 return ($query->image) ? asset('storage/'.$query->image) : null;
+            })
+            ->addColumn('paraName', function($row){
+                return QuranParas::getParaName($row->para_no);
             })->make(true);
         }
+        // $paraNo = Quran::parent($quran->id)->select('para_no')->first();
+        // $paraNo = $paraNo['para_no'];
+        // $paraName = QuranParas::getParaName($paraNo);
+        // $quran['para'] = $paraName;
         return view('admin.quran.quran', compact('quran'));
     }
 
@@ -66,7 +74,7 @@ class QuranController extends Controller
             $quranChild->save();
             return redirect()->route('quran.quran', $quran->id);
         }
-         $paras = range(1, 30);
+        $paras = QuranParas::getParas();
         return view('admin.quran.surah.add', compact('quran', 'paras'));
     }
 
@@ -107,7 +115,7 @@ class QuranController extends Controller
             $childQuran->save();
             return redirect()->route('quran.quran',$childQuran->parent_id);
         }
-         $paras = range(1, 30);
+         $paras = QuranParas::getParas();
         return view('admin.quran.surah.edit', compact('quran', 'childQuran', 'paras'));
     }
 

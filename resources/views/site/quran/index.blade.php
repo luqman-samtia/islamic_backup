@@ -63,6 +63,11 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Hide para select by default */
+        #para-select-container {
+            display: none;
+        }
     </style>
 @stop
 
@@ -98,14 +103,23 @@
                                     <div class="contact-form text-center mb-5">
                                         <form id="searchForm" action="{{ route('search') }}">
                                             <div class="row mrg20 justify-content-center align-items-center text-center">
-                                                <div class="col-md-3 col-sm-6 col-lg-3">
-                                                    <select name="surat">
+                                                <!-- Surah Select - Show by default -->
+                                                <div id="surah-select-container" class="col-md-3 col-sm-6 col-lg-3">
+                                                    <select name="surat" id="surah-select">
                                                         <option value="">-- Select Surah --</option>
                                                         @foreach ($quran as $surat)
                                                             <option value="{{ $surat->slug }}">{{ $surat->title }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
+
+                                                <!-- Para Select - Hidden by default -->
+                                                <div id="para-select-container" class="col-md-3 col-sm-6 col-lg-3">
+                                                    <select name="para" id="para-select">
+                                                        <option value="">-- Select Para --</option>
+                                                    </select>
+                                                </div>
+
                                                 <div class="col-md-3 col-sm-6 col-lg-3">
                                                     <input type="number" name="page" placeholder="Page">
                                                 </div>
@@ -159,70 +173,116 @@
     </main>
 @stop
 
-{{-- @section('custom_js') --}}
-    <script !src="">
-        // $(document).ready(function() {
-        document.addEventListener('DOMContentLoaded', function() {
-            var contactFormRow = ($('.contact-form-row').offset().top - 92);
-            $(window).on('scroll', function() {
-                var scroll = $(window).scrollTop();
-                if (scroll >= contactFormRow) {
-                    $('.contact-form-row').addClass('sticky');
-                } else {
-                    $('.contact-form-row').removeClass('sticky');
-                }
-            });
-
-            const surahButton = document.getElementById('show-surahs');
-            const paraButton = document.getElementById('show-paras');
-            const surahList = document.getElementById('surah-list');
-            const paraList = document.getElementById('para-list');
-            const paraListContent = document.getElementById('para-list-content');
-            const loadingSpinner = document.getElementById('loadingSpinner');
-
-            if (surahButton && paraButton && surahList && paraList) {
-
-                surahButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    paraList.style.display = 'none';
-                    surahList.style.display = 'block';
-                    loadingSpinner.classList.remove('show');
-                    paraButton.classList.remove('active');
-                    surahButton.classList.add('active');
-                });
-
-                paraButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    if (paraListContent.innerHTML.trim() === '') {
-                        loadingSpinner.classList.add('show');
-                        
-                        $.ajax({
-                            url: "{{ route('quran.paraList') }}",
-                            type: 'GET',
-                            dataType: 'html',
-                            success: function(html) {
-                                paraListContent.innerHTML = html;
-                                loadingSpinner.classList.remove('show');
-                                surahList.style.display = 'none';
-                                paraList.style.display = 'block';
-                                surahButton.classList.remove('active');
-                                paraButton.classList.add('active');
-                            },
-                            error: function(xhr) {
-                                console.error('Error:', xhr);
-                                loadingSpinner.classList.remove('show');
-                                paraListContent.innerHTML = '<p class="col-12 text-center text-danger">Error loading Paras</p>';
-                            }
-                        });
-                    } else {
-                        surahList.style.display = 'none';
-                        paraList.style.display = 'block';
-                        surahButton.classList.remove('active');
-                        paraButton.classList.add('active');
-                    }
-                });
+<script !src="">
+    document.addEventListener('DOMContentLoaded', function() {
+        var contactFormRow = ($('.contact-form-row').offset().top - 92);
+        $(window).on('scroll', function() {
+            var scroll = $(window).scrollTop();
+            if (scroll >= contactFormRow) {
+                $('.contact-form-row').addClass('sticky');
+            } else {
+                $('.contact-form-row').removeClass('sticky');
             }
         });
-    </script>
-{{-- @stop --}}
+
+        const surahButton = document.getElementById('show-surahs');
+        const paraButton = document.getElementById('show-paras');
+        const surahList = document.getElementById('surah-list');
+        const paraList = document.getElementById('para-list');
+        const paraListContent = document.getElementById('para-list-content');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        
+        // New elements for select dropdowns
+        const surahSelectContainer = document.getElementById('surah-select-container');
+        const paraSelectContainer = document.getElementById('para-select-container');
+        const paraSelect = document.getElementById('para-select');
+
+        if (surahButton && paraButton && surahList && paraList) {
+
+            surahButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                paraList.style.display = 'none';
+                surahList.style.display = 'block';
+                loadingSpinner.classList.remove('show');
+                paraButton.classList.remove('active');
+                surahButton.classList.add('active');
+                
+                // Show surah select, hide para select
+                surahSelectContainer.style.display = 'block';
+                paraSelectContainer.style.display = 'none';
+            });
+
+            paraButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Show para select, hide surah select
+                surahSelectContainer.style.display = 'none';
+                paraSelectContainer.style.display = 'block';
+                
+                if (paraListContent.innerHTML.trim() === '') {
+                    loadingSpinner.classList.add('show');
+                    
+                    $.ajax({
+                        url: "{{ route('quran.paraList') }}",
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            loadingSpinner.classList.remove('show');
+                            surahList.style.display = 'none';
+                            paraList.style.display = 'block';
+                            surahButton.classList.remove('active');
+                            paraButton.classList.add('active');
+                            
+                            // Populate para select dropdown
+                            paraSelect.innerHTML = '<option value="">-- Select Para --</option>';
+                            data.forEach(function(para) {
+                                const option = document.createElement('option');
+                                option.value = para.para_no;
+                                option.textContent = para.para_name;
+                                paraSelect.appendChild(option);
+                            });
+                            
+                            // Render para list
+                            renderParaList(data);
+                        },
+                        error: function(xhr) {
+                            console.error('Error:', xhr);
+                            loadingSpinner.classList.remove('show');
+                            paraListContent.innerHTML = '<p class="col-12 text-center text-danger">Error loading Paras</p>';
+                        }
+                    });
+                } else {
+                    surahList.style.display = 'none';
+                    paraList.style.display = 'block';
+                    surahButton.classList.remove('active');
+                    paraButton.classList.add('active');
+                }
+            });
+            
+            // Handle para select change
+            paraSelect.addEventListener('change', function(e) {
+                if (this.value) {
+                    window.location.href = "{{ route('quran.para', '') }}/" + this.value;
+                }
+            });
+        }
+
+        function renderParaList(paras) {
+            let html = '';
+            paras.forEach(function(para) {
+                html += `
+                    <div class="col-md-3 col-sm-6 col-lg-3">
+                        <div class="srv-box2">
+                            <i class="flaticon-quran-rehal"></i>
+                            <div class="srv-info2">
+                                <h4>${para.para_name}</h4>
+                                <a href="{{ route('quran.para', '') }}/${para.para_no}" title="">Read More<i class="flaticon-right-arrow"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('para-list-content').innerHTML = html;
+        }
+    });
+</script>

@@ -31,7 +31,7 @@
                                     <option value="">-- Select Para --</option>
                                     @foreach ($paras as $para)
                                         <option value="{{ $para }}">
-                                            Para {{ $para }}
+                                             {{ $para }}
                                         </option>
                                     @endforeach
                                 </select>

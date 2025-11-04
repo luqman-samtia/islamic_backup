@@ -143,7 +143,7 @@ public function studentsDetails(Request $request){
     $user = Auth::user();
     
     if ($user->type === 'admin') {
-        $studentUsers = User::where('type', 'student')->pluck('id');
+        $studentUsers = User::where('type', 'student')->where('is_verified', 1)->pluck('id');
     } else {
         $user_email = $user->email;
         $scholar = Scholars::where('email', $user_email)->first();

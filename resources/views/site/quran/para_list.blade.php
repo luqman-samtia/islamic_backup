@@ -3,7 +3,7 @@
         <div class="srv-box2">
             <i class="flaticon-quran-rehal"></i>
             <div class="srv-info2">
-                <h4>Para {{ $para->para_no }}</h4>
+                <h4> {{ $para->para_name }}</h4>
                 <a href="{{ route('quran.para', $para->para_no) }}" title="">Read More<i class="flaticon-right-arrow"></i></a>
             </div>
         </div>

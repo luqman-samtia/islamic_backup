@@ -324,6 +324,7 @@ class StudentController extends Controller
             'type' => $item['type'],
             'title' => $item['title'],
             'link' => $item['link'],
+            'created_at' => $item['created_at'],
         ]);
         }
 

@@ -45,7 +45,7 @@
                 ajax: '{!! route('quran.quran', $quran->id) !!}',
                 columns: [
                     { data: 'number' },
-                    { data: 'para_no' },
+                    { data: 'paraName' },
                     { data: 'title' },
                     // { data: 'ayat_from' },
                     // { data: 'ayat_to' },
