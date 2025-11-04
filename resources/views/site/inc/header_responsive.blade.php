@@ -9,7 +9,7 @@
             <span>
                 <i class="fa fa-envelope thm-clr"></i>
                 <a href="mailto:qarihabib847@gmail.com" title="">
-                    <span class="__cf_email__" data-cfemail="3851565e57785a514b555154545950165b5755">qarihabib847@gmail.com</span>
+                    <span>qarihabib847@gmail.com</span>
                 </a>
             </span>
             @php($info = \App\Information::query()->first())

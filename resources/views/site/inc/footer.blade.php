@@ -70,13 +70,13 @@
                                         <li><i class="fa-brands fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/{{$info['whatsapp2']['value']}}"><span>{{ $info['whatsapp2']['label']  }}</span></a></li>
                                         @endif
                                         @if(@$info['email']['label'] && @$info['email']['value'])
-                                        <li><i class="flaticon-email"></i><a href="mailto:{{$info['email']['value']}}"><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">{{ $info['email']['label']  }}</span></a></li>
+                                        <li><i class="flaticon-email"></i><a href="mailto:{{$info['email']['value']}}"><span>{{ $info['email']['value']  }}</span></a></li>
                                         @endif
                                         @if(@$info['youtube']['label'] && @$info['youtube']['value'])
                                         <li><i class="fa-brands fa-youtube" style="padding: 5px 0px;color:red;"></i><a href="{{$info['youtube']['value']}}"><span class="__cf_email__" >{{ $info['youtube']['label']  }}</span></a></li>
                                         @endif
-{{--                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923484736397" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">+92-348-4736397</span></a></li>--}}
-{{--                                        <li><i class="flaticon-email"></i><a href="mailto:qarihabib847@gmail.com" title=""><span class="__cf_email__" data-cfemail="ea83868b878389aa8e9f878793c4898587">qarihabib847@gmail.com</span></a></li>--}}
+{{--                                        <li><i class="fa fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/923484736397" title=""><span>+92-348-4736397</span></a></li>--}}
+{{--                                        <li><i class="flaticon-email"></i><a href="mailto:qarihabib847@gmail.com" title=""><span>qarihabib847@gmail.com</span></a></li>--}}
                                     </ul>
                                 </div>
                             </div>
