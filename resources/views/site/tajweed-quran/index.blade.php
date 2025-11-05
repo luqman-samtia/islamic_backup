@@ -231,7 +231,7 @@
                         tajweedLoadingSpinner.classList.add('show');
 
                         $.ajax({
-                            url: "{{ route('quran.paraList') }}",
+                            url: "{{ route('tajweedQuran.paraList') }}",
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
