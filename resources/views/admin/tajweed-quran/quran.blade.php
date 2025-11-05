@@ -20,8 +20,8 @@
                             <td>Page #</td>
                             <td>Title</td>
                             <td>Para #</td>
-                            <td>Ayat From</td>
-                            <td>Ayat To</td>
+                            {{-- <td>Ayat From</td>
+                            <td>Ayat To</td> --}}
                             <td>Image</td>
                             <td>Action</td>
                         </tr>
@@ -47,8 +47,8 @@
                     { data: 'number' },
                     { data: 'title' },
                     { data: 'paraName' },
-                    { data: 'ayat_from' },
-                    { data: 'ayat_to' },
+                    // { data: 'ayat_from' },
+                    // { data: 'ayat_to' },
                     {
                         data: 'image',
                         render: function(data, type, row){

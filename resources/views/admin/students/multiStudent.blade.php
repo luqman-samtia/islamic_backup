@@ -33,7 +33,7 @@
                    
                     
                     {{-- @if(!empty($info->student_items  )) --}}
-                        @foreach($info as $index => $item)
+                        {{-- @foreach($info as $index => $item)
                             <div class="col-md-4 student-item-container" style="">
                                 <div class="box box-info">
                                     <div class="box-header with-border">
@@ -63,7 +63,41 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @endforeach --}}
+
+                        @foreach($info as $index => $item)
+                        <div class="col-md-4 student-item-container">
+                            <div class="box box-info">
+                                <div class="box-header with-border">
+                                    {{-- Add hidden ID field for existing records --}}
+                                    @if($item->id)
+                                        <input type="hidden" name="student_items[{{$index}}][id]" value="{{ $item->id }}" class="form-control">
+                                    @endif
+                                    <input type="hidden" name="student_items[{{$index}}][type]" value="Student" class="form-control">
+                                    <input type="hidden" name="student_id" value="{{$student_id}}" class="form-control">
+
+                                    <h3 class="box-title">Student</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label>Title</label>
+                                        <input type="text" id="titleField" name="student_items[{{$index}}][title]" value="{{ $item->title }}" class="form-control" placeholder="Enter Title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Link</label>
+                                        <input type="text" id="linkField" name="student_items[{{$index}}][link]" value="{{ $item->link }}" class="form-control" placeholder="Enter Link">
+                                    </div>
+                                    <div>
+                                        <label>Date: </label>
+                                        <input type="date" id="createdAtField" name='student_items[{{$index}}][created_at]' value="{{ date('Y-m-d', strtotime($item->created_at)) }}" class='form-control'>
+                                    </div>
+                                </div>
+                                <div class="box-footer">
+                                    <button type="button" data-id="{{ $item->id }}" class="btn btn-danger remove-student-item">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                     {{-- @endif --}}
                    
                 </div>
@@ -104,118 +138,124 @@
 
 @push('js')
     <script>
-       
-                let studentIndex = {{ !empty($info) ? count($info) : 0 }};
-                var studentId = "{{ $student_id }}";
-$('#addStudentItem').click(function () {
-    const newStudentItemContainer = `
-        <div class="col-md-4 student-item-container">
-            <div class="box box-info">
-                <div class="box-header with-border">
-                    <input type="hidden" name="student_items[${studentIndex}][type]" value="Student" class="form-control">
-                    <input type="hidden" name="student_id" value="${studentId}" class="form-control">
+        let studentIndex = {{ !empty($info) ? count($info) : 0 }};
+        var studentId = "{{ $student_id }}";
 
-                    <h3 class="box-title">Student</h3>
-                </div>
-                <div class="box-body">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" id="titleField" name="student_items[${studentIndex}][title]" class="form-control" placeholder="Enter Title">
+        $('#addStudentItem').click(function () {
+            const newStudentItemContainer = `
+                <div class="col-md-4 student-item-container">
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <input type="hidden" name="student_items[${studentIndex}][id]" value="" class="form-control">
+                            <input type="hidden" name="student_items[${studentIndex}][type]" value="Student" class="form-control">
+                            <input type="hidden" name="student_id" value="${studentId}" class="form-control">
+                            <h3 class="box-title">Student</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" id="titleField" name="student_items[${studentIndex}][title]" class="form-control" placeholder="Enter Title">
+                            </div>
+                            <div class="form-group">
+                                <label>Link</label>
+                                <input type="text" id="linkField" name="student_items[${studentIndex}][link]" class="form-control" placeholder="Enter Link">
+                            </div>
+                            <div class="form-group">
+                                <label>Date: </label>
+                                <input type="date" id="createdAtField" name='student_items[${studentIndex}][created_at]' class='form-control'>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <button type="button" data-id="" class="btn btn-danger remove-student-item">Remove</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Link</label>
-                        <input type="text" id="linkField" name="student_items[${studentIndex}][link]" class="form-control" placeholder="Enter Link">
-                    </div>
-                    <div class="form-group">
-                        <label>Date: </label>
-                       <input type="date" id="createdAtField" name='student_items[${studentIndex}][created_at]' class='form-control' >
-                </div>
-                <div class="box-footer">
-                    <button type="button" data-id="${studentIndex}" class="btn btn-danger remove-student-item">Remove</button>
-                </div>
-            </div>
-        </div>`;
-    
-    $('#dynamicStudentContainer').append(newStudentItemContainer);
-    studentIndex++;
-});
-// Ajax student item
-$('#dynamicStudentForm').submit(function (e) {
-    e.preventDefault();
-    
-    let hasError = false;
-    
-    // Loop through each dynamically added footer item to validate
-    $('#dynamicStudentContainer .student-item-container').each(function () {
-        const title = $(this).find('#titleField').val();
-        const link = $(this).find('#linkField').val();
-        const createdAt = $(this).find('#createdAtField').val();
+                </div>`;
+            
+            $('#dynamicStudentContainer').append(newStudentItemContainer);
+            studentIndex++;
+        });
 
-        if (!title || !link || !createdAt) {
-            Swal.fire(
-                'Error!',
-                'Title, link, and created at fields cannot be empty.',
-                'error'
-            );
-            hasError = true;
-            return false; 
-        }
-    });
-    
- 
-    if (hasError) return;
+        $('#dynamicStudentForm').submit(function (e) {
+            e.preventDefault();
+            
+            let hasError = false;
+            
+            $('#dynamicStudentContainer .student-item-container').each(function () {
+                const title = $(this).find('#titleField').val();
+                const link = $(this).find('#linkField').val();
+                const createdAt = $(this).find('#createdAtField').val();
 
-    const formData = new FormData(this);
+                if (!title || !link || !createdAt) {
+                    Swal.fire(
+                        'Error!',
+                        'Title, link, and created at fields cannot be empty.',
+                        'error'
+                    );
+                    hasError = true;
+                    return false; 
+                }
+            });
+            
+            if (hasError) return;
 
-    $.ajax({
-        url: "{{ route('admin.student.update') }}",
-        type: "POST",
-        data: formData,
-        contentType: false, 
-        processData: false, 
-        success: function(response) {
-            Swal.fire(
-                'Success!',
-                'The Student information has been updated.',
-                'success'
-            );
-        },
-        error: function(xhr) {
-            Swal.fire(
-                'Error!',
-                'An error occurred: ' + xhr.responseText,
-                'error'
-            );
-        }
-    });
-});
+            const formData = new FormData(this);
 
+            $.ajax({
+                url: "{{ route('admin.student.update') }}",
+                type: "POST",
+                data: formData,
+                contentType: false, 
+                processData: false, 
+                success: function(response) {
+                    Swal.fire(
+                        'Success!',
+                        'The Student information has been updated.',
+                        'success'
+                    ).then(function() {
+                        location.reload(); 
+                    });
+                },
+                error: function(xhr) {
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred: ' + xhr.responseText,
+                        'error'
+                    );
+                }
+            });
+        });
 
-$(document).on('click', '.remove-student-item', function() {
-    var itemId = $(this).data('id'); 
-    var parentContainer = $(this).closest('.student-item-container');
-    $.ajax({
-        type: 'POST',
-        url: '/admin/student/remove-student-item',
-        data: {
-            item_id: itemId,
-        },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(response) {
-            parentContainer.remove();
-            Swal.fire(
-                'Success!',
-                'The Student has been deleted.',
-                'success'
-            );
-        },
-        error: function(xhr) {
-            alert(xhr.responseJSON.message);
-        }
-    });
-});
-
+        // Remove item
+        $(document).on('click', '.remove-student-item', function() {
+            var itemId = $(this).data('id'); 
+            var parentContainer = $(this).closest('.student-item-container');
+            
+            if (!itemId) {
+                parentContainer.remove();
+                return;
+            }
+            
+            $.ajax({
+                type: 'POST',
+                url: '/admin/student/remove-student-item',
+                data: {
+                    item_id: itemId,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    parentContainer.remove();
+                    Swal.fire(
+                        'Success!',
+                        'The Student has been deleted.',
+                        'success'
+                    );
+                },
+                error: function(xhr) {
+                    alert(xhr.responseJSON.message);
+                }
+            });
+        });
     </script>
 @endpush

@@ -233,6 +233,22 @@
 
         @include('site.inc.footer')
     </main>
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: '{{ session('success') }}',
+        });
+    </script>
+@endif
+ @if(Session::has('message'))
+    toastr.success("{{ Session::get('message') }}");
+    @endif
+
+    @if(Session::has('error'))
+        toastr.error("{{ Session::get('error') }}");
+    @endif
 @stop
 
 @section('custom_js')

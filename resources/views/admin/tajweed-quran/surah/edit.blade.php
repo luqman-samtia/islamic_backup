@@ -24,14 +24,14 @@
                                 <label>Page #</label>
                                 <input type="number" name="number" value="{{ $childQuran->number }}" min="1" class="form-control" placeholder="Enter Page Number" required>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>Ayat From</label>
                                 <input type="number" name="ayat_from" value="{{ $childQuran->ayat_from }}" min="1" class="form-control" placeholder="Ayat From " required>
                             </div>
                             <div class="form-group">
                                 <label>Ayat To</label>
                                 <input type="number" name="ayat_to" value="{{ $childQuran->ayat_to }}" min="1" class="form-control" placeholder="Ayat To" required>
-                            </div>
+                            </div> --}}
                              <div class="form-group">
                                 <label for="para_no">Para Number</label>
                                 <select name="para_no" id="para_no" class="form-control" required>

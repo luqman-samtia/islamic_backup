@@ -158,7 +158,7 @@
         <!-- Skype Button -->
         @if(@$info['skype1']['label'] && @$info['skype1']['value'])        
         <a href="skype:live:{{$info['skype1']['value']}}?call" target="_blank" class="skype-button">
-            <img src="{{ asset('assets/images/skype.png') }}" alt="Skype">
+            <img src="{{ asset('assets/images/pngwing2.png') }}" alt="Teams">
         </a>
         @endif
     </div>

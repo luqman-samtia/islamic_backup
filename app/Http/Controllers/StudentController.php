@@ -336,24 +336,65 @@ class StudentController extends Controller
             return view('admin.students.multiStudent', $data);
         }
 
-        public function update(Request $request)
-    {
-        $studentId =  $request->input('student_id');
+    //     public function update(Request $request)
+    // {
+    //     $studentId =  $request->input('student_id');
         
-        $studentItems = $request->input('student_items', []);
+    //     $studentItems = $request->input('student_items', []);
 
-        foreach ($studentItems as $item) {
-            Student::updateOrCreate([         
-              'user_id'=>$studentId,
-            'type' => $item['type'],
-            'title' => $item['title'],
-            'link' => $item['link'],
-            'created_at' => $item['created_at'],
-        ]);
+    //     foreach ($studentItems as $item) {
+    //         Student::updateOrCreate([         
+    //           'user_id'=>$studentId,
+    //         'type' => $item['type'],
+    //         'title' => $item['title'],
+    //         'link' => $item['link'],
+    //         'created_at' => $item['created_at'],
+    //     ]);
+    //     }
+
+    //      return response()->json(['success' => true]);
+    // }
+  public function update(Request $request)
+{
+    $studentId = $request->input('student_id');
+    $studentItems = $request->input('student_items', []);
+
+    // Get existing items
+    $existingItems = Student::where('user_id', $studentId)->get();
+    $existingIds = $existingItems->pluck('id')->toArray();
+    $submittedIds = [];
+
+    foreach ($studentItems as $item) {
+        // Check if this is an existing record (has an id that exists in DB)
+        if (!empty($item['id']) && is_numeric($item['id']) && in_array((int)$item['id'], $existingIds)) {
+            // Update existing record
+            Student::where('id', $item['id'])->update([
+                'type' => $item['type'] ?? 'Student',
+                'title' => $item['title'],
+                'link' => $item['link'],
+                'created_at' => $item['created_at'],
+            ]);
+            $submittedIds[] = (int)$item['id'];
+        } else {
+            // Create new record (id is null or doesn't exist)
+            $newRecord = Student::create([         
+                'user_id' => $studentId,
+                'type' => $item['type'] ?? 'Student',
+                'title' => $item['title'],
+                'link' => $item['link'],
+                'created_at' => $item['created_at'],
+            ]);
+            $submittedIds[] = $newRecord->id;
         }
-
-         return response()->json(['success' => true]);
     }
+
+    // Delete records that were not submitted (removed items)
+    Student::where('user_id', $studentId)
+        ->whereNotIn('id', $submittedIds)
+        ->delete();
+
+    return response()->json(['success' => true]);
+}
     
     public function removeStudentItem(Request $request){
         $itemId = $request->input('item_id'); 

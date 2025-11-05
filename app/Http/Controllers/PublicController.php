@@ -227,8 +227,10 @@ public function quranSuratPage($slug, $page)
         $q->where('slug', $slug);
     })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
 
-    if(!$surat)
-        abort(404);
+    if(!$surat){
+        return abort(404);
+    }
+       
 
     $prev = Quran::where('id', '<', $surat->id)->where('parent_id', $surat->parent_id)->orderBy('id','desc')->first();
     $next = Quran::where('id', '>', $surat->id)->where('parent_id', $surat->parent_id)->orderBy('id')->first();
@@ -246,8 +248,10 @@ public function quranSuratPage($slug, $page)
         $query->orderBy('number', 'asc');
     }])->where('slug', $slug)->first();
 
-        if(!$data['surat'])
-            abort(404);
+        if(!$data['surat']){
+            return redirect()->route('tajweed.quran.index')->with('error', 'Surat not found');
+        }
+            
 
         $prev = TajweedQuran::where('id', '<', $data['surat']->id)->whereNull('parent_id')->orderBy('id','desc')->first();
         $next = TajweedQuran::where('id', '>', $data['surat']->id)->whereNull('parent_id')->orderBy('id')->first();
