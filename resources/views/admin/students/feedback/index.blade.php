@@ -60,8 +60,7 @@
                             edit = edit.replace(':id', data);
                             let deleteTestimonials = '';
                             deleteTestimonials = deleteTestimonials.replace(':id', data);
-                            return '<a href="'+edit+'" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i></a> ' +
-                                '<button type="button" data-id="'+data+'" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i></button> ';
+                            return '<a href="'+edit+'" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i></a> ' ;
                         }
                     },
                 ],
