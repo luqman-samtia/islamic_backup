@@ -81,76 +81,6 @@ class PublicController extends Controller
     // }
 
     // /**
-    //  * Get Para List via AJAX
-    //  */
-    // public function quranParaList()
-    // {
-        
-    //     $paraIds = Quran::whereNotNull('para_no')
-    //                     ->whereNotNull('parent_id')
-    //                     ->groupBy('para_no')
-    //                     ->selectRaw('MIN(id) as id')
-    //                     ->pluck('id');
-
-    //     $paras = Quran::whereIn('id', $paraIds)
-    //                   ->orderBy('para_no', 'asc')
-    //                   ->get();
-
-    //     if (request()->ajax()) {
-    //         return view('site.quran.para_list', compact('paras'));
-    //     }
-    //     return view('site.quran.index', compact('paras'));
-    // }
-
-    // /**
-    //  * Display Para Show Page (Like Surah)
-    //  */
-    // public function quranParaShow($para_no)
-    // {
-    //     // Validate para number
-    //     if ($para_no < 1 || $para_no > 30) {
-    //         abort(404);
-    //     }
-
-    //     // Get first page of this para for reference
-    //     $para_info = Quran::where('para_no', $para_no)
-    //                       ->whereNotNull('parent_id')
-    //                       ->orderBy('id', 'asc')
-    //                       ->first();
-
-    //     if (!$para_info) {
-    //         abort(404);
-    //     }
-
-    //     // Get all pages in this para
-    //     $pages = Quran::where('para_no', $para_no)
-    //                   ->whereNotNull('parent_id')
-    //                   ->with('getParent')
-    //                   ->orderBy('number', 'asc')
-    //                   ->get();
-    //     // Get prev/next para
-    //     $prev = Quran::where('para_no', '<', $para_no)
-    //                  ->whereNotNull('para_no')
-    //                  ->whereNotNull('parent_id')
-    //                  ->orderBy('para_no', 'desc')
-    //                  ->value('para_no');
-
-    //     $next = Quran::where('para_no', '>', $para_no)
-    //                  ->whereNotNull('para_no')
-    //                  ->whereNotNull('parent_id')
-    //                  ->orderBy('para_no', 'asc')
-    //                  ->value('para_no');
-
-    //     return view('site.quran.para_show', [
-    //         'para_no' => $para_no,
-    //         'para_info' => $para_info,
-    //         'pages' => $pages,
-    //         'prev' => $prev,
-    //         'next' => $next
-    //     ]);
-    // }
-
-    // /**
     //  * Display Surah with all its pages
     //  */
     // public function quranSurat($slug){
@@ -306,14 +236,15 @@ public function quranSuratPage($slug, $page)
     return view('site.quran.suratpage', compact('surat', 'prev', 'next'));
 }
     public function tajweedQuran(){
-        $quran = TajweedQuran::parent(null)->orderAsc('number')->get();
+        $quran = TajweedQuran::whereNull('parent_id')->orderBy('number')->get();
         return view('site.tajweed-quran.index', compact('quran'));
     }
 
     public function tajweedQuranSurat($slug){
+        $data['tajweedQuran'] = TajweedQuran::whereNull('parent_id')->orderBy('number', 'asc')->get();
         $data['surat'] = TajweedQuran::with(['children' => function($query){
-            $query->orderAsc('number');
-        }])->findBySlug($slug)->first();
+        $query->orderBy('number', 'asc');
+    }])->where('slug', $slug)->first();
 
         if(!$data['surat'])
             abort(404);
@@ -344,6 +275,84 @@ public function quranSuratPage($slug, $page)
 
         return view('site.tajweed-quran.suratpage', $data);
     }
+
+    public function tajweedQuranParaList()
+{
+    $paraIds = TajweedQuran::whereNotNull('para_no')
+                    ->whereNotNull('parent_id')
+                    ->groupBy('para_no')
+                    ->selectRaw('MIN(id) as id')
+                    ->pluck('id');
+
+    $paras = TajweedQuran::whereIn('id', $paraIds)
+                  ->orderBy('para_no', 'asc')
+                  ->get()
+                  ->map(function($para) {
+                      $para['para_name'] = QuranParas::getParaName($para->para_no);
+                      return $para;
+                  });
+
+    if (request()->ajax()) {
+        return response()->json($paras);
+    }
+
+    return view('site.tajweed-quran.para_list', compact('paras'));
+}
+
+public function tajweedQuranParaShow($para_no)
+{
+    if ($para_no < 1 || $para_no > 30) {
+        abort(404);
+    }
+
+    $para_name = QuranParas::getParaName($para_no);
+    $para_info = TajweedQuran::where('para_no', $para_no)
+                      ->whereNotNull('parent_id')
+                      ->orderBy('id', 'asc')
+                      ->first();
+
+    if (!$para_info) {
+        return back()->with('error', 'No para information found for this para.');
+    }
+
+    $pages = TajweedQuran::where('para_no', $para_no)
+                  ->whereNotNull('parent_id')
+                  ->with('getParent')
+                  ->orderBy('number', 'asc')
+                  ->get();
+    if ($pages->isEmpty()) {
+        return back()->with('error', 'No pages found for this para.');
+    }
+    $prev = TajweedQuran::where('para_no', '<', $para_no)
+                 ->whereNotNull('para_no')
+                 ->whereNotNull('parent_id')
+                 ->orderBy('para_no', 'desc')
+                 ->value('para_no');
+
+    $next = TajweedQuran::where('para_no', '>', $para_no)
+                 ->whereNotNull('para_no')
+                 ->whereNotNull('parent_id')
+                 ->orderBy('para_no', 'asc')
+                 ->value('para_no');
+
+     $allParas = [];
+    for ($i = 1; $i <= 30; $i++) {
+        $allParas[] = [
+            'para_no' => $i,
+            'para_name' => QuranParas::getParaName($i)
+        ];
+    }
+
+    return view('site.tajweed-quran.para_show', [
+        'para_name' => $para_name,
+        'para_no' => $para_no,
+        'para_info' => $para_info,
+        'pages' => $pages,
+        'prev' => $prev,
+        'next' => $next,
+        'allParas' => $allParas
+    ]);
+}
 
     public function faq(){
         return view('site.faq');

@@ -36,7 +36,7 @@
                         <h2>{{ $surat->title }}</h2>
                         <ul class="breadcrumbs">
                             <li><a href="{{ route('site') }}" title="">Home</a></li>
-                            <li><a href="{{ route('tajweedQuran') }}" title="">Quran</a></li>
+                            <li><a href="{{ route('tajweedQuran') }}" title="">Tajweed Quran</a></li>
                             <li><a href="{{ route('tajweedQuranSurat', $surat->getPArent->slug) }}" >{{ $surat->getParent->title }}</a></li>
                             <li>Page - {{ $surat->number }}</li>
                         </ul>
@@ -60,14 +60,18 @@
                                                    type="submit">Previous</a>
                                             @endif
                                         </div>
-                                        
-                                        <!-- Center Button -->
-                                        <div>
-                                            <a href="{{ route('tajweedQuranSurat', $surat->getParent->slug) }}" 
-                                               class="thm-btn brd-rd40 mt-2">{{ $surat->getParent->title }}</a>
-                                        </div>
-                                
-                                        <!-- Next Button -->
+                                        <form id="searchForm" action="{{ route('tajweedQuranSearch') }}">
+                                            <div class="row mrg20 justify-content-center align-items-center text-center">
+                                                
+                                                <div class="col-md-6 col-sm-6 col-lg-3">
+                                                    <input  type="number" name="page" placeholder="Page No">
+                                                </div>
+                                                <div class="col-md-2 col-sm-12 col-lg-2">
+                                                    <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                      
                                         <div>
                                             @if(@$next)
                                                 <a href="{{ route('tajweedQuranSurat.page', [$surat->getParent->slug, $next->number ]) }}" 
@@ -75,39 +79,7 @@
                                                    type="submit">Next</a>
                                             @endif
                                         </div>
-                                        <form id="searchForm" action="{{ route('tajweedQuranSearch') }}">
-                                            <div>    
-                                                {{-- thm-btn brd-rd40 mt-3 --}}
-                                                    <button type="button" class="thm-btn brd-rd40 pull-right" onclick="openPageModal()">Search</button>
-                        
-                                            </div>
-                                            <script>
-                        function openPageModal() {
-                            $('#pageModal').modal('show')
-                            .on('shown.bs.modal', function () {
-                                // Add and remove classes once the modal is fully shown
-                                $('.modal-backdrop').remove();
-                            });
-                        }
-                            function confirmPage() {
-                            var pageNumber = document.getElementById('pageInput').value;
-                            if (pageNumber) {
-                                // Set the page input in the form
-                                var input = document.createElement('input');
-                                input.type = 'hidden';
-                                input.name = 'page';
-                                input.value = pageNumber;
-                                document.getElementById('searchForm').appendChild(input);
-                        
-                                // Submit the form
-                                document.getElementById('searchForm').submit();
-                            } else {
-                                alert('Please enter a page number');
-                            }
-                        }
-                        
-                                            </script>
-                                        </form>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3">
@@ -131,10 +103,10 @@
                                         </div>
                                         
                                         <!-- Center Button -->
-                                        <div>
+                                        {{-- <div>
                                             <a href="{{ route('tajweedQuranSurat', $surat->getParent->slug) }}" 
                                                class="thm-btn brd-rd40 mt-2">{{ $surat->getParent->title }}</a>
-                                        </div>
+                                        </div> --}}
                                 
                                         <!-- Next Button -->
                                         <div>

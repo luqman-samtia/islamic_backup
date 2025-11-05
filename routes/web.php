@@ -39,7 +39,7 @@ Route::match(['GET', 'POST'],'/contactUs', 'PublicController@contactUs')->name('
 Route::get('/page/{slug}', 'PublicController@page')->middleware('student.auth')->name('page');
 Route::get('/quran', 'PublicController@quran')->middleware('student.auth')->name('quranPage');
 Route::prefix('quran')->middleware('student.auth')->group(function(){
-     Route::get('/para/list', 'PublicController@quranParaList')->name('quran.paraList');
+    Route::get('/para/list', 'PublicController@quranParaList')->name('quran.paraList');
     
     Route::get('/para/{para_no}', 'PublicController@quranParaShow')->name('quran.para');
 
@@ -52,7 +52,10 @@ Route::prefix('quran')->middleware('student.auth')->group(function(){
 Route::prefix('tajweed-quran')->middleware('student.auth')->group(function(){
     Route::get('search', 'PublicController@tajweedQuranSearch')->name('tajweedQuranSearch');
     Route::get('/', 'PublicController@tajweedQuran')->name('tajweedQuran');
-   
+
+    Route::get('/para/list', 'PublicController@tajweedQuranParaList')->name('tajweedQuran.paraList');
+
+    Route::get('/para/{para_no}', 'PublicController@tajweedQuranParaShow')->name('tajweedQuran.para');
 
     Route::prefix('{surat}')->middleware('student.auth')->group(function(){
         Route::get('/', 'PublicController@tajweedQuranSurat')->name('tajweedQuranSurat');
@@ -91,6 +94,7 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::get('/student/update/password',  function () {
         return view('admin.students.updatepassword');
     })->name('student.update-password');
+    Route::post('/student/{id}/update-dates', [StudentController::class, 'updateDates'])->name('admin.student.update-dates');
     Route::post('/student/update-password', 'StudentController@StudentUpdatePassword')->name('information.student.update-password');
     // Route::get('/student/submit-feedback', function(){
     //     $feedback = Feedback::where('user_id', Auth::id())->first();

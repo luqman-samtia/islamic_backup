@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Slug;
 use App\TajweedQuran;
 use Illuminate\Http\Request;
+use App\Constants\QuranParas;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -15,6 +16,9 @@ class TajweedQuranController extends Controller
         if ($request->ajax()){
             return DataTables::of(TajweedQuran::parent($quran->id))->addColumn('image_complete_url', function($query){
                 return ($query->image) ? asset('storage/'.$query->image) : null;
+            })
+             ->addColumn('paraName', function($row){
+                return QuranParas::getParaName($row->para_no);
             })->make(true);
         }
         return view('admin.tajweed-quran.quran', compact('quran'));
@@ -59,7 +63,8 @@ class TajweedQuranController extends Controller
             $quranChild->save();
             return redirect()->route('tajweed.quran.quran', $quran->id);
         }
-        return view('admin.tajweed-quran.surah.add', compact('quran'));
+         $paras = QuranParas::getParas();
+        return view('admin.tajweed-quran.surah.add', compact('quran', 'paras'));
     }
 
 
@@ -88,6 +93,7 @@ class TajweedQuranController extends Controller
             $childQuran->number = $request->number;
             $childQuran->ayat_from = $request->ayat_from;
             $childQuran->ayat_to = $request->ayat_to;
+            $childQuran->para_no = $request->para_no;
             if ($request->hasFile('image')){
                 Storage::delete($childQuran->image);
                 $path = $request->image->store('tajweed-quran/resources/'.$quran->id);
@@ -96,7 +102,8 @@ class TajweedQuranController extends Controller
             $childQuran->save();
             return redirect()->route('tajweed.quran.quran',$childQuran->parent_id);
         }
-        return view('admin.tajweed-quran.surah.edit', compact('quran', 'childQuran'));
+        $paras = QuranParas::getParas();
+        return view('admin.tajweed-quran.surah.edit', compact('quran', 'childQuran', 'paras'));
     }
 
 

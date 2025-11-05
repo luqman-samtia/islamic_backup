@@ -105,10 +105,8 @@
 @push('js')
     <script>
        
-                //  COde for Students 
                 let studentIndex = {{ !empty($info) ? count($info) : 0 }};
                 var studentId = "{{ $student_id }}";
-// Add new student item
 $('#addStudentItem').click(function () {
     const newStudentItemContainer = `
         <div class="col-md-4 student-item-container">

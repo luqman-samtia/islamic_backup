@@ -6,13 +6,14 @@
             </a>
         </div>
         <div class="rspn-cnt">
+            @php($info = \App\Information::query()->first())
             <span>
                 <i class="fa fa-envelope thm-clr"></i>
-                <a href="mailto:qarihabib847@gmail.com" title="">
-                    <span>qarihabib847@gmail.com</span>
-                </a>
+                     @if(@$info['email']['label'] && @$info['email']['value'])
+                     <a href="mailto:{{$info['email']['value']}}"><span>{{ $info['email']['value']  }}</span></a>
+                    @endif
             </span>
-            @php($info = \App\Information::query()->first())
+            
             @if(@$info['whatsapp2']['label'] && @$info['whatsapp2']['value'])      
            
             <span><i class="fa fa-phone thm-clr"></i>+{{$info['whatsapp2']['value']}}</span>

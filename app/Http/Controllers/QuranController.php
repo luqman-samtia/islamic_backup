@@ -25,10 +25,7 @@ class QuranController extends Controller
                 return QuranParas::getParaName($row->para_no);
             })->make(true);
         }
-        // $paraNo = Quran::parent($quran->id)->select('para_no')->first();
-        // $paraNo = $paraNo['para_no'];
-        // $paraName = QuranParas::getParaName($paraNo);
-        // $quran['para'] = $paraName;
+       
         return view('admin.quran.quran', compact('quran'));
     }
 
@@ -75,6 +72,7 @@ class QuranController extends Controller
             return redirect()->route('quran.quran', $quran->id);
         }
         $paras = QuranParas::getParas();
+        // dd($paras);
         return view('admin.quran.surah.add', compact('quran', 'paras'));
     }
 

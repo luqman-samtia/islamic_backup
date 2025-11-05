@@ -47,7 +47,7 @@
         <section>
             <div class="mt-lg-5">
                 <div class="col-md-12 w-100" id="stickyFormContainer">
-                    @if($prev)
+                    {{-- @if($prev)
                         <div>
                             <a href="{{ route('tajweedQuranSurat', $prev->slug) }}" class="thm-btn brd-rd40 mb-lg-5 pull-left" type="submit">Previous</a>
                         </div>
@@ -56,40 +56,33 @@
                         <div>
                             <a href="{{ route('tajweedQuranSurat', $next->slug) }}" class="thm-btn brd-rd40 mb-lg-5 pull-right" type="submit">Next</a>
                         </div>
-                    @endif
-                    <form id="searchForm" action="{{ route('tajweedQuranSearch') }}">
-                        <div>    
-                            {{-- thm-btn brd-rd40 mt-3 --}}
-                                <button type="button" class="thm-btn brd-rd40 mb-lg-5 pull-right" onclick="openPageModal()">Search</button>
-
+                    @endif --}}
+                    <div class="row contact-form-row" id="stickyFormContainer">
+                        <div class="col-md-12">
+                            <div class="contact-form text-center mb-5">
+                                <form id="searchForm" action="{{ route('tajweedQuranSearch') }}">
+                                    <div class="row mrg20 justify-content-center align-items-center text-center">
+                                        <div class="col-md-3 col-sm-6 col-lg-3">
+                                            <select name="surat">
+                                                <option value="">-- Select Surah --</option>
+                                                @foreach ($tajweedQuran as $surat_item)
+                                                    <option value="{{ $surat_item->slug }}" {{ $surat_item->id === $surat->id ? 'selected' : '' }}>
+                                                        {{ $surat_item->title }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-6 col-lg-3">
+                                            <input type="number" name="page" placeholder="Page">
+                                        </div>
+                                        <div class="col-md-2 col-sm-12 col-lg-2">
+                                            <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <script>
-    function openPageModal() {
-        $('#pageModal').modal('show')
-        .on('shown.bs.modal', function () {
-            // Add and remove classes once the modal is fully shown
-            $('.modal-backdrop').remove();
-        });
-    }
-        function confirmPage() {
-        var pageNumber = document.getElementById('pageInput').value;
-        if (pageNumber) {
-            // Set the page input in the form
-            var input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'page';
-            input.value = pageNumber;
-            document.getElementById('searchForm').appendChild(input);
-
-            // Submit the form
-            document.getElementById('searchForm').submit();
-        } else {
-            alert('Please enter a page number');
-        }
-    }
-  
-                        </script>
-                    </form>
+                    </div>
                 </div>
                 <div class="container">
                     <div class="prtfl-wrap text-center">

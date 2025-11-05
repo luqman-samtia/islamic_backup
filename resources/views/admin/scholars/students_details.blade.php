@@ -39,24 +39,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3">
-                                    <label>Select Month</label>
-                                    <select name="month" class="form-control">
-                                        <option value="">-- All Months --</option>
-                                        <option value="1" {{ request('month') == 1 ? 'selected' : '' }}>January</option>
-                                        <option value="2" {{ request('month') == 2 ? 'selected' : '' }}>February</option>
-                                        <option value="3" {{ request('month') == 3 ? 'selected' : '' }}>March</option>
-                                        <option value="4" {{ request('month') == 4 ? 'selected' : '' }}>April</option>
-                                        <option value="5" {{ request('month') == 5 ? 'selected' : '' }}>May</option>
-                                        <option value="6" {{ request('month') == 6 ? 'selected' : '' }}>June</option>
-                                        <option value="7" {{ request('month') == 7 ? 'selected' : '' }}>July</option>
-                                        <option value="8" {{ request('month') == 8 ? 'selected' : '' }}>August</option>
-                                        <option value="9" {{ request('month') == 9 ? 'selected' : '' }}>September</option>
-                                        <option value="10" {{ request('month') == 10 ? 'selected' : '' }}>October</option>
-                                        <option value="11" {{ request('month') == 11 ? 'selected' : '' }}>November</option>
-                                        <option value="12" {{ request('month') == 12 ? 'selected' : '' }}>December</option>
-                                    </select>
-                                </div>
+                               
                                 <div class="col-md-3">
                                     <label>&nbsp;</label>
                                     <button type="submit" class="btn btn-primary btn-block">Filter</button>

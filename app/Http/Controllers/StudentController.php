@@ -247,8 +247,32 @@ class StudentController extends Controller
             return $data;
             }
             $scholars = Scholars::pluck('name', 'id');
-            // $students = User::where('type','student');
             return view('admin.students.index', compact('scholars'));
+    }
+
+    public function updateDates(Request $request, $id)
+    {
+        $request->validate([
+            'created_at' => 'required|date_format:Y-m-d',
+            'leave_date' => 'nullable|date_format:Y-m-d',
+        ]);
+
+        try {
+            $student = User::findOrFail($id);
+            
+            $student->created_at = $request->created_at;
+            $student->leave_date = $request->leave_date ?: null;
+            $student->save();
+
+            return response()->json([
+                'success' => 'Student dates updated successfully!'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -358,7 +382,7 @@ class StudentController extends Controller
     if ($request->has('month') && $request->month != '') {
         $query->whereMonth('created_at', $request->month);
     }
-
+    
     $studentData = $query->get();
 
     $years = Student::where('user_id', $student_id)
@@ -381,8 +405,11 @@ class StudentController extends Controller
         11 => '#29B6F6',
         12 => '#26C6DA'    
     ];
-
-    return view('admin.students.data', compact('studentData', 'years', 'monthColors'));
+ $studentDate = User::where('id', $student_id)
+                    ->select('id', 'created_at', 'leave_date')
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+    return view('admin.students.data', compact('studentData', 'years', 'monthColors', 'studentDate'));
 }
 
     public function StudentUpdatePassword(Request $request){
