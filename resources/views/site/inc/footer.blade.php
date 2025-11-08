@@ -51,10 +51,10 @@
                                     <h4>Information</h4>
                                     <ul class="cont-lst">
                                         @if(@$info['skype1']['label'] && @$info['skype1']['value'])
-                                        <li><i class="fa-brands fa-skype" style="padding: 5px 0px;"></i><a href="skype:live:{{$info['skype1']['value']}}?call">{{ $info['skype1']['label']  }}</a></li>
+                                        <li><i class="fa-brands fa-skype" style="padding: 5px 0px;"></i><a href="https://teams.microsoft.com/l/call/0/0?users={{$info['skype1']['value']}}">{{ $info['skype1']['label']  }}</a></li>
                                         @endif
                                         @if(@$info['skype2']['label'] && @$info['skype2']['value'])
-                                        <li><i class="fa-brands fa-skype" style="padding: 5px 0px;"></i><a href="skype:live:{{$info['skype2']['value']}}?call">{{ $info['skype2']['label']  }}</a></li>
+                                        <li><i class="fa-brands fa-skype" style="padding: 5px 0px;"></i><a href="https://teams.microsoft.com/l/call/0/0?users={{$info['skype2']['value']}}">{{ $info['skype2']['label']  }}</a></li>
                                         @endif
                                         @if(@$info['phone1']['label'] && @$info['phone1']['value'])
                                         <li><i class="flaticon-call"></i><a href="tel:{{$info['phone1']['value']}}">{{ $info['phone1']['label']  }}</a></li>
