@@ -69,7 +69,7 @@
                 <a href="#" title="">Islamic Resources</a>
                 <ul>
                     @foreach($resources as $resource)
-                        <li><a href="{{ route('page', $resource->slug) }}" title="{{ $resource->title }}">{{ $resource->title }}</a></li>
+                        <li><a href="{{ route('page', $resource->slug) }}?page=1" title="{{ $resource->title }}">{{ $resource->title }}</a></li>
                     @endforeach
                 </ul>
             </li>
