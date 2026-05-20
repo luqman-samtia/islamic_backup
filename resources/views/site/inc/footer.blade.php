@@ -70,7 +70,7 @@
                                         <li><i class="fa-brands fa-whatsapp" style="padding: 5px 0px;"></i><a href="https://wa.me/{{$info['whatsapp2']['value']}}"><span>{{ $info['whatsapp2']['label']  }}</span></a></li>
                                         @endif
                                         @if(@$info['email']['label'] && @$info['email']['value'])
-                                        <li><i class="flaticon-email"></i><a href="mailto:{{$info['email']['value']}}"><span>{{ $info['email']['value']  }}</span></a></li>
+                                        <li><i class="flaticon-email"></i><a href="mailto:{{$info['email']['value']}}"><span>{{ $info['email']['label']  }}</span></a></li>
                                         @endif
                                         @if(@$info['youtube']['label'] && @$info['youtube']['value'])
                                         <li><i class="fa-brands fa-youtube" style="padding: 5px 0px;color:red;"></i><a href="{{$info['youtube']['value']}}"><span class="__cf_email__" >{{ $info['youtube']['label']  }}</span></a></li>

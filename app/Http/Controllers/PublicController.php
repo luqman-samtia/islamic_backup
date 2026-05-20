@@ -169,7 +169,8 @@ public function quranParaShow($para_no)
                   ->whereNotNull('parent_id')
                   ->with('getParent')
                   ->orderBy('number', 'asc')
-                  ->get();
+                  ->get()
+                  ->unique('number');
     if ($pages->isEmpty()) {
         return back()->with('error', 'No pages found for this para.');
     }
@@ -221,19 +222,112 @@ public function quranSurat($slug)
     return view('site.quran.surat', compact('surat', 'prev', 'next', 'quran'));
 }
 
-public function quranSuratPage($slug, $page)
-{
-    $surat = Quran::whereHas('getParent', function($q) use ($slug){
-        $q->where('slug', $slug);
-    })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+// public function quranSuratPage($slug, $page)
+// {
+//     // $surat = Quran::whereHas('getParent', function($q) use ($slug){
+//     //     $q->where('slug', $slug);
+//     // })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
 
-    if(!$surat){
-        return abort(404);
-    }
+//     // if(!$surat){
+//     //     return abort(404);
+//     // }
+//     $decodedSlug = urldecode($slug);
+    
+//     $paraNo = array_search($decodedSlug, QuranParas::getParas());
+
+//     if ($paraNo === false && preg_match('/^para-?(\d+)$/i', $slug, $matches)) {
+//         $paraNo = $matches[1]; 
+//     }
+
+//     if ($paraNo !== false) {
+//         $surat = Quran::where(function($q) use ($paraNo) {
+//             $q->where('para_no', $paraNo)->orWhereHas('getParent', function($sub) use ($paraNo) {
+//                 $sub->where('para_no', $paraNo);
+//             });
+//         })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+//     } else {
+//         $surat = Quran::whereHas('getParent', function($q) use ($slug){
+//             $q->where('slug', $slug);
+//         })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+//     }
        
 
-    $prev = Quran::where('id', '<', $surat->id)->where('parent_id', $surat->parent_id)->orderBy('id','desc')->first();
-    $next = Quran::where('id', '>', $surat->id)->where('parent_id', $surat->parent_id)->orderBy('id')->first();
+//     $prev = Quran::where('id', '<', $surat->id)->where('parent_id', $surat->parent_id)->orderBy('id','desc')->first();
+//     $next = Quran::where('id', '>', $surat->id)->where('parent_id', $surat->parent_id)->orderBy('id')->first();
+
+//     return view('site.quran.suratpage', compact('surat', 'prev', 'next'));
+// }
+
+public function quranSuratPage($slug, $page)
+{
+    $decodedSlug = urldecode($slug);
+    
+    $paraNo = array_search($decodedSlug, QuranParas::getParas());
+    $isParaMode = false;
+
+    if ($paraNo !== false) {
+        $isParaMode = true; 
+    } elseif (preg_match('/^para-?(\d+)$/i', $slug, $matches)) {
+        $paraNo = $matches[1];
+        $isParaMode = true; 
+    }
+
+    if ($isParaMode) {
+        $surat = Quran::where(function($q) use ($paraNo) {
+            $q->where('para_no', $paraNo)->orWhereHas('getParent', function($sub) use ($paraNo) {
+                $sub->where('para_no', $paraNo);
+            });
+        })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+    } else {
+        $surat = Quran::whereHas('getParent', function($q) use ($slug){
+            $q->where('slug', $slug);
+        })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+    }
+
+    if(!$surat) {
+        return abort(404);
+    }
+
+   if ($isParaMode) {
+        $prev = Quran::with('getParent')
+            ->where('number', '<', $surat->number) 
+            ->where(function($q) use ($paraNo) {
+                $q->where('para_no', $paraNo)->orWhereHas('getParent', function($sub) use ($paraNo) { $sub->where('para_no', $paraNo); });
+            })
+            ->whereNotNull('parent_id')
+            ->orderBy('number','desc') 
+            ->first();
+
+        $next = Quran::with('getParent')
+            ->where('number', '>', $surat->number) 
+            ->where(function($q) use ($paraNo) {
+                $q->where('para_no', $paraNo)->orWhereHas('getParent', function($sub) use ($paraNo) { $sub->where('para_no', $paraNo); });
+            })
+            ->whereNotNull('parent_id')
+            ->orderBy('number', 'asc') 
+            ->first();
+    } else {
+        $prev = Quran::with('getParent')
+            ->where('number', '<', $surat->number) 
+            ->where('parent_id', $surat->parent_id)
+            ->orderBy('number','desc') 
+            ->first();
+            
+        $next = Quran::with('getParent')
+            ->where('number', '>', $surat->number) 
+            ->where('parent_id', $surat->parent_id)
+            ->orderBy('number', 'asc') 
+            ->first();
+    }
+    if ($isParaMode) {
+        if ($surat->getParent) {
+            $surat->getParent->slug = 'para-' . $paraNo;
+        }
+    } else {
+        if ($surat->getParent) {
+            $surat->getParent->slug = $surat->getParent->getOriginal('slug');
+        }
+    }
 
     return view('site.quran.suratpage', compact('surat', 'prev', 'next'));
 }
@@ -323,7 +417,8 @@ public function tajweedQuranParaShow($para_no)
                   ->whereNotNull('parent_id')
                   ->with('getParent')
                   ->orderBy('number', 'asc')
-                  ->get();
+                  ->get()
+                 ->unique('number');
     if ($pages->isEmpty()) {
         return back()->with('error', 'No pages found for this para.');
     }
@@ -448,7 +543,7 @@ public function tajweedQuranParaShow($para_no)
         }
     }
 
-    $data['search'] = $search->orderBy('number', 'asc')->get();
+    $data['search'] = $search->orderBy('number', 'asc')->get()->unique('number');
     
     if ($data['search']->isEmpty()) {
         $data['error'] = 'No results found for your search.';
@@ -523,7 +618,7 @@ public function tajweedQuranParaShow($para_no)
         }
     }
 
-    $data['search'] = $search->orderBy('number', 'asc')->get();
+    $data['search'] = $search->orderBy('number', 'asc')->get()->unique('number');
     
     if ($data['search']->isEmpty()) {
         $data['error'] = 'No results found for your search.';

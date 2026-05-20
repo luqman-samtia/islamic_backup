@@ -59,18 +59,17 @@ class StudentController extends Controller
 
        
         $validatedData['password'] = Hash::make($request->password);
-        $validatedData['type'] = 'student';  // Set type to 'student'
-        $validatedData['is_verified'] = 0;   // Mark as not verified
+        $validatedData['type'] = 'student';  
+        $validatedData['is_verified'] = 0;   
 
         
             $user = User::create($validatedData);
           
            
             try {
-                Mail::to('luqmansamtia617@gmail.com')->send(new AdminVerification($user));
+                Mail::to('shifaacademy63@gmail.com')->send(new AdminVerification($user));
                 $successMessage = 'Registration successful! Waiting for admin approval.';
             } catch (\Exception $e) {
-                // Log the error for debugging
                 \Log::error('Mail sending failed: ' . $e->getMessage());
                 $successMessage = 'Registration successful! However, we were unable to send an email notification to the admin.';
             }
@@ -82,7 +81,7 @@ class StudentController extends Controller
     // Student login
     public function login(Request $request)
     {
-        // Validate the input data
+        
         $validatedData = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string|min:8',
@@ -117,9 +116,7 @@ class StudentController extends Controller
         $user = User::find($id);
         $user->is_verified = 1; 
         $user->save();
-        
-        // Mail::to($user->email)->send(new StudentVerified($user));
-    
+            
         try {
             Mail::to($user->email)->send(new StudentVerified($user));
             $successMessage = 'Student verified successfully!';
@@ -336,24 +333,6 @@ class StudentController extends Controller
             return view('admin.students.multiStudent', $data);
         }
 
-    //     public function update(Request $request)
-    // {
-    //     $studentId =  $request->input('student_id');
-        
-    //     $studentItems = $request->input('student_items', []);
-
-    //     foreach ($studentItems as $item) {
-    //         Student::updateOrCreate([         
-    //           'user_id'=>$studentId,
-    //         'type' => $item['type'],
-    //         'title' => $item['title'],
-    //         'link' => $item['link'],
-    //         'created_at' => $item['created_at'],
-    //     ]);
-    //     }
-
-    //      return response()->json(['success' => true]);
-    // }
   public function update(Request $request)
 {
     $studentId = $request->input('student_id');
@@ -365,9 +344,7 @@ class StudentController extends Controller
     $submittedIds = [];
 
     foreach ($studentItems as $item) {
-        // Check if this is an existing record (has an id that exists in DB)
         if (!empty($item['id']) && is_numeric($item['id']) && in_array((int)$item['id'], $existingIds)) {
-            // Update existing record
             Student::where('id', $item['id'])->update([
                 'type' => $item['type'] ?? 'Student',
                 'title' => $item['title'],
@@ -376,7 +353,6 @@ class StudentController extends Controller
             ]);
             $submittedIds[] = (int)$item['id'];
         } else {
-            // Create new record (id is null or doesn't exist)
             $newRecord = Student::create([         
                 'user_id' => $studentId,
                 'type' => $item['type'] ?? 'Student',
@@ -388,7 +364,6 @@ class StudentController extends Controller
         }
     }
 
-    // Delete records that were not submitted (removed items)
     Student::where('user_id', $studentId)
         ->whereNotIn('id', $submittedIds)
         ->delete();

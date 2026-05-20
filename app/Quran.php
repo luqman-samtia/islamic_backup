@@ -45,7 +45,19 @@ class Quran extends Model
 
     public function getParent()
     {
-        return $this->hasOne(Quran::class, 'id', 'parent_id');
+        // return $this->hasOne(Quran::class, 'id', 'parent_id');
+        return $this->belongsTo(Quran::class, 'parent_id');
+    }
+    public function getSlugAttribute($value)
+    {
+        if (!empty($this->para_no)) {
+            $arabicName = \App\Constants\QuranParas::getParaName($this->para_no);
+            if ($arabicName) {
+                return $arabicName;
+            }
+        }
+        
+        return $value;
     }
     public function SearchgetParent()
     {

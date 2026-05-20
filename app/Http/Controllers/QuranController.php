@@ -72,7 +72,6 @@ class QuranController extends Controller
             return redirect()->route('quran.quran', $quran->id);
         }
         $paras = QuranParas::getParas();
-        // dd($paras);
         return view('admin.quran.surah.add', compact('quran', 'paras'));
     }
 

@@ -34,11 +34,9 @@
                 data-toggle="dropdown"
                 aria-haspopup="true" 
                 aria-expanded="false"
-            >@if (Auth::user()->type == 'scholar')
-                <span>scholar</span>
-                @else
+            >
             {{Auth::user()->name}}
-            @endif
+           
                 </a>
             <div class="dropdown-menu" aria-labelledby="profileImage">
                 <a class="dropdown-item" href="{{url('admin/home')}}">Dashboard</a>

@@ -92,7 +92,8 @@
                                             Page - {{ $page->number }}
                                             <br>
                                         </labe>
-                                        <a href="{{ route('quranSurat.page', [$page->getParent->slug, $page->number]) }}" title="">
+                                        {{-- <a href="{{ route('quranSurat.page', [$page->getParent->slug, $page->number]) }}" title=""> --}}
+                                            <a href="{{ route('quranSurat.page', ['para-'.$para_no, $page->number]) }}" title="">
                                             <br>
                                             <img src="{{ asset('storage/'.$page->image) }}" alt="Page {{ $page->number }}" >
                                         </a>
