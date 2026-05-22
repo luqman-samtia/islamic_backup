@@ -1,6 +1,6 @@
 @extends('site.layout.master')
 
-@section('title', $surat->title)
+@section('title', $surat->para_name ?? $surat->title)
 
 @section('content')
     <main>
@@ -34,7 +34,7 @@
                 <div class="fixed-bg" style="background-image: url('{{ asset('assets/images/parallax12.jpg') }}');"></div>
                 <div class="container">
                     <div class="page-title-wrap">
-                        <h2>{{ $surat->title }}</h2>
+                        <h2>{{ $surat->para_name ?? $surat->title }}</h2>
                         <ul class="breadcrumbs">
                             <li><a href="{{ route('site') }}" title="">Home</a></li>
                             <li><a href="{{ route('tajweedQuran') }}" title="">Tajweed Quran</a></li>

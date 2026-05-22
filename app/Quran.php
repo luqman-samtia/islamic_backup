@@ -48,7 +48,7 @@ class Quran extends Model
         // return $this->hasOne(Quran::class, 'id', 'parent_id');
         return $this->belongsTo(Quran::class, 'parent_id');
     }
-    public function getSlugAttribute($value)
+    public function getParaNameAttribute($value)
     {
         if (!empty($this->para_no)) {
             $arabicName = \App\Constants\QuranParas::getParaName($this->para_no);

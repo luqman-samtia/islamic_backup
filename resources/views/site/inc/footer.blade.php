@@ -2,6 +2,7 @@
     // Retrieve the first Information record
     $information = \App\Information::query()->first();  
 @endphp
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 <footer>
     <div class="gap top-spac70 drk-bg2 remove-bottom">
         <div class="container">
@@ -51,10 +52,10 @@
                                     <h4>Information</h4>
                                     <ul class="cont-lst">
                                         @if(@$info['skype1']['label'] && @$info['skype1']['value'])
-                                        <li><i class="fa-brands fa-skype" style="padding: 5px 0px;"></i><a href="https://teams.microsoft.com/l/call/0/0?users={{$info['skype1']['value']}}">{{ $info['skype1']['label']  }}</a></li>
+                                        <li><i class="bi bi-microsoft-teams" style="padding: 5px 0px;"></i><a href="https://teams.microsoft.com/l/call/0/0?users={{$info['skype1']['value']}}">{{ $info['skype1']['label']  }}</a></li>
                                         @endif
                                         @if(@$info['skype2']['label'] && @$info['skype2']['value'])
-                                        <li><i class="fa-brands fa-skype" style="padding: 5px 0px;"></i><a href="https://teams.microsoft.com/l/call/0/0?users={{$info['skype2']['value']}}">{{ $info['skype2']['label']  }}</a></li>
+                                        <li><i class="bi bi-microsoft-teams" style="padding: 5px 0px;"></i><a href="https://teams.microsoft.com/l/call/0/0?users={{$info['skype2']['value']}}">{{ $info['skype2']['label']  }}</a></li>
                                         @endif
                                         @if(@$info['phone1']['label'] && @$info['phone1']['value'])
                                         <li><i class="flaticon-call"></i><a href="tel:{{$info['phone1']['value']}}">{{ $info['phone1']['label']  }}</a></li>

@@ -36,12 +36,26 @@ class TajweedQuran extends Model
     {
         return $this->hasMany(TajweedQuran::class, 'parent_id', 'id');
     }
-
+    public function getParaNameAttribute($value)
+    {
+        if (!empty($this->para_no)) {
+            $arabicName = \App\Constants\QuranParas::getParaName($this->para_no);
+            if ($arabicName) {
+                return $arabicName;
+            }
+        }
+        
+        return $value;
+    }
     public function getParent()
     {
-        return $this->hasOne(TajweedQuran::class, 'id', 'parent_id');
+        return $this->belongsTo(TajweedQuran::class,'parent_id');
     }
 
+    public function SearchgetParent()
+    {
+        return $this->belongsTo(Quran::class, 'parent_id');
+    }
     public function delete(){
         @unlink(public_path("/storage/".$this->image));
         $path = public_path('/storage/quran/'.$this->id);

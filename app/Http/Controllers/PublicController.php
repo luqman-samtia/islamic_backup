@@ -356,24 +356,83 @@ public function quranSuratPage($slug, $page)
         return view('site.tajweed-quran.surat', $data);
     }
 
-    public function tajweedQuranSuratPage($slug, $page){
+    // public function tajweedQuranSuratPage($slug, $page){
 
-        $data['surat'] = TajweedQuran::whereHas('getParent', function($q) use ($slug){
-            $q->where('slug', $slug);
-        })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+    //     $data['surat'] = TajweedQuran::whereHas('getParent', function($q) use ($slug){
+    //         $q->where('slug', $slug);
+    //     })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
 
-        if(!$data['surat'])
-            abort(404);
+    //     if(!$data['surat'])
+    //         abort(404);
 
-        $prev = TajweedQuran::where('id', '<', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id','desc')->first();
-        $next = TajweedQuran::where('id', '>', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id')->first();
+    //     $prev = TajweedQuran::where('id', '<', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id','desc')->first();
+    //     $next = TajweedQuran::where('id', '>', $data['surat']->id)->where('parent_id', $data['surat']->parent_id)->orderBy('id')->first();
+
+    //     $data['prev'] = $prev;
+    //     $data['next'] = $next;
+
+    //     return view('site.tajweed-quran.suratpage', $data);
+    // }
+    public function tajweedQuranSuratPage($slug, $page)
+    {
+        $decodedSlug = urldecode($slug);
+        
+        $paraNo = array_search($decodedSlug, \App\Constants\QuranParas::getParas());
+        if ($paraNo === false && preg_match('/^para-?(\d+)$/i', $slug, $matches)) {
+            $paraNo = $matches[1];
+        }
+
+        if ($paraNo !== false) {
+            $data['surat'] = TajweedQuran::where(function($q) use ($paraNo) {
+                $q->where('para_no', $paraNo)->orWhereHas('getParent', function($sub) use ($paraNo) {
+                    $sub->where('para_no', $paraNo);
+                });
+            })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+        } else {
+            $data['surat'] = TajweedQuran::whereHas('getParent', function($q) use ($slug){
+                $q->where('slug', $slug);
+            })->with('getParent')->whereNotNull('parent_id')->where('number', $page)->first();
+        }
+
+        if(!$data['surat']) {
+            return abort(404);
+        }
+
+        $activeParaNo = $paraNo !== false ? $paraNo : ($data['surat']->para_no ?? ($data['surat']->getParent->para_no ?? null));
+
+        if ($activeParaNo) {
+            $correctSlug = 'para-' . $activeParaNo;
+            if ($slug !== $correctSlug) {
+                return redirect()->route('tajweedQuranSurat.page', [$correctSlug, $page]);
+            }
+        }
+
+        if ($activeParaNo) {
+            $prev = TajweedQuran::with('getParent')->where('number', '<', $data['surat']->number) 
+                ->where(function($q) use ($activeParaNo) {
+                    $q->where('para_no', $activeParaNo)->orWhereHas('getParent', function($sub) use ($activeParaNo) { $sub->where('para_no', $activeParaNo); });
+                })
+                ->whereNotNull('parent_id')->orderBy('number','desc')->first();
+
+            $next = TajweedQuran::with('getParent')->where('number', '>', $data['surat']->number) 
+                ->where(function($q) use ($activeParaNo) {
+                    $q->where('para_no', $activeParaNo)->orWhereHas('getParent', function($sub) use ($activeParaNo) { $sub->where('para_no', $activeParaNo); });
+                })
+                ->whereNotNull('parent_id')->orderBy('number', 'asc')->first();
+        } else {
+            $prev = TajweedQuran::with('getParent')->where('number', '<', $data['surat']->number)->where('parent_id', $data['surat']->parent_id)->orderBy('number','desc')->first();
+            $next = TajweedQuran::with('getParent')->where('number', '>', $data['surat']->number)->where('parent_id', $data['surat']->parent_id)->orderBy('number', 'asc')->first();
+        }
+
+        if ($activeParaNo && $data['surat']->getParent) {
+            $data['surat']->getParent->slug = 'para-' . $activeParaNo;
+        }
 
         $data['prev'] = $prev;
         $data['next'] = $next;
 
         return view('site.tajweed-quran.suratpage', $data);
     }
-
     public function tajweedQuranParaList()
 {
     $paraIds = TajweedQuran::whereNotNull('para_no')
