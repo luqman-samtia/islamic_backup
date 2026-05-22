@@ -67,39 +67,39 @@
     border-radius: 50%;
 }
 /* end floating */
-        .thm-btn, .secndry-btn{
-            box-shadow: 0 5px 10px rgba(0,0,0,0.15) !important;
-        }
-        header.sticky-active{
-            box-shadow: none !important;
-        }
-        @media only screen and (min-width: 996px) {
+.thm-btn, .secndry-btn{
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15) !important;
+}
+header.sticky-active{
+    box-shadow: none !important;
+}
+@media only screen and (min-width: 996px) {
 
-            .sticky{
-                position: fixed;
-                top: 80px;
-                background-color: white;
-                z-index: 99;
-                box-shadow: 0 3px 5px rgba(0,0,0,.08);
-                width: 100%;
-                left: 15px;
-            }
-            .contact-form-row.sticky .contact-form{
-                margin-bottom: 10px !important;
-            }
-        }
-        /* login_register Modal css */
-        .modal {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
+    .sticky{
+        position: fixed;
+        top: 80px;
+        background-color: white;
+        z-index: 99;
+        box-shadow: 0 3px 5px rgba(0,0,0,.08);
+        width: 100%;
+        left: 15px;
+    }
+    .contact-form-row.sticky .contact-form{
+        margin-bottom: 10px !important;
+    }
+}
+/* login_register Modal css */
+.modal {
+display: none;
+position: fixed;
+z-index: 999;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgb(0,0,0);
+background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
@@ -124,7 +124,62 @@
     text-decoration: none;
     cursor: pointer;
 }
+ /* Pageloader css */
+.pageloader-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffffff; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+}
 
+.custom-quran-loader {
+    width: 90px;
+    height: 90px;
+    animation: float-quran 2.5s ease-in-out infinite;
+}
+
+.book-path, .rehal-path {
+    fill: transparent;
+    stroke: #cda253; 
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.book-path {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: draw-quran 2s ease-in-out infinite alternate;
+}
+
+.rehal-path {
+    stroke-dasharray: 50;
+    stroke-dashoffset: 50;
+    animation: draw-rehal 2s ease-in-out infinite alternate;
+    animation-delay: 0.2s; 
+}
+
+@keyframes draw-quran {
+    0% { stroke-dashoffset: 200; fill: transparent; }
+    100% { stroke-dashoffset: 0; fill: rgba(205, 162, 83, 0.15);  }
+}
+
+@keyframes draw-rehal {
+    0% { stroke-dashoffset: 50; }
+    100% { stroke-dashoffset: 0; }
+}
+
+@keyframes float-quran {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+}
+/* End page loader css  */
 
     </style>
 
