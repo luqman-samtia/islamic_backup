@@ -39,11 +39,11 @@
                                                     </div>
                                                     @endif
                                                 </div>
+                                                {{-- {{ request()->page }} --}}
                                                 <div class="col-md-3 col-sm-3">
-                                                    {{-- {{ request()->page }} --}}
                                                     <input type="number" name="page" placeholder="Enter Page No" value="">
                                                 </div>
-                                                <div class="col-md-3 col-sm-3">
+                                                <div class="col-md-2 col-sm-3">
                                                     <button class="thm-btn brd-rd40 mt-3 pull-right" type="submit">Search</button>
                                                 </div>
                                                 <div class="col-md-3 col-sm-3">

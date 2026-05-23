@@ -58,7 +58,7 @@
                                                     <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
                                                 </div> --}}
                                                 <div class="col-md-3 col-sm-6 col-lg-3">
-                                                    <input type="number" name="page" placeholder="Page" >
+                                                    <input type="number" name="page" placeholder="Enter Page No" >
                                                 </div>
                                                 <div class="col-md-3 col-sm-12 col-lg-3">
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
@@ -82,7 +82,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <input type="number" id="pageInput" placeholder="Enter page number" class="form-control">
+                                            <input type="number" id="pageInput" placeholder="Enter Page No" class="form-control">
                                         </div>
                                         <div class="modal-footer">
                                             {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
@@ -145,10 +145,10 @@
                                         
                                         <!-- Center Button -->
                                         <div>
-                                            @if($parent_slug)
+                                            {{-- @if($parent_slug)
                                             <a href="{{ route('tajweedQuranSurat', $parent_slug) }}" 
                                                class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
-                                               @endif
+                                               @endif --}}
 
                                                {{-- @if(!empty($parent_slug))
                                                 <a href="{{ route('tajweedQuran', ['surat' => $parent_slug]) }}" 

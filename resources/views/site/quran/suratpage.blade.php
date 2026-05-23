@@ -18,7 +18,7 @@
                         <h2>{{ $surat->para_name ?? $surat->getParent->title }}</h2>
                         <ul class="breadcrumbs">
                             <li><a href="{{ route('site') }}" title="">Home</a></li>
-                            <li><a href="{{ route('quranPage') }}" title="">Quran</a></li>
+                            <li><a href="{{ route('quranPage') }}" title="">Tajweed Quran 15</a></li>
                             <li><a href="{{ route('quranSurat', $surat->getPArent->slug) }}" >{{ $surat->getParent->title }}</a></li>
                             <li>Page - {{ $surat->number }}</li>
                         </ul>
@@ -48,25 +48,15 @@
                                             @endif
                                         </div>
                                         <form id="searchForm" action="{{ route('search') }}">
-                                    <div class="row mrg20 justify-content-center align-items-center text-center">
-                                        {{-- <div class="col-md-3 col-sm-6 col-lg-3">
-                                            <select name="surat">
-                                                <option value="">-- Select Surah --</option>
-                                                @foreach ($quran as $surat_item)
-                                                    <option value="{{ $surat_item->slug }}" {{ $surat_item->id === $surat->id ? 'selected' : '' }}>
-                                                        {{ $surat_item->title }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div> --}}
-                                        <div class="col-md-6 col-sm-6 col-lg-3">
-                                            <input  type="number" name="page" placeholder="Page No">
-                                        </div>
-                                        <div class="col-md-2 col-sm-12 col-lg-2">
-                                            <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                            <div class="d-flex justify-content-center align-items-center flex-wrap" style="gap: 15px;"> 
+                                                <div>
+                                                    <input type="number" name="page" placeholder="Enter Page No" style="margin-bottom: 0; width: 200px; height: 45px; padding: 10px 20px; border: 1px solid #e1e1e1;">
+                                                </div>
+                                                <div>
+                                                    <button class="thm-btn brd-rd40 search-btn-small" type="submit" style="margin-top: 0;">Search</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     
                                         <div>
                                             @if(@$next)

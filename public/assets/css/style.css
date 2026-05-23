@@ -846,8 +846,8 @@ header.style1.sticky-active nav > div > ul > li {color: #666;}
   position: relative;
   z-index: 1;
   overflow: hidden;
-  padding: 14.5px 45px;
-  font-size: 14px;
+  padding: 10px 20px;
+  font-size: 12px;
   font-weight: 500;
   -webkit-box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   -ms-box-shadow: 0 10px 30px rgba(0,0,0,0.15);

@@ -1,6 +1,6 @@
 @extends('site.layout.master')
 
-@section('title', 'Para ' . $para_name)
+@section('title', $para_name)
 
 @section('custom_css')
     <style>
@@ -47,7 +47,7 @@
                         <h2> {{ $para_name }}</h2>
                         <ul class="breadcrumbs">
                             <li><a href="{{ route('site') }}" title="">Home</a></li>
-                            <li><a href="{{ route('tajweedQuran') }}" title="">Tajweed Quran</a></li>
+                            <li><a href="{{ route('tajweedQuran') }}" title="">Tajweed Quran 16</a></li>
                             <li> {{ $para_name }}</li>
                         </ul>
                     </div>
@@ -72,7 +72,7 @@
                             </div>
                             <!-- Page Input -->
                             <div class="col-md-3 col-sm-6 col-lg-3">
-                                <input type="number" name="page" placeholder="Page">
+                                <input type="number" name="page" placeholder="Enter Page No">
                             </div>
                             <!-- Search Button -->
                             <div class="col-md-2 col-sm-12 col-lg-2">

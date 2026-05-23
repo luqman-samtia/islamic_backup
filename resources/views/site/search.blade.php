@@ -79,7 +79,7 @@
                                                         <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
                                                     </div> --}}
                                                     <div class="col-md-2 col-sm-6 col-lg-2">
-                                                        <input type="number" name="page" placeholder="Page" value="">
+                                                        <input type="number" name="page" placeholder="Enter Page No" value="">
                                                     </div>
 
                                                     <div class="col-md-2 col-sm-12 col-lg-2">
@@ -108,11 +108,11 @@
                                                             @endif
                                                         </div>
                                                         <!-- Center Button -->
-                                                        <div>
+                                                        {{-- <div>
                                                             @if($parent_slug)
                                                                 <a href="{{ route('quranSurat', $parent_slug) }}" class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
                                                             @endif
-                                                        </div>
+                                                        </div> --}}
                                                         <!-- Next Button -->
                                                         <div>
                                                             @if(@$next)

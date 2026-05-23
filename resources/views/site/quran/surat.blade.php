@@ -37,7 +37,7 @@
                         <h2>{{ $surat->para_name ?? $surat->title }}</h2>
                         <ul class="breadcrumbs">
                             <li><a href="{{ route('site') }}" title="">Home</a></li>
-                            <li><a href="{{ route('quranPage') }}" title="">Quran</a></li>
+                            <li><a href="{{ route('quranPage') }}" title="">Tajweed Quran 15</a></li>
                             <li>{{ $surat->para_name ?? $surat->title }}</li>
                         </ul>
                     </div>
@@ -65,7 +65,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-3 col-sm-6 col-lg-3">
-                                            <input type="number" name="page" placeholder="Page">
+                                            <input type="number" name="page" placeholder=" Enter Page No">
                                         </div>
                                         <div class="col-md-2 col-sm-12 col-lg-2">
                                             <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>

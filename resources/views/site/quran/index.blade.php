@@ -1,6 +1,6 @@
 @extends('site.layout.master')
 
-@section('title', 'Quran')
+@section('title', 'Tajweed Quran 15')
 
 @section('custom_css')
     <style>
@@ -82,10 +82,10 @@
                 <div class="fixed-bg" style="background-image: url('{{ asset('assets/images/parallax12.jpg') }}');"></div>
                 <div class="container">
                     <div class="page-title-wrap">
-                        <h2>Quran</h2>
+                        <h2>Tajweed Quran 15</h2>
                         <ul class="breadcrumbs">
                             <li><a href="{{ route('site') }}" title="">Home</a></li>
-                            <li>Quran</li>
+                            <li>Tajweed Quran 15</li>
                         </ul>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                                                 </div>
 
                                                 <div class="col-md-3 col-sm-6 col-lg-3">
-                                                    <input type="number" name="page" placeholder="Page">
+                                                    <input type="number" name="page" placeholder="Enter Page No">
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-lg-2">
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
