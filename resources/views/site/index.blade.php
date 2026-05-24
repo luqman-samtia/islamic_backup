@@ -54,6 +54,38 @@
                 </div>
             </div>
         </section>
+        <div class="sticky-admission-bar" id="stickyAdmissionBar">
+    <div class="container" style="position: relative;">
+        
+        <button class="close-sticky-bar d-md-none" onclick="closeStickyBar()" style="position: absolute; top: -10px; right: 0px; z-index: 999999; padding: 10px;">
+            <i class="fa fa-times"></i>
+        </button>
+        
+        <div class="row align-items-center">
+            <div class="col-md-8 sticky-txt-wrap">
+                <div class="d-inline-block d-md-flex align-items-center" style="padding-right: 25px;">
+                    <span class="blink-badge"><i class="fa fa-bell-o"></i> Limited Seats</span>
+                    <h4 style="color: #ffffff; margin: 0; font-weight: 700; display: inline-block;" class="mobile-hd-txt">
+                        <span style="color: #cfa54f;">Admissions Open</span> For New Batch!
+                    </h4>
+                </div>
+                <p style="color: #aaaaaa; margin: 5px 0 0 0; padding-left: 2px;" class="mobile-p-txt">
+                    Enroll today for Tajweed, Qira'at, & Dars-e-Nizami courses with expert scholars.
+                </p>
+            </div>
+            
+           <div class="col-md-4 sticky-btn-wrap d-flex justify-content-center justify-content-md-end align-items-center mt-3 mt-md-0">
+                <a href="javascript:void(0);" onclick="openModal('student'); showSignup();" class="thm-btn brd-rd40 glow-btn-premium mb-0">
+                    Enroll Now <i class="fa fa-arrow-circle-right" style="margin-left: 5px;"></i>
+                </a>
+                
+                <button class="close-sticky-bar d-none d-md-block" title="Close" onclick="closeStickyBar()">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
         <section>
             <div class="gap">
                 <div class="lft-shp shp-lyr"></div>
@@ -320,3 +352,19 @@
    
 
 @stop
+
+@section('custom_js')
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var stickyBar = document.getElementById('stickyAdmissionBar');
+        
+        setTimeout(function() {
+            stickyBar.classList.add('show');
+        }, 1500);
+    });
+
+    function closeStickyBar() {
+        var stickyBar = document.getElementById('stickyAdmissionBar');
+        stickyBar.classList.remove('show');        
+    }
+</script>

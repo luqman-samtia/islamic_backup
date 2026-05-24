@@ -91,9 +91,22 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     Route::post('/student/update-links', 'StudentController@update')->name('admin.student.update');
     Route::post('/student/remove-student-item', 'StudentController@removeStudentItem')->name('information.student-item.destroy');
     Route::get('/student/show/info', 'StudentController@StudentDataShow')->name('information.student-data.show');
-    Route::get('/student/update/password',  function () {
-        return view('admin.students.updatepassword');
-    })->name('student.update-password');
+    // Route::get('/student/update/password',  function () {
+    //     return view('admin.students.updatepassword');
+    // })->name('student.update-password');
+    Route::get('/student/update/password', function () {
+    if (Auth::check() && Auth::user()->type === 'admin') {
+        return redirect('/admin/admin/update/password');
+    }
+    return view('admin.students.updatepassword');
+})->middleware('auth')->name('student.update-password');
+
+Route::get('/admin/update/password', function () {
+    if (Auth::check() && Auth::user()->type !== 'admin') {
+        return redirect('/student/update/password');
+    }
+    return view('admin.students.updatepassword');
+})->middleware('auth')->name('admin.update-password');
     Route::post('/student/{id}/update-dates', [StudentController::class, 'updateDates'])->name('admin.student.update-dates');
     Route::post('/student/update-password', 'StudentController@StudentUpdatePassword')->name('information.student.update-password');
     // Route::get('/student/submit-feedback', function(){

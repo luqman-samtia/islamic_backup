@@ -25,6 +25,10 @@
                                 <input type="number" name="number" min="1" class="form-control" required value="{{ $childResource->number }}">
                             </div>
                             <div class="form-group">
+                                <label>Takhti Number (Optional)</label>
+                                <input type="number" class="form-control" name="takhti_number" value="{{ @$childResource->takhti_number }}" placeholder="Enter Takhti Number">
+                            </div>
+                            <div class="form-group">
                                 <label> Edit Image </label>
                                 <div class="d-flex">
                                     <img src="{{ asset('storage/'.$childResource->image) }}" style="width: 200px;"/>

@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\File;
 class Resources extends Model
 {
     protected $fillable = [
-        'title', 'image', 'parent_id', 'slug', 'number'
+        'title', 'image', 'parent_id', 'slug', 'number','takhti_number'
     ];
 
     protected $appends = ['image_url'];

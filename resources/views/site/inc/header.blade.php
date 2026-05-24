@@ -38,22 +38,24 @@
                 </div>
          
             @else
-                <div class="dropdown" style="display: inline-block;">
-        
-           <a class="btn btn-danger dropdown-toggle"
-            href="javascript:void(0);"
-            style="background:#d1ad3c;color:white;border:none;border-radius:50px;margin-left:5px;margin-top:8px; cursor:pointer;"
-            id="loginDropdown"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-        >Login</a>
-        <div class="dropdown-menu" aria-labelledby="loginDropdown">
-            <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('student')">Student</a>
-            <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('scholar')">Scholar</a>
-            <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('admin')">Admin</a>
-        </div>
-    </div>
+                {{-- <div class="dropdown" style="display: inline-block;">
+                <a class="btn btn-danger dropdown-toggle"
+                    href="javascript:void(0);"
+                    style="background:#d1ad3c;color:white;border:none;border-radius:50px;margin-left:5px;margin-top:8px; cursor:pointer;"
+                    id="loginDropdown"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >Login</a>
+                <div class="dropdown-menu" aria-labelledby="loginDropdown">
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('student')">Student</a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('scholar')">Scholar</a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('admin')">Admin</a>
+                </div>
+             </div> --}}
+             <a class="btn btn-danger" href="javascript:void(0);" onclick="openModal('student')" style="background:#d1ad3c;color:white;border:none;border-radius:50px;margin-left:5px;margin-top:8px; cursor:pointer;">
+                    Login
+                </a>
             @endif
                 
             
@@ -104,18 +106,18 @@
         <span class="close" onclick="closeModal()">&times;</span>
 
         <!-- Login Form -->
-        <div id="loginForm">
+        {{-- <div id="loginForm">
             <h3 id="loginTitle">Login</h3>
             <form id="loginData" action="{{ route('student.login') }}" method="POST">
                 @csrf
                 <input type="hidden" id="loginType" name="login_type" value="student">
                 <label for="email">Email</label>
-                <input class="form-control" id="email" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;">
+                <input class="form-control" id="email" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;" required>
                 @error('email')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
                  <label for="password">Password</label>
-                <input class="form-control" id="password"  type="password" name="password" placeholder="Password"  style="margin-bottom: 10px;">
+                <input class="form-control" id="password"  type="password" name="password" placeholder="Password"  style="margin-bottom: 10px;" required>
                 @error('password')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
@@ -124,6 +126,37 @@
             <p>Don't have an account? <button onclick="showSignup()" class="" style="">Sign Up</button></p>
             <p><a href="javascript:void(0);" onclick="showForgotPassword()">Forgot Password?</a></p>
 
+        </div> --}}
+
+        <div id="loginForm">
+            <h3 id="loginTitle">Student Login</h3>
+            <form id="loginData" action="{{ route('student.login') }}" method="POST">
+                @csrf
+                
+                <label for="roleSelector">Select Type</label>
+                <select id="roleSelector" class="form-control" style="margin-bottom: 15px;" onchange="updateLoginForm(this.value)">
+                    <option value="student">Student</option>
+                    <option value="scholar">Scholar</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <input type="hidden" id="loginType" name="login_type" value="student">
+                
+                <label for="email">Email</label>
+                <input class="form-control" id="email" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;" required>
+                @error('email')
+                <div class="text-danger">{{ $message }}</div>
+                 @enderror
+                 
+                 <label for="password">Password</label>
+                <input class="form-control" id="password"  type="password" name="password" placeholder="Password"  style="margin-bottom: 10px;" required>
+                @error('password')
+                <div class="text-danger">{{ $message }}</div>
+                 @enderror
+                 
+                <button class="btn btn-info" type="submit" style="margin-bottom: 10px;background:#d1ad3c;color:white;border:none;border-radius:50px;">Login </button>
+            </form>
+            <p>Don't have an account? <button onclick="showSignup()" class="" style="">Sign Up</button></p>
+            <p><a href="javascript:void(0);" onclick="showForgotPassword()">Forgot Password?</a></p>
         </div>
              
         <!-- Signup Form (Initially Hidden) -->
@@ -134,12 +167,12 @@
                 @csrf
                 <input type="hidden" id="registerType" name="type" value="student">
                 <label for="name">Name</label>
-                <input class="form-control" id="name" type="text" name="name" placeholder="Full Name"  style="margin-bottom: 10px;">
+                <input class="form-control" id="name" type="text" name="name" placeholder="Full Name"  style="margin-bottom: 10px;" required>
                 @error('name')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
                 <label for="email">Email</label>
-                <input class="form-control" id="email" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;">
+                <input class="form-control" id="email" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;" required>
                 @error('email')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
@@ -202,13 +235,13 @@
                             <option value="48">+48 🇵🇱</option>
                         </select>
                     </div>
-                    <input type="number" min="0" class="form-control" name="contact_raw" placeholder="3476834169">
+                    <input type="number" min="0" class="form-control" name="contact_raw" placeholder="34000000000" required>
                 </div>
                 @error('contact_no')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
                  <label for="password">Password</label>
-                <input class="form-control" id="password" type="password" name="password" placeholder="Password"  style="margin-bottom: 10px;">
+                <input class="form-control" id="password" type="password" name="password" placeholder="Password"  style="margin-bottom: 10px;" required>
                 @error('password')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
@@ -228,7 +261,7 @@
                 @csrf
                 <input type="hidden" id="forgotType" name="login_type" value="student">
                 <label for="forgot_email">Email</label>
-                <input class="form-control" id="forgot_email" type="email" name="email" placeholder="Enter your register email" style="margin-bottom: 10px;">
+                <input class="form-control" id="forgot_email" type="email" name="email" placeholder="Enter your register email" style="margin-bottom: 10px;" required>
                 <button class="btn btn-info" type="submit" style="background:#d1ad3c;color:white;border:none;border-radius:50px;">Send Reset Link</button>
             </form>
             <p><a href="javascript:void(0);" onclick="showLogin()">Back to Login</a></p>
@@ -243,10 +276,10 @@
         <input type="hidden" name="email" id="resetEmail">
 
         <label for="new_password">New Password</label>
-        <input class="form-control" type="password" name="password" placeholder="New password" style="margin-bottom: 10px;">
+        <input class="form-control" type="password" name="password" placeholder="New password" style="margin-bottom: 10px;" required>
         <label for="confirm_password">Confirm Password</label>
-        <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm password" style="margin-bottom: 10px;">
-        
+        <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm password" style="margin-bottom: 10px;" required>
+
         <button class="btn btn-info" type="submit" style="background:#d1ad3c;color:white;border:none;border-radius:50px;">Reset Password</button>
     </form>
 </div>
@@ -567,21 +600,19 @@ $('#loginData').on('submit', function(e) {
             'admin': 'Admin'
         };
 
-        // Update form fields
         document.getElementById('loginType').value = userType;
         document.getElementById('registerType').value = userType;
         document.getElementById('forgotType').value = userType;
+        
         document.getElementById('loginTitle').textContent = typeMap[userType] + ' Login';
 
-        // Update form action based on user type
-        const loginForm = document.getElementById('loginData');
-        if (userType === 'admin') {
-            loginForm.action = "{{ route('student.login') }}"; // Change to admin login route if needed
-        } else if (userType === 'scholar') {
-            loginForm.action = "{{ route('student.login') }}"; // Change to scholar login route if needed
-        } else {
-            loginForm.action = "{{ route('student.login') }}";
+        const roleSelector = document.getElementById('roleSelector');
+        if (roleSelector) {
+            roleSelector.value = userType;
         }
+
+        const loginForm = document.getElementById('loginData');
+        loginForm.action = "{{ route('student.login') }}";
     }
 
     function closeModal() {

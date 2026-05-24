@@ -47,7 +47,7 @@
         </div>
  
     @else
-        <div class="dropdown" style="display: inline-block;">
+        {{-- <div class="dropdown" style="display: inline-block;">
             <a class="btn btn-danger dropdown-toggle"
                 href="javascript:void(0);"
                 style="background:#d1ad3c;color:white;border:none;border-radius:50px;margin-left:5px;margin-top:8px; cursor:pointer;"
@@ -61,7 +61,10 @@
                 <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('scholar')">Scholar</a>
                 <a class="dropdown-item" href="javascript:void(0);" onclick="openModal('admin')">Admin</a>
             </div>
-        </div>
+        </div> --}}
+        <a class="btn btn-danger" href="javascript:void(0);" onclick="openModal('student')" style="background:#d1ad3c;color:white;border:none;border-radius:50px;margin-left:5px;margin-top:8px; cursor:pointer;">
+                Login
+        </a>
     @endif
         <ul>
             <li><a href="{{ route('site') }}" title="">Home</a></li>

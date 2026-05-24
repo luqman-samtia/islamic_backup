@@ -11,7 +11,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <h1>
-        Student Update Password
+        {{ auth()->user()->type ==='admin' ? 'Admin' : 'Student' }}
+         Update Password
         {{-- <a href="" class="btn btn-sm btn-success pull-right"><i class="fa fa-plus"></i> New Scholars</a> --}}
     </h1>
 @stop

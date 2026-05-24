@@ -18,6 +18,7 @@
                         <thead>
                         <tr>
                             <td>Page #</td>
+                            <td> Takhti Number </td>
                             <td>Title</td>
                             <td>Image</td>
                             <td>Action</td>
@@ -42,6 +43,7 @@
                 ajax: '{!! route('resources.resources', $resource->id) !!}',
                 columns: [
                     { data: 'number' },
+                    { data: 'takhti_number'},
                     { data: 'title' },
                     {
                         data: 'image',

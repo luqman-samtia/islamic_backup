@@ -84,6 +84,7 @@ class ResourcesController extends Controller
         if ($request->post()){
             $childResource->title = $request->title;
             $childResource->number = $request->number;
+            $childResource->takhti_number = $request->takhti_number; 
             if ($request->hasFile('image')){
                 $path = $request->image->store('resources/images');
                 $childResource->image = $path;

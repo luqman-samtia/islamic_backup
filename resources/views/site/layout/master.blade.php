@@ -37,12 +37,12 @@
         .dropdown-menu {
     min-width: 200px; /* Set width for dropdown */
 }
-        /* floating */
-        .floating-buttons {
+/* floating */
+.floating-buttons {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 999;
+    z-index: 9999999;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -180,7 +180,95 @@ background-color: rgba(0,0,0,0.4);
     50% { transform: translateY(-12px); }
 }
 /* End page loader css  */
+    .sticky-admission-bar {
+        position: fixed;
+        bottom: -150%; /* Start hidden below screen */
+        left: 0;
+        width: 100%;
+        background: #1a1a1a; /* Dark premium background */
+        border-top: 3px solid #cfa54f; /* Golden border */
+        box-shadow: 0 -5px 25px rgba(0,0,0,0.6);
+        z-index: 999999;
+        padding: 15px 0;
+        /* Bouncy slide-up animation */
+        transition: bottom 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    /* Class to trigger the slide up */
+    .sticky-admission-bar.show {
+        bottom: 0;
+    }
 
+    /* Glowing Button Animation */
+    .glow-btn-premium {
+        background-color: #cfa54f !important;
+        color: #fff !important;
+        border: none;
+        animation: glowing-gold 2s infinite;
+        transition: all 0.3s ease;
+        padding: 12px 35px !important;
+        font-size: 16px !important;
+        display: inline-block;
+    }
+    .glow-btn-premium:hover {
+        background-color: #b38b3f !important;
+        transform: translateY(-2px);
+    }
+    @keyframes glowing-gold {
+        0% { box-shadow: 0 0 5px rgba(207, 165, 79, 0.4); }
+        50% { box-shadow: 0 0 15px rgba(207, 165, 79, 0.8), 0 0 25px rgba(207, 165, 79, 0.5); }
+        100% { box-shadow: 0 0 5px rgba(207, 165, 79, 0.4); }
+    }
+
+    /* Blinking Badge */
+    .blink-badge {
+        background: rgba(207, 165, 79, 0.15); 
+        color: #cfa54f; 
+        padding: 4px 12px; 
+        border-radius: 30px; 
+        font-size: 12px; 
+        font-weight: bold; 
+        border: 1px solid #cfa54f; 
+        display: inline-block; 
+        text-transform: uppercase; 
+        letter-spacing: 1px;
+        animation: blinking-text 1.5s infinite;
+        margin-right: 15px;
+        vertical-align: middle;
+    }
+    @keyframes blinking-text {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    /* Close Button */
+    .close-sticky-bar {
+        background: transparent;
+        border: none;
+        color: #aaaaaa;
+        font-size: 26px;
+        margin-left: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        vertical-align: middle;
+    }
+    .close-sticky-bar:hover {
+        color: #cfa54f;
+    }
+
+    /* Mobile Responsive Adjustments */
+   @media (max-width: 768px) {
+    .sticky-txt-wrap { text-align: left; margin-bottom: 15px; } 
+    .sticky-btn-wrap { text-align: center; }
+    .blink-badge { margin-bottom: 8px; }
+    
+    .mobile-hd-txt { font-size: 18px !important; }
+    .mobile-p-txt { font-size: 13px !important; line-height: 1.4 !important; }
+    
+    .floating-buttons.lifted {
+        bottom: 210px !important; 
+    }
+}
     </style>
 
 </head>

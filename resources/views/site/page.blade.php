@@ -30,29 +30,38 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-lg-12">
                                     <div class="contact-form text-center mb-5">
-                                        <form action="" style="max-width: 100% !important;">
-                                            <div class="row" id="stickyFormContainer">
-                                                <div class="col-md-3 col-sm-3">
-                                                    @if($prev)
+                                       <form action="" style="max-width: 100% !important;">
+                                            <div class="d-flex flex-wrap align-items-center mb-4" id="stickyFormContainer" style="justify-content: space-evenly;">                                                
+                                                @if($prev)
                                                     <div>
-                                                        <a href="{{ route('page', [$resource->slug, 'page' => $prev->number]) }}" class="thm-btn brd-rd40 mt-2 mb-5 pull-left" type="submit">Previous</a>
+                                                        <a href="{{ route('page', [$resource->slug, 'page' => $prev->number]) }}" class="thm-btn brd-rd40 m-0" style="height: 45px; display: inline-flex; align-items: center; justify-content: center; padding: 0 25px; box-sizing: border-box; text-decoration: none;">Previous</a>
                                                     </div>
-                                                    @endif
+                                                @endif
+
+                                                <div>
+                                                    <select name="takhti" class="form-control w-100" style="width: 140px; height: 45px; padding: 0 15px; border: 1px solid #e1e1e1; margin: 0; box-sizing: border-box; text-align: center; border-radius: 0;">
+                                                        <option value="">Takhti No</option>
+                                                        @foreach($takhtis as $t)
+                                                            <option value="{{ $t }}" {{ $activeTakhti == $t ? 'selected' : '' }}>
+                                                                Takhti {{ $t }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
-                                                {{-- {{ request()->page }} --}}
-                                                <div class="col-md-3 col-sm-3">
-                                                    <input type="number" name="page" placeholder="Enter Page No" value="">
+
+                                                <div>
+                                                    <input type="number" name="page" placeholder="Enter Page No" style="width: 140px; height: 45px; padding: 0 15px; border: 1px solid #e1e1e1; margin: 0; box-sizing: border-box; text-align: center; border-radius: 0;">
                                                 </div>
-                                                <div class="col-md-2 col-sm-3">
-                                                    <button class="thm-btn brd-rd40 mt-3 pull-right" type="submit">Search</button>
+
+                                                <div>
+                                                    <button class="thm-btn brd-rd40 m-0" type="submit" style="height: 45px; display: inline-flex; align-items: center; justify-content: center; padding: 0 30px; border: none; box-sizing: border-box; cursor: pointer;">Search</button>
                                                 </div>
-                                                <div class="col-md-3 col-sm-3">
-                                                    @if($next)
+
+                                                @if($next)
                                                     <div>
-                                                        <a href="{{ route('page', [$resource->slug, 'page' => $next->number]) }}" class="thm-btn brd-rd40 mt-2 mb-5 pull-right" type="submit">Next</a>
+                                                        <a href="{{ route('page', [$resource->slug, 'page' => $next->number]) }}" class="thm-btn brd-rd40 m-0" style="height: 45px; display: inline-flex; align-items: center; justify-content: center; padding: 0 25px; box-sizing: border-box; text-decoration: none;">Next</a>
                                                     </div>
-                                                    @endif
-                                                </div>
+                                                @endif
 
                                             </div>
                                         </form>

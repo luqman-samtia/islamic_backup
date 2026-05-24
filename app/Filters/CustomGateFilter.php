@@ -32,7 +32,7 @@ class CustomGateFilter implements FilterInterface
             $user = Auth::user();
 
             if ($user->type === 'admin' && in_array($item['url'], [
-                'admin/student/update/password',
+                // 'admin/student/update/password',
                 'admin/student/submit/feedback',
                 'admin/student/show/info',
             ])) {

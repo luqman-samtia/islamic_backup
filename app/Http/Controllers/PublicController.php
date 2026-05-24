@@ -41,11 +41,24 @@ class PublicController extends Controller
         $resource = Resources::with(['children' => function($relation){
             if (request()->page)
                 $relation->where('number', request()->page);
+            if (request()->takhti) {
+            $relation->where('takhti_number', request()->takhti);
+            }
             $relation->orderBy('number', 'asc');
         }])->findBySlug($slug)->first();
         if(!$resource)
             abort(404);
+            $takhtis = Resources::where('parent_id', $resource->id)
+                ->whereNotNull('takhti_number')
+                ->select('takhti_number')
+                ->distinct()
+                ->orderBy('takhti_number', 'asc')
+                ->pluck('takhti_number');
 
+           $activeTakhti = request()->takhti;
+            if (!$activeTakhti && request()->page && $resource->children->isNotEmpty()) {
+                $activeTakhti = $resource->children->first()->takhti_number;
+            }     
         if (request()->page){
             $prev = Resources::where('number', '<', request()->page)->where('parent_id', $resource->id)->orderBy('number','desc')->first();
             $next = Resources::where('number', '>', request()->page)->where('parent_id', $resource->id)->orderBy('number')->first();
@@ -53,7 +66,9 @@ class PublicController extends Controller
         return view('site.page', [
             'resource' => $resource,
             'next' => @$next,
-            'prev' => @$prev
+            'prev' => @$prev,
+            'takhtis' => $takhtis,
+            'activeTakhti' => $activeTakhti
         ]);
     }
 
