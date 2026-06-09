@@ -25,8 +25,9 @@ class QuranController extends Controller
                 return QuranParas::getParaName($row->para_no);
             })->make(true);
         }
-       
-        return view('admin.quran.quran', compact('quran'));
+        $prevSurah = Quran::whereNull('parent_id')->where('id', '<', $quran->id)->orderBy('id', 'desc')->first();
+        $nextSurah = Quran::whereNull('parent_id')->where('id', '>', $quran->id)->orderBy('id', 'asc')->first();
+        return view('admin.quran.quran', compact('quran', 'prevSurah', 'nextSurah'));
     }
 
     public function index(Request $request)
@@ -72,7 +73,9 @@ class QuranController extends Controller
             return redirect()->route('quran.quran', $quran->id);
         }
         $paras = QuranParas::getParas();
-        return view('admin.quran.surah.add', compact('quran', 'paras'));
+        $prevSurah = Quran::whereNull('parent_id')->where('id', '<', $quran->id)->orderBy('id', 'desc')->first();
+        $nextSurah = Quran::whereNull('parent_id')->where('id', '>', $quran->id)->orderBy('id', 'asc')->first();
+        return view('admin.quran.surah.add', compact('quran', 'paras', 'prevSurah', 'nextSurah'));
     }
 
 
@@ -112,8 +115,10 @@ class QuranController extends Controller
             $childQuran->save();
             return redirect()->route('quran.quran',$childQuran->parent_id);
         }
-         $paras = QuranParas::getParas();
-        return view('admin.quran.surah.edit', compact('quran', 'childQuran', 'paras'));
+        $prevSurah = Quran::whereNull('parent_id')->where('id', '<', $quran->id)->orderBy('id', 'desc')->first();
+        $nextSurah = Quran::whereNull('parent_id')->where('id', '>', $quran->id)->orderBy('id', 'asc')->first();
+        $paras = QuranParas::getParas();
+        return view('admin.quran.surah.edit', compact('quran', 'childQuran', 'paras', 'prevSurah', 'nextSurah'));
     }
 
 

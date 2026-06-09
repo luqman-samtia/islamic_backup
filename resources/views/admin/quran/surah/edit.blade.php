@@ -5,6 +5,21 @@
 @section('content_header')
     <h1>
         Edit {{ $childQuran->title }}
+        <div class="pull-right">
+            {{-- Previous Surah Button --}}
+            @if(isset($prevSurah) && $prevSurah)
+                <a href="{{ route('quran.child.add', $prevSurah->id) }}" class="btn btn-sm btn-primary">
+                    <i class="fa fa-arrow-left"></i> Previous Surah
+                </a>
+            @endif
+
+            {{-- Next Surah Button --}}
+            @if(isset($nextSurah) && $nextSurah)
+                <a href="{{ route('quran.child.add', $nextSurah->id) }}" class="btn btn-sm btn-info">
+                    Next Surah <i class="fa fa-arrow-right"></i>
+                </a>
+            @endif
+        </div>
     </h1>
 @stop
 

@@ -21,7 +21,9 @@ class TajweedQuranController extends Controller
                 return QuranParas::getParaName($row->para_no);
             })->make(true);
         }
-        return view('admin.tajweed-quran.quran', compact('quran'));
+        $prevSurah = TajweedQuran::whereNull('parent_id')->where('id', '<', $quran->id)->orderBy('id', 'desc')->first();
+        $nextSurah = TajweedQuran::whereNull('parent_id')->where('id', '>', $quran->id)->orderBy('id', 'asc')->first();
+        return view('admin.tajweed-quran.quran', compact('quran', 'prevSurah', 'nextSurah'));
     }
 
     public function index(Request $request)
@@ -64,7 +66,9 @@ class TajweedQuranController extends Controller
             return redirect()->route('tajweed.quran.quran', $quran->id);
         }
          $paras = QuranParas::getParas();
-        return view('admin.tajweed-quran.surah.add', compact('quran', 'paras'));
+        $prevSurah = TajweedQuran::whereNull('parent_id')->where('id', '<', $quran->id)->orderBy('id', 'desc')->first();
+        $nextSurah = TajweedQuran::whereNull('parent_id')->where('id', '>', $quran->id)->orderBy('id', 'asc')->first();
+        return view('admin.tajweed-quran.surah.add', compact('quran', 'paras', 'prevSurah', 'nextSurah'));
     }
 
 
@@ -102,8 +106,10 @@ class TajweedQuranController extends Controller
             $childQuran->save();
             return redirect()->route('tajweed.quran.quran',$childQuran->parent_id);
         }
+        $prevSurah = TajweedQuran::whereNull('parent_id')->where('id', '<', $quran->id)->orderBy('id', 'desc')->first();
+        $nextSurah = TajweedQuran::whereNull('parent_id')->where('id', '>', $quran->id)->orderBy('id', 'asc')->first();
         $paras = QuranParas::getParas();
-        return view('admin.tajweed-quran.surah.edit', compact('quran', 'childQuran', 'paras'));
+        return view('admin.tajweed-quran.surah.edit', compact('quran', 'childQuran', 'paras', 'prevSurah', 'nextSurah'));
     }
 
 
