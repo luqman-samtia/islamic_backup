@@ -25,8 +25,13 @@
                                 <input type="number" name="number" min="1" class="form-control" required value="{{ $childResource->number }}">
                             </div>
                             <div class="form-group">
-                                <label>Takhti Number (Optional)</label>
-                                <input type="number" class="form-control" name="takhti_number" value="{{ @$childResource->takhti_number }}" placeholder="Enter Takhti Number">
+                                <label>Mazoon (Subject)</label>
+                                <input type="text" name="subject" class="form-control" placeholder="Enter Mazoon (Subject)"
+                                    value="{{ $childResource->subject }}">
+                            </div>
+                            <div class="form-group">
+                                <label>Mazoon Number</label>
+                                <input type="number" class="form-control" name="takhti_number" value="{{ @$childResource->takhti_number }}" placeholder="Enter Mazoon Number">
                             </div>
                             <div class="form-group">
                                 <label> Edit Image </label>

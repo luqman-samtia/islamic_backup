@@ -50,15 +50,17 @@ class PublicController extends Controller
             abort(404);
             $takhtis = Resources::where('parent_id', $resource->id)
                 ->whereNotNull('takhti_number')
-                ->select('takhti_number')
+                ->whereNotNull('subject')
+                ->select('takhti_number', 'subject')
                 ->distinct()
                 ->orderBy('takhti_number', 'asc')
-                ->pluck('takhti_number');
+                ->get()
+                ->unique('takhti_number');
 
            $activeTakhti = request()->takhti;
-            if (!$activeTakhti && request()->page && $resource->children->isNotEmpty()) {
-                $activeTakhti = $resource->children->first()->takhti_number;
-            }     
+                if (!$activeTakhti && request()->page && $resource->children->isNotEmpty()) {
+                    $activeTakhti = $resource->children->first()->takhti_number;
+                } 
         if (request()->page){
             $prev = Resources::where('number', '<', request()->page)->where('parent_id', $resource->id)->orderBy('number','desc')->first();
             $next = Resources::where('number', '>', request()->page)->where('parent_id', $resource->id)->orderBy('number')->first();

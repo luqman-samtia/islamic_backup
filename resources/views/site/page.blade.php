@@ -39,13 +39,19 @@
                                                 @endif
 
                                                 <div>
-                                                    <select name="takhti" class="form-control w-100" style="width: 140px; height: 45px; padding: 0 15px; border: 1px solid #e1e1e1; margin: 0; box-sizing: border-box; text-align: center; border-radius: 0;">
-                                                        <option value="">Takhti No</option>
+                                                    <select name="takhti" class="form-control w-100" 
+                                                        style="width: 180px; height: 45px; padding: 0 15px; border: 1px solid #e1e1e1; 
+                                                            margin: 0; box-sizing: border-box; text-align: center; border-radius: 0;">
+                                                        
+                                                        <option value="">-- Mazoon --</option>
+                                                        
                                                         @foreach($takhtis as $t)
-                                                            <option value="{{ $t }}" {{ $activeTakhti == $t ? 'selected' : '' }}>
-                                                                Takhti {{ $t }}
+                                                            <option value="{{ $t->takhti_number }}" 
+                                                                {{ $activeTakhti == $t->takhti_number ? 'selected' : '' }}>
+                                                                {{ $t->subject }} - {{ $t->takhti_number }}  
                                                             </option>
                                                         @endforeach
+                                                        
                                                     </select>
                                                 </div>
 

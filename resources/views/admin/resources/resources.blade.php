@@ -18,7 +18,7 @@
                         <thead>
                         <tr>
                             <td>Page #</td>
-                            <td> Takhti Number </td>
+                            <td> Mazoon Number </td>
                             <td>Title</td>
                             <td>Image</td>
                             <td>Action</td>
@@ -43,7 +43,15 @@
                 ajax: '{!! route('resources.resources', $resource->id) !!}',
                 columns: [
                     { data: 'number' },
-                    { data: 'takhti_number'},
+                    { 
+                            data: null, 
+                            orderable: false, 
+                            render: function (data, type, row) {
+                                let subject = row.subject ? row.subject : ''; 
+                                let takhtiNumber = row.takhti_number ? row.takhti_number : '';                                
+                                return subject + ' - ' + takhtiNumber; 
+                            }
+                        },
                     { data: 'title' },
                     {
                         data: 'image',
