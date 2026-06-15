@@ -280,28 +280,95 @@ class StudentController extends Controller
     //         $scholars = Scholars::pluck('name', 'id');
     //         return view('admin.students.index', compact('scholars'));
     // }
-    public function students(Request $request)
+    // public function students(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         return DataTables::of(
+    //             User::where('type', 'student')
+    //                 ->leftJoin('scholars', 'users.scholar', '=', 'scholars.id')
+    //                 ->leftJoin('admission_forms', 'users.id', '=', 'admission_forms.user_id')
+    //                 ->select(
+    //                     'users.*',
+    //                     'scholars.name as scholar_name',
+    //                     'admission_forms.id as admission_form_id',
+    //                     'admission_forms.pic as admission_pic'
+    //                 )
+    //         )
+    //         ->addColumn('scholar', function ($row) {
+    //             return $row->scholar_name ?? 'No Scholar';
+    //         })
+    //         ->make(true);
+    //     }
+ 
+    //     $scholars = Scholars::pluck('name', 'id');
+    //     return view('admin.students.index', compact('scholars'));
+    // }
+     public function students(Request $request)
     {
         if ($request->ajax()) {
-            return DataTables::of(
-                User::where('type', 'student')
-                    ->leftJoin('scholars', 'users.scholar', '=', 'scholars.id')
-                    ->leftJoin('admission_forms', 'users.id', '=', 'admission_forms.user_id')
-                    ->select(
-                        'users.*',
-                        'scholars.name as scholar_name',
-                        'admission_forms.id as admission_form_id',
-                        'admission_forms.pic as admission_pic'
-                    )
-            )
-            ->addColumn('scholar', function ($row) {
-                return $row->scholar_name ?? 'No Scholar';
-            })
-            ->make(true);
+ 
+            $query = User::where('type', 'student')
+                ->leftJoin('scholars', 'users.scholar', '=', 'scholars.id')
+                ->leftJoin('admission_forms', 'users.id', '=', 'admission_forms.user_id')
+                ->select(
+                    'users.*',
+                    'scholars.name as scholar_name',
+                    'admission_forms.id as admission_form_id',
+                    'admission_forms.pic as admission_pic'
+                )
+                ->orderBy('id','desc');
+ 
+            $status = $request->input('status_filter');
+            if ($status === 'verified') {
+                $query->where('users.is_verified', 1);
+            } elseif ($status === 'not_verified') {
+                $query->where('users.is_verified', 0);
+            }
+ 
+            return DataTables::of($query)
+                ->addColumn('scholar', function ($row) {
+                    return $row->scholar_name ?? 'No Scholar';
+                })
+                ->make(true);
         }
  
         $scholars = Scholars::pluck('name', 'id');
         return view('admin.students.index', compact('scholars'));
+    }
+ 
+    public function bulkDestroy(Request $request)
+    {
+        $ids = $request->input('ids', []);
+ 
+        if (!is_array($ids) || count($ids) === 0) {
+            return response()->json(['error' => 'No students selected.'], 422);
+        }
+ 
+        $ids = User::whereIn('id', $ids)->where('type', 'student')->pluck('id')->toArray();
+ 
+        if (count($ids) === 0) {
+            return response()->json(['error' => 'No valid students found.'], 422);
+        }
+ 
+        \DB::beginTransaction();
+        try {
+            foreach (['admission_forms', 'fee_records', 'student_courses', 'lesson_records'] as $table) {
+                if (\Schema::hasTable($table)) {
+                    \DB::table($table)->whereIn('user_id', $ids)->delete();
+                }
+            }
+ 
+            User::whereIn('id', $ids)->delete();
+ 
+            \DB::commit();
+ 
+            return response()->json([
+                'success' => count($ids) . ' student(s) deleted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return response()->json(['error' => 'Delete failed: ' . $e->getMessage()], 500);
+        }
     }
 
     public function updateDates(Request $request, $id)

@@ -25,6 +25,36 @@
     .legend { font-size: 11px; color: #95a5a6; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
     .legend span { display: inline-flex; align-items: center; gap: 4px; }
 
+    .tb-group { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+    /* status filter (segmented) */
+    .status-filter { display: inline-flex; border: 1px solid #dfe4e7; border-radius: 8px; overflow: hidden; }
+    .status-filter .sf-btn {
+        border: none; background: #fff; color: #5a6a72; font-size: 12px; font-weight: 600;
+        padding: 5px 14px; cursor: pointer; transition: background .15s, color .15s; border-right: 1px solid #eef1f3;
+    }
+    .status-filter .sf-btn:last-child { border-right: none; }
+    .status-filter .sf-btn:hover { background: #f3f6f8; }
+    .status-filter .sf-btn.active { background: #3c8dbc; color: #fff; }
+
+    /* bulk delete button */
+    .btn-bulk-del {
+        border: none; background: #dc3545; color: #fff; font-size: 13px; font-weight: 600;
+        padding: 7px 16px; border-radius: 8px; cursor: pointer; transition: background .15s, box-shadow .15s;
+    }
+    .btn-bulk-del:hover:not(:disabled) { background: #c82333; box-shadow: 0 3px 8px rgba(220,53,69,.3); }
+    .btn-bulk-del:disabled { background: #e7b9bd; cursor: not-allowed; }
+
+    /* legend strip */
+    .students-legend { padding: 8px 16px; border-bottom: 1px solid #f0f2f3; font-size: 11px; color: #95a5a6; display: flex; gap: 14px; flex-wrap: wrap; }
+    .students-legend span { display: inline-flex; align-items: center; gap: 4px; }
+
+    /* selection */
+    .sel-col { width: 38px; text-align: center; }
+    .row-check, #checkAll { width: 16px; height: 16px; cursor: pointer; vertical-align: middle; }
+    #studentsTable tbody tr.selected-row { background: #fff7f7; }
+    #studentsTable tbody tr.selected-row:hover { background: #fff0f0; }
+
     #studentsTable thead th {
         background: #f7f9fa; color: #7b8a8b; font-weight: 600; font-size: 11.5px;
         text-transform: uppercase; letter-spacing: .4px; border-bottom: 2px solid #ecf0f1;
@@ -242,18 +272,31 @@
 {{-- ========================= TABLE ========================= --}}
 <div class="box students-box">
     <div class="students-toolbar">
-        <h3>Students <span class="students-count" id="stuCount">0</span></h3>
-        <div class="legend">
-            <span><i class="fa fa-id-card-o" style="color:#17a2b8"></i> Admission</span>
-            <span><i class="fa fa-money" style="color:#28a745"></i> Fee</span>
-            <span><i class="fa fa-sliders" style="color:#6f42c1"></i> Courses</span>
-            <span><i class="fa fa-book" style="color:#fd7e14"></i> Lessons</span>
+        <div class="tb-group">
+            <h3>Students <span class="students-count" id="stuCount">0</span></h3>
+            <div class="status-filter" role="group" aria-label="Filter by status">
+                <button type="button" class="sf-btn active" data-val="">All</button>
+                <button type="button" class="sf-btn" data-val="verified">Verified</button>
+                <button type="button" class="sf-btn" data-val="not_verified">Not Verified</button>
+            </div>
         </div>
+        <div class="tb-group">
+            <button id="deleteSelected" class="btn-bulk-del" disabled>
+                <i class="fa fa-trash"></i> Delete Selected (<span id="selCount">0</span>)
+            </button>
+        </div>
+    </div>
+    <div class="students-legend">
+        <span><i class="fa fa-id-card-o" style="color:#17a2b8"></i> Admission</span>
+        <span><i class="fa fa-money" style="color:#28a745"></i> Fee</span>
+        <span><i class="fa fa-sliders" style="color:#6f42c1"></i> Courses</span>
+        <span><i class="fa fa-book" style="color:#fd7e14"></i> Lessons</span>
     </div>
     <div class="box-body table-responsive">
         <table id="studentsTable" class="table table-hover" style="width:100%">
             <thead>
                 <tr>
+                    <th class="sel-col"><input type="checkbox" id="checkAll" title="Select all on this page"></th>
                     <th>Student</th>
                     <th>Email</th>
                     <th>Scholar</th>
@@ -363,12 +406,20 @@
     }
 
     /* ---- DataTable ---- */
+    var currentStatus = '';          // status filter value
+    var selectedIds   = new Set();   // bulk-delete selection (persists across pages)
+
     var datatable = $('#studentsTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '{{ route('admin.student') }}',
-        order: [[0, 'asc']],
+        ajax: {
+            url: '{{ route('admin.student') }}',
+            data: function (d) { d.status_filter = currentStatus; }
+        },
+        order: [[1, 'asc']],
         columns: [
+            { data: 'id',          orderable: false, searchable: false, className: 'sel-col',
+              render: function (id) { return '<input type="checkbox" class="row-check" value="' + id + '">'; } },
             { data: 'name',        orderable: true,  searchable: true,  render: studentCell },
             { data: 'email',       visible: false,   searchable: true,  orderable: false },
             { data: 'scholar',     orderable: false, searchable: false, render: scholarCell },
@@ -380,7 +431,85 @@
         ],
         drawCallback: function () {
             $('#stuCount').text(this.api().page.info().recordsTotal);
+            // re-apply selection state after every redraw (pagination/search/sort)
+            $('#studentsTable tbody .row-check').each(function () {
+                var on = selectedIds.has(String(this.value));
+                $(this).prop('checked', on);
+                $(this).closest('tr').toggleClass('selected-row', on);
+            });
+            updateCheckAllState();
+            updateBulkButton();
         }
+    });
+
+    /* ---- status filter ---- */
+    $(document).on('click', '.sf-btn', function () {
+        $('.sf-btn').removeClass('active');
+        $(this).addClass('active');
+        currentStatus = $(this).data('val') || '';
+        datatable.ajax.reload();
+    });
+
+    /* ---- multiple delete: selection ---- */
+    $(document).on('change', '.row-check', function () {
+        var id = String(this.value);
+        if (this.checked) { selectedIds.add(id); } else { selectedIds.delete(id); }
+        $(this).closest('tr').toggleClass('selected-row', this.checked);
+        updateCheckAllState();
+        updateBulkButton();
+    });
+
+    $(document).on('change', '#checkAll', function () {
+        var on = this.checked;
+        $('#studentsTable tbody .row-check').each(function () {
+            this.checked = on;
+            var id = String(this.value);
+            if (on) { selectedIds.add(id); } else { selectedIds.delete(id); }
+            $(this).closest('tr').toggleClass('selected-row', on);
+        });
+        updateBulkButton();
+    });
+
+    function updateCheckAllState() {
+        var boxes = $('#studentsTable tbody .row-check');
+        $('#checkAll').prop('checked', boxes.length > 0 && boxes.filter(':checked').length === boxes.length);
+    }
+    function updateBulkButton() {
+        var n = selectedIds.size;
+        $('#selCount').text(n);
+        $('#deleteSelected').prop('disabled', n === 0);
+    }
+
+    /* ---- multiple delete: action ---- */
+    $(document).on('click', '#deleteSelected', function () {
+        if (selectedIds.size === 0) return;
+        var ids = Array.from(selectedIds);
+        Swal.fire({
+            title: 'Delete ' + ids.length + ' student' + (ids.length > 1 ? 's' : '') + '?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete them!'
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                $.ajax({
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    url: "{{ url('admin/student/bulk-delete') }}",
+                    method: 'POST',
+                    data: { ids: ids },
+                    success: function (response) {
+                        selectedIds.clear();
+                        Swal.fire('Deleted!', (response && response.success) || 'Selected students deleted.', 'success');
+                        datatable.ajax.reload(null, false);
+                    },
+                    error: function (xhr) {
+                        Swal.fire('Error!', (xhr.responseJSON && xhr.responseJSON.error) || 'Delete failed.', 'error');
+                    }
+                });
+            }
+        });
     });
 
     /* ---- edit dates (delegated) ---- */

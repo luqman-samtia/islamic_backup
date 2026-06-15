@@ -33,7 +33,7 @@ Route::get('admin/disable/student/{id}', [StudentController::class, 'adminDisabl
 Route::get('admin/check-student-status/{id}', [StudentController::class, 'checkStudentStatus']);
 Route::get('admin/check-student-disable/{id}', [StudentController::class, 'checkStudentDisable']);
 Route::post('admin/student/change-password', [StudentController::class, 'changeStudentPassword'])->name('admin.student.changePassword');
-
+Route::post('admin/student/bulk-delete', 'StudentController@bulkDestroy')->name('admin.student.bulk-delete');
 
 
 // END
