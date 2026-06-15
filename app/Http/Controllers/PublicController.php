@@ -39,15 +39,53 @@ class PublicController extends Controller
 
     public function page($slug){
         $resource = Resources::with(['children' => function($relation){
-            if (request()->page)
-                $relation->where('number', request()->page);
-            if (request()->takhti) {
+        if (request()->filled('page')) {
+            $relation->where('number', request()->page);
+        }
+        if (request()->filled('takhti')) {
             $relation->where('takhti_number', request()->takhti);
-            }
-            $relation->orderBy('number', 'asc');
-        }])->findBySlug($slug)->first();
+        }
+        $relation->orderBy('number', 'asc');
+    }])->findBySlug($slug)->first();
+
+    if ($resource && $resource->children) {
+        
+        $children = $resource->children;
+
+        if (request()->filled('page')) {
+            $children = $children->unique(function ($item) {
+                return trim((string) $item->number);
+            })->values();
+            
+        // } elseif (request()->filled('takhti')) {
+        //     $children = $children->unique(function ($item) {
+        //         return trim((string) $item->takhti_number);
+        //     })->values();
+            
+        } else {
+            $children = $children->unique(function ($item) {
+                return trim((string) $item->number);
+            })->values();
+        }
+
+        $resource->setRelation('children', $children);
+    }
         if(!$resource)
             abort(404);
+        if (request()->filled('takhti') && !request()->filled('page')) {
+            $firstPage = Resources::where('parent_id', $resource->id)
+                ->where('takhti_number', request()->takhti)
+                ->orderBy('number', 'asc')
+                ->first();
+
+            if ($firstPage) {
+                return redirect()->route('page', [
+                    'slug'   => $slug,
+                    'takhti' => request()->takhti,
+                    'page'   => $firstPage->number
+                ]);
+            }
+        }
             $takhtis = Resources::where('parent_id', $resource->id)
                 ->whereNotNull('takhti_number')
                 ->whereNotNull('subject')
@@ -55,7 +93,8 @@ class PublicController extends Controller
                 ->distinct()
                 ->orderBy('takhti_number', 'asc')
                 ->get()
-                ->unique('takhti_number');
+                ->unique('takhti_number')
+                ->values();
 
            $activeTakhti = request()->takhti;
                 if (!$activeTakhti && request()->page && $resource->children->isNotEmpty()) {

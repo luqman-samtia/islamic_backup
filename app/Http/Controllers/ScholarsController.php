@@ -73,7 +73,6 @@ class ScholarsController extends Controller
     public function edit(Request $request, Scholars $scholar){
 
         $user = User::where('email', $scholar->email)->first();
-        // dd($user);
         if ($request->post()){
 
             $validator = Validator::make($request->all(), [
@@ -103,18 +102,24 @@ class ScholarsController extends Controller
 
              // Update User if exists
         if ($user) {
-            $user->update([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'contact' => $request->input('phone'),
-            ]);
-
-            if ($request->filled('password')) {
-                $user->update([
-                    'password' => Hash::make($request->input('password'))
+                $user->name       = $request->input('name');
+                $user->email      = $request->input('email');
+                $user->contact_no = $request->input('phone'); 
+                
+                if ($request->filled('password')) {
+                    $user->password = Hash::make($request->input('password'));
+                }
+                $user->save();
+            } else {
+                User::create([
+                    'name'        => $request->input('name'),
+                    'email'       => $request->input('email'),
+                    'password'    => Hash::make($request->input('password')),
+                    'contact_no'  => $request->input('phone'), 
+                    'is_verified' => 1, 
+                    'type'        => 'scholar', 
                 ]);
             }
-        }
             return redirect()->route('scholars');
         }
         return view('admin.scholars.edit', compact('scholar', 'user'));
@@ -131,7 +136,18 @@ class ScholarsController extends Controller
         if ($request->ajax()) {
             return DataTables::of(
                 User::where('scholar', $scholar_id)->where('type', 'student')
-            )->make(true);
+            )
+            ->addColumn('lessons_action', function($row) {
+                return '
+                    <a href="'.route('admin.lessons.entry', $row->id).'" class="btn btn-primary btn-xs" title="Lessons">
+                        <i class="fa fa-book"></i> Lessons
+                    </a>
+                    <a href="'.route('admin.lessons.report').'?student_id='.$row->id.'" class="btn btn-default btn-xs" title="Report">
+                        <i class="fa fa-file-text"></i> Report
+                    </a>';
+            })
+            ->rawColumns(['lessons_action'])
+            ->make(true);
         }
         return view('admin.scholars.students');
     }

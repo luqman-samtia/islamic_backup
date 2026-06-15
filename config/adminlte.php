@@ -153,6 +153,58 @@ return [
             'url'  => 'admin/students',
             'can' => 'studentcontroller.StudentDataShow' 
         ],
+         [
+            'text'        => 'Admission Forms',
+            'url'         => 'admin/admission',
+            'icon'        => 'address-card',
+            'can'         => 'resourcescontroller.index',
+        ],
+        [
+            'text'        => 'Fee Records',
+            'url'         => 'admin/fees',
+            'icon'        => 'money',
+            'can'         => 'resourcescontroller.index',
+        ],
+        [
+            'text'        => 'Lesson Options',
+            'url'         => 'admin/lessons/options',
+            'icon'        => 'sliders',
+            'can'         => 'resourcescontroller.index',
+        ],
+        [
+            'text'        => 'Lesson Types',
+            'url'         => 'admin/lessons/types',
+            'icon'        => 'tags',
+            'can'         => 'resourcescontroller.index',
+        ],
+        [
+            'text'        => 'Lessons Report',
+            'url'         => 'admin/lessons/report',
+            'icon'        => 'book',
+            'can'         => 'resourcescontroller.index',
+        ],
+
+
+/* ---------------- STUDENT-SIDE items (sirf student ko dikhenge) -------- */
+
+        [
+            'text' => 'My Admission Form',
+            'icon' => 'address-card',
+            'url'  => 'admin/admission/my-form',
+            'can'  => 'studentcontroller.StudentDataShow',
+        ],
+        [
+            'text' => 'My Fee Report',
+            'icon' => 'money',
+            'url'  => 'admin/fees/my/report',
+            'can'  => 'studentcontroller.StudentDataShow',
+        ],
+        [
+            'text' => 'My Lessons',
+            'icon' => 'book',
+            'url'  => 'admin/lessons/my',
+            'can'  => 'studentcontroller.StudentDataShow',
+        ],
 
 
 //        [

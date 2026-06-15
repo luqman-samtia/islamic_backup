@@ -22,7 +22,7 @@
                         <thead>
                         <tr>
                             <td>Name</td>
-                            {{-- <td>Action</td> --}}
+                            <td>Lessons</td>
                         </tr>
                         </thead>
                     </table>
@@ -43,7 +43,9 @@
                 serverSide: true,
                 ajax: '{!! route('scholars.students') !!}',
                 columns: [
-                    { data: 'name' } 
+                    { data: 'name' },
+                    { data: 'lessons_action', name: 'lessons_action', orderable: false, searchable: false },
+
                 ],
                 order: [[0, 'desc']]
             });

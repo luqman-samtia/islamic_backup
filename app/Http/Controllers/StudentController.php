@@ -9,6 +9,7 @@ use App\Mail\StudentVerified;
 use App\Mail\StudentDisable;
 use App\User;
 use App\Scholars;
+use App\AdmissionForm;
 use Hash;
 use Auth;
 use Spatie\Permission\Models\Role;
@@ -64,7 +65,19 @@ class StudentController extends Controller
 
         
             $user = User::create($validatedData);
-          
+             AdmissionForm::create([
+                'user_id'        => $user->id,
+                'student_name'   => $request->name,
+                'father_name'    => $request->father_name,
+                'age'            => $request->age,
+                'course'         => $request->course,
+                'phone_no'       => $request->contact_no,   
+                'address'        => $request->address,
+                'admission_date' => now()->toDateString(),
+                'pic'            => $request->hasFile('pic')
+                                        ? $request->file('pic')->store('admissions/images')
+                                        : null,
+            ]);
            
             try {
                 Mail::to('shifaacademy63@gmail.com')->send(new AdminVerification($user));
@@ -220,31 +233,75 @@ class StudentController extends Controller
     return redirect()->back()->with('message', 'You are not authorized to log out.');
 }
 
-    public function students(Request $request){
-
-            if ($request->ajax()) {
+    // public function students(Request $request){
         
-                $data = DataTables::of(User::where('type', 'student')
-                ->leftJoin('scholars', 'users.scholar', '=', 'scholars.id')
-                ->select('users.*', 'scholars.name as scholar_name')
-                )
-                ->addColumn('scholar', function($row) {
-                    return $row->scholar_name ?? 'No Scholar';
-                })
-                ->addColumn('password_action', function($row) {
-                    return '<button type="button" data-id="'.$row->id.'" class="btn btn-warning btn-xs change-password">
-                                <i class="fa fa-key"></i> Change Password
-                            </button>';
-                })
-                ->rawColumns(['password_action'])
-                ->make(true);
+    //         if ($request->ajax()) {
+        
+    //             $data = DataTables::of(User::where('type', 'student')
+    //             ->leftJoin('scholars', 'users.scholar', '=', 'scholars.id')
+    //             ->leftJoin('admission_forms', 'users.id', '=', 'admission_forms.user_id')
+    //             ->select('users.*', 'scholars.name as scholar_name','admission_forms.id as admission_form_id')
+    //             )
+    //             ->addColumn('scholar', function($row) {
+    //                 return $row->scholar_name ?? 'No Scholar';
+    //             })
+    //             ->addColumn('password_action', function($row) {
+    //                 return '<button type="button" data-id="'.$row->id.'" class="btn btn-warning btn-xs change-password">
+    //                             <i class="fa fa-key"></i> Change Password
+    //                         </button>';
+    //             })
+    //              ->addColumn('actions', function($row) {
+    //                $admissionBtn = $row->admission_form_id 
+    //                     ? '<a href="'.route('admin.admission.show', $row->admission_form_id).'" class="btn btn-info btn-xs" title="Admission Form">
+    //                             <i class="fa fa-address-card"></i> Admission
+    //                     </a>'
+    //                     : '<button class="btn btn-secondary btn-xs" disabled title="Not Filled Yet">
+    //                             <i class="fa fa-address-card"></i> No Form
+    //                     </button>';
+
+    //                 return $admissionBtn . '
+    //                     <a href="'.route('admin.fees.manage', $row->id).'" class="btn btn-success btn-xs" title="Fee Records">
+    //                         <i class="fa fa-money"></i> Fee
+    //                     </a>
+    //                     <a href="'.route('admin.lessons.courses', $row->id).'" class="btn btn-primary btn-xs" title="Manage Courses & Permissions">
+    //                         <i class="fa fa-sliders"></i> Courses
+    //                     </a>
+    //                     <a href="'.route('admin.lessons.entry', $row->id).'" class="btn btn-default btn-xs" title="Lessons">
+    //                         <i class="fa fa-book"></i> Lessons
+    //                     </a>';
+    //             })
+    //             ->rawColumns(['password_action','actions'])
+    //             ->make(true);
     
-            \Log::info($data); 
+    //         \Log::info($data); 
             
-            return $data;
-            }
-            $scholars = Scholars::pluck('name', 'id');
-            return view('admin.students.index', compact('scholars'));
+    //         return $data;
+    //         }
+    //         $scholars = Scholars::pluck('name', 'id');
+    //         return view('admin.students.index', compact('scholars'));
+    // }
+    public function students(Request $request)
+    {
+        if ($request->ajax()) {
+            return DataTables::of(
+                User::where('type', 'student')
+                    ->leftJoin('scholars', 'users.scholar', '=', 'scholars.id')
+                    ->leftJoin('admission_forms', 'users.id', '=', 'admission_forms.user_id')
+                    ->select(
+                        'users.*',
+                        'scholars.name as scholar_name',
+                        'admission_forms.id as admission_form_id',
+                        'admission_forms.pic as admission_pic'
+                    )
+            )
+            ->addColumn('scholar', function ($row) {
+                return $row->scholar_name ?? 'No Scholar';
+            })
+            ->make(true);
+        }
+ 
+        $scholars = Scholars::pluck('name', 'id');
+        return view('admin.students.index', compact('scholars'));
     }
 
     public function updateDates(Request $request, $id)

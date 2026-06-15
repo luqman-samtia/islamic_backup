@@ -31,10 +31,15 @@ class CustomGateFilter implements FilterInterface
         if (Auth::check()) {
             $user = Auth::user();
 
+            // ---- ADMIN: in URLs ko admin se CHUPAO (student-only items) ----
             if ($user->type === 'admin' && in_array($item['url'], [
                 // 'admin/student/update/password',
                 'admin/student/submit/feedback',
                 'admin/student/show/info',
+                // === NEW: student-only items hidden from admin ===
+                'admin/admission/my-form',
+                'admin/fees/my/report',
+                'admin/lessons/my',
             ])) {
                 return false;
             }
@@ -44,21 +49,27 @@ class CustomGateFilter implements FilterInterface
                 return true;
             }
 
-            // Allow only specific routes for students
+            // ---- STUDENT: sirf in URLs ki ijazat ----
             if ($user->type === 'student' && in_array($item['url'], [
                 'admin/home',
                 'admin/student/update/password',
                 'admin/student/submit/feedback',
                 'admin/student/show/info',
+                // === NEW: student ke naye items ===
+                'admin/admission/my-form',
+                'admin/fees/my/report',
+                'admin/lessons/my',
             ])) {
                 return true;
             }
 
-             // Allow scholars to access the admin/home route
+            // ---- SCHOLAR: in URLs ki ijazat ----
             if ($user->type === 'scholar' && in_array($item['url'], [
                 'admin/home',
                 'admin/scholars/students',
                 'admin/scholars/students/info',
+                // === NEW: scholar ko Lessons Report dikhao ===
+                'admin/lessons/report',
             ])) {
                 return true;
             }

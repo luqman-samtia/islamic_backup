@@ -171,11 +171,24 @@
                 @error('name')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
+                 <label for="reg_father_name">Father Name</label>
+                <input class="form-control" id="reg_father_name" type="text" name="father_name"
+                       placeholder="Father Name" style="margin-bottom: 10px;">
                 <label for="email">Email</label>
                 <input class="form-control" id="email" type="email" name="email" placeholder="Email"  style="margin-bottom: 10px;" required>
                 @error('email')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
+                 <label for="reg_age">Age</label>
+                <input class="form-control" id="reg_age" type="number" min="1" name="age"
+                       placeholder="Age" style="margin-bottom: 10px;">
+                <label for="reg_course">Course</label>
+                <input class="form-control" id="reg_course" type="text" name="course"
+                       placeholder="e.g. Nazra Quran / Hifz / Qaida" style="margin-bottom: 10px;">
+
+                <label for="reg_address">Address</label>
+                <textarea class="form-control" id="reg_address" name="address" rows="2"
+                          placeholder="Address" style="margin-bottom: 10px;"></textarea>
                  <label for="contact">Contact</label>
                 <div class="input-group" style="margin-bottom: 10px;">
                     <div class="input-group-prepend">
@@ -250,6 +263,9 @@
                 @error('password_confirmation')
                 <div class="text-danger">{{ $message }}</div>
                  @enderror
+                <label for="reg_pic">Photo</label>
+                <input class="form-control" id="reg_pic" type="file" name="pic"
+                       accept="image/*" style="margin-bottom: 10px;">
                 <button class="btn btn-info" type="submit" style="margin-bottom: 10px;background:#d1ad3c;color:white;border:none;border-radius:50px;">Sign Up</button>
             </form>
             <p>Already have an account? <button onclick="showLogin()" class="" style="">Login</button></p>
