@@ -121,9 +121,9 @@ class LessonController extends Controller
     public function updateCourse(Request $request)
     {
         $course = StudentCourse::findOrFail($request->id);
-        $course->scholar_can_write = $request->boolean('scholar_can_write');
-        $course->student_can_write = $request->boolean('student_can_write');
-        $course->is_active         = $request->boolean('is_active');
+        $course->scholar_can_write = filter_var($request->input('scholar_can_write'), FILTER_VALIDATE_BOOLEAN);
+        $course->student_can_write = filter_var($request->input('student_can_write'), FILTER_VALIDATE_BOOLEAN);
+        $course->is_active         = filter_var($request->input('is_active'), FILTER_VALIDATE_BOOLEAN);
         $course->save();
 
         return response()->json(['success' => true, 'message' => 'Course updated!']);
