@@ -37,41 +37,97 @@ class PublicController extends Controller
         return view('site.index', compact('posts','scholars','testimonials','feedbacks'));
     }
 
-    public function page($slug){
-        $resource = Resources::with(['children' => function($relation){
-        if (request()->filled('page')) {
-            $relation->where('number', request()->page);
-        }
-        if (request()->filled('takhti')) {
-            $relation->where('takhti_number', request()->takhti);
-        }
-        $relation->orderBy('number', 'asc');
-    }])->findBySlug($slug)->first();
+    // public function page($slug){
+    //     $resource = Resources::with(['children' => function($relation){
+    //     if (request()->filled('page')) {
+    //         $relation->where('number', request()->page);
+    //     }
+    //     if (request()->filled('takhti')) {
+    //         $relation->where('takhti_number', request()->takhti);
+    //     }
+    //     $relation->orderBy('number', 'asc');
+    // }])->findBySlug($slug)->first();
 
-    if ($resource && $resource->children) {
+    // if ($resource && $resource->children) {
         
-        $children = $resource->children;
+    //     $children = $resource->children;
 
-        if (request()->filled('page')) {
-            $children = $children->unique(function ($item) {
-                return trim((string) $item->number);
-            })->values();
+    //     if (request()->filled('page')) {
+    //         $children = $children->unique(function ($item) {
+    //             return trim((string) $item->number);
+    //         })->values();
             
-        // } elseif (request()->filled('takhti')) {
-        //     $children = $children->unique(function ($item) {
-        //         return trim((string) $item->takhti_number);
-        //     })->values();
+    //     // } elseif (request()->filled('takhti')) {
+    //     //     $children = $children->unique(function ($item) {
+    //     //         return trim((string) $item->takhti_number);
+    //     //     })->values();
             
-        } else {
-            $children = $children->unique(function ($item) {
-                return trim((string) $item->number);
-            })->values();
-        }
+    //     } else {
+    //         $children = $children->unique(function ($item) {
+    //             return trim((string) $item->number);
+    //         })->values();
+    //     }
 
-        $resource->setRelation('children', $children);
-    }
-        if(!$resource)
-            abort(404);
+    //     $resource->setRelation('children', $children);
+    // }
+    //     if(!$resource)
+    //         abort(404);
+    //     if (request()->filled('takhti') && !request()->filled('page')) {
+    //         $firstPage = Resources::where('parent_id', $resource->id)
+    //             ->where('takhti_number', request()->takhti)
+    //             ->orderBy('number', 'asc')
+    //             ->first();
+
+    //         if ($firstPage) {
+    //             return redirect()->route('page', [
+    //                 'slug'   => $slug,
+    //                 'takhti' => request()->takhti,
+    //                 'page'   => $firstPage->number
+    //             ]);
+    //         }
+    //     }
+    //         $takhtis = Resources::where('parent_id', $resource->id)
+    //             ->whereNotNull('takhti_number')
+    //             ->whereNotNull('subject')
+    //             ->select('takhti_number', 'subject')
+    //             ->distinct()
+    //             ->orderBy('takhti_number', 'asc')
+    //             ->get()
+    //             ->unique('takhti_number')
+    //             ->values();
+
+    //        $activeTakhti = request()->takhti;
+    //             if (!$activeTakhti && request()->page && $resource->children->isNotEmpty()) {
+    //                 $activeTakhti = $resource->children->first()->takhti_number;
+    //             } 
+    //     if (request()->page){
+    //         $prev = Resources::where('number', '<', request()->page)->where('parent_id', $resource->id)->orderBy('number','desc')->first();
+    //         $next = Resources::where('number', '>', request()->page)->where('parent_id', $resource->id)->orderBy('number')->first();
+    //     }
+    //     return view('site.page', [
+    //         'resource' => $resource,
+    //         'next' => @$next,
+    //         'prev' => @$prev,
+    //         'takhtis' => $takhtis,
+    //         'activeTakhti' => $activeTakhti
+    //     ]);
+    // }
+
+   public function page($slug)
+    {
+        $resource = Resources::findBySlug($slug)->first();
+        if (!$resource) abort(404);
+
+        $takhtis = Resources::where('parent_id', $resource->id)
+            ->whereNotNull('takhti_number')
+            ->whereNotNull('subject')
+            ->select('takhti_number', 'subject')
+            ->distinct()
+            ->orderBy('takhti_number', 'asc')
+            ->get()
+            ->unique('takhti_number')
+            ->values();
+
         if (request()->filled('takhti') && !request()->filled('page')) {
             $firstPage = Resources::where('parent_id', $resource->id)
                 ->where('takhti_number', request()->takhti)
@@ -79,37 +135,62 @@ class PublicController extends Controller
                 ->first();
 
             if ($firstPage) {
+                session(['active_takhti' => request()->takhti]);  
                 return redirect()->route('page', [
-                    'slug'   => $slug,
-                    'takhti' => request()->takhti,
-                    'page'   => $firstPage->number
+                    'slug' => $slug,
+                    'page' => $firstPage->number
                 ]);
             }
         }
-            $takhtis = Resources::where('parent_id', $resource->id)
-                ->whereNotNull('takhti_number')
-                ->whereNotNull('subject')
-                ->select('takhti_number', 'subject')
-                ->distinct()
-                ->orderBy('takhti_number', 'asc')
-                ->get()
-                ->unique('takhti_number')
-                ->values();
 
-           $activeTakhti = request()->takhti;
-                if (!$activeTakhti && request()->page && $resource->children->isNotEmpty()) {
-                    $activeTakhti = $resource->children->first()->takhti_number;
-                } 
-        if (request()->page){
-            $prev = Resources::where('number', '<', request()->page)->where('parent_id', $resource->id)->orderBy('number','desc')->first();
-            $next = Resources::where('number', '>', request()->page)->where('parent_id', $resource->id)->orderBy('number')->first();
+        $childQuery = Resources::where('parent_id', $resource->id)->orderBy('number', 'asc');
+        if (request()->filled('page')) {
+            $childQuery->where('number', request()->page);
         }
+        $children = $childQuery->get()->unique(function ($item) {
+            return trim((string) $item->number);
+        })->values();
+
+        $resource->setRelation('children', $children);
+
+        $activeTakhti = null;
+        if (request()->page && $children->isNotEmpty()) {
+            $activeTakhti = $children->first()->takhti_number;
+        }
+
+        $sessionTakhti = session('active_takhti');
+
+        $prev = $next = null;
+        if (request()->page) {
+
+            $next = Resources::where('parent_id', $resource->id)
+                ->where('number', '>', request()->page)
+                ->orderBy('number', 'asc')->first();
+
+            $prev = Resources::where('parent_id', $resource->id)
+                ->where('number', '<', request()->page)
+                ->orderBy('number', 'desc')->first();
+
+            if ($sessionTakhti) {
+                $takhtiNext = Resources::where('parent_id', $resource->id)
+                    ->where('takhti_number', $sessionTakhti)
+                    ->where('number', '>', request()->page)
+                    ->orderBy('number', 'asc')->first();
+
+                if ($takhtiNext) {
+                    $next = $takhtiNext;
+                } else {
+                    session()->forget('active_takhti');   
+                }
+            }
+        }
+
         return view('site.page', [
-            'resource' => $resource,
-            'next' => @$next,
-            'prev' => @$prev,
-            'takhtis' => $takhtis,
-            'activeTakhti' => $activeTakhti
+            'resource'     => $resource,
+            'next'         => $next,
+            'prev'         => $prev,
+            'takhtis'      => $takhtis,
+            'activeTakhti' => $activeTakhti,
         ]);
     }
 

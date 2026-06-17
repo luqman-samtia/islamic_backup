@@ -3,6 +3,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AdmissionFormController;
 use App\Http\Controllers\FeeRecordController;
 use App\Http\Controllers\LessonController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -145,6 +146,8 @@ Route::get('/admin/update/password', function () {
     // Student own fee report
     Route::get('/fees/my/report', [FeeRecordController::class, 'myFees'])->name('fees.my-report');
     Route::post('/fees/my/upload-proof', [FeeRecordController::class, 'uploadProof'])->name('fees.upload-proof');
+    Route::post('/fees/proof/delete',  [FeeRecordController::class, 'deleteProof'])->name('admin.fees.proof.delete');
+    Route::post('/fees/proof/replace', [FeeRecordController::class, 'replaceProof'])->name('admin.fees.proof.replace');
 
     // ---------- Lessons / Courses ----------
     // Admin: assign courses + permissions per student
@@ -158,20 +161,21 @@ Route::get('/admin/update/password', function () {
     Route::post('/lessons/options/store', [LessonController::class, 'storeOption'])->name('admin.lessons.options.store');
     Route::post('/lessons/options/delete', [LessonController::class, 'deleteOption'])->name('admin.lessons.options.delete');
     Route::get('/lessons/options/get/{type}', [LessonController::class, 'getOptions'])->name('admin.lessons.options.get');
+    Route::post('/lessons/options/reorder', [LessonController::class, 'reorderOptions'])->name('admin.lessons.options.reorder');
 
     // Admin: manage LESSON TYPES (add your own types)
     Route::get('/lessons/types', [LessonController::class, 'lessonTypes'])->name('admin.lessons.types');
     Route::post('/lessons/types/store', [LessonController::class, 'storeLessonType'])->name('admin.lessons.types.store');
     Route::post('/lessons/types/update', [LessonController::class, 'updateLessonType'])->name('admin.lessons.types.update');
     Route::post('/lessons/types/delete', [LessonController::class, 'deleteLessonType'])->name('admin.lessons.types.delete');
-
+    Route::post('/lessons/record/delete', [LessonController::class, 'deleteRecord'])->name('admin.lessons.record.delete');
     // Lesson entry (admin & scholar open a student) + student own page
     Route::get('/lessons/entry/{userId}', [LessonController::class, 'entry'])->name('admin.lessons.entry');
     Route::get('/lessons/my', [LessonController::class, 'myLessons'])->name('lessons.my');
     Route::post('/lessons/save', [LessonController::class, 'saveLessons'])->name('admin.lessons.save');
-
     // Report (admin / scholar / student)
     Route::get('/lessons/report', [LessonController::class, 'report'])->name('admin.lessons.report');
+    Route::get('/lessons/report/pdf', [LessonController::class, 'reportPdf'])->name('admin.lessons.report.pdf');
 
     
 

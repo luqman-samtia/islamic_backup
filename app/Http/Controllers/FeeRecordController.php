@@ -6,6 +6,7 @@ use Auth;
 use App\User;
 use DataTables;
 use App\FeeRecord;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class FeeRecordController extends Controller
@@ -172,6 +173,56 @@ class FeeRecordController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Payment proof uploaded. Waiting for admin to verify.',
+            'proof_url' => asset('storage/' . $rec->proof),
+        ]);
+    }
+    public function deleteProof(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'year'    => 'required|integer',
+            'month'   => 'required|integer|min:1|max:12',
+        ]);
+
+        $rec = FeeRecord::where('user_id', $request->user_id)
+            ->where('year', $request->year)
+            ->where('month', (int) $request->month)
+            ->first();
+
+        if ($rec && $rec->proof) {
+            Storage::delete($rec->proof);   
+            $rec->proof = null;
+            $rec->save();
+        }
+
+        return response()->json(['success' => true, 'message' => 'Proof deleted.']);
+    }
+
+    public function replaceProof(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'year'    => 'required|integer',
+            'month'   => 'required|integer|min:1|max:12',
+            'proof'   => 'required|image|mimes:jpeg,png,jpg,gif|max:4096',
+        ]);
+
+        $rec = FeeRecord::firstOrNew([
+            'user_id' => $request->user_id,
+            'year'    => $request->year,
+            'month'   => (int) $request->month,
+        ]);
+
+        if ($rec->proof) {
+            Storage::delete($rec->proof); 
+        }
+
+        $rec->proof = $request->file('proof')->store('fees/proofs');
+        $rec->save();
+
+        return response()->json([
+            'success'   => true,
+            'message'   => 'Proof updated.',
             'proof_url' => asset('storage/' . $rec->proof),
         ]);
     }

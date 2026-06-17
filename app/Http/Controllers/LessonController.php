@@ -73,10 +73,28 @@ class LessonController extends Controller
     // All dropdown options for a type, grouped by field_key
     protected function optionsFor($type)
     {
+        // return LessonOption::where('lesson_type', $type)
+        //     ->orderBy('sort_order')->orderBy('label')
+        //     ->get()
+        //     ->groupBy('field_key');
         return LessonOption::where('lesson_type', $type)
-            ->orderBy('sort_order')->orderBy('label')
-            ->get()
-            ->groupBy('field_key');
+        ->get()
+        ->groupBy('field_key')
+        ->map(function ($group) {
+            return $group->sort(function ($a, $b) {
+                return $a->sort_order <=> $b->sort_order
+                    ?: strnatcasecmp($a->label, $b->label);
+            })->values();
+        });
+    }
+
+    public function reorderOptions(Request $request)
+    {
+        $ids = (array) $request->input('ids', []);
+        foreach ($ids as $index => $id) {
+            LessonOption::where('id', $id)->update(['sort_order' => $index + 1]);
+        }
+        return response()->json(['success' => true, 'message' => 'Order saved!']);
     }
 
     /* =========================================================
@@ -160,12 +178,23 @@ class LessonController extends Controller
             'label'       => 'required|string|max:255',
         ]);
 
+        // $option = LessonOption::firstOrCreate([
+        //     'lesson_type' => $request->lesson_type,
+        //     'field_key'   => $request->field_key,
+        //     'label'       => $request->label,
+        // ], [
+        //     'sort_order'  => (int) $request->input('sort_order', 0),
+        // ]);
         $option = LessonOption::firstOrCreate([
             'lesson_type' => $request->lesson_type,
             'field_key'   => $request->field_key,
             'label'       => $request->label,
         ], [
-            'sort_order'  => (int) $request->input('sort_order', 0),
+            'sort_order'  => $request->filled('sort_order')
+                ? (int) $request->input('sort_order')
+                : ((int) LessonOption::where('lesson_type', $request->lesson_type)
+                        ->where('field_key', $request->field_key)
+                        ->max('sort_order') + 1),
         ]);
 
         return response()->json(['success' => true, 'message' => 'Item added!', 'option' => $option]);
@@ -332,6 +361,22 @@ class LessonController extends Controller
         return view('admin.lessons.entry', compact('student', 'tables', 'typeLabels'));
     }
 
+    public function deleteRecord(Request $request)
+    {
+        $record  = LessonRecord::findOrFail($request->id);
+        $student = User::findOrFail($record->user_id);
+
+        if ($this->role() === 'student') {
+            return response()->json(['error' => 'Students are not allowed to delete.'], 403);
+        }
+        if (!$this->canWrite($student, $record->lesson_type)) {
+            return response()->json(['error' => 'You do not have permission.'], 403);
+        }
+
+        $record->delete();
+        return response()->json(['success' => true, 'message' => 'Row deleted!']);
+    }
+
     // Save all rows for one (student, type)
     public function saveLessons(Request $request)
     {
@@ -383,12 +428,6 @@ class LessonController extends Controller
             }
         }
 
-        // Delete rows that were removed in the UI
-        LessonRecord::where('user_id', $student->id)
-            ->where('lesson_type', $type)
-            ->whereNotIn('id', $keptIds)
-            ->delete();
-
         return response()->json(['success' => true, 'message' => ucfirst($type) . ' lessons saved!']);
     }
 
@@ -422,9 +461,51 @@ class LessonController extends Controller
         if ($request->filled('year'))        $query->whereYear('lesson_date', $request->year);
         if ($request->filled('month'))       $query->whereMonth('lesson_date', $request->month);
 
-        $records  = $query->get();
+        $records = $query->paginate(10)->appends($request->query());
         $students = User::whereIn('id', $studentIds)->select('id', 'name')->orderBy('name')->get();
 
         return view('admin.lessons.report', compact('records', 'students'));
+    }
+    public function reportPdf(Request $request)
+    {
+        $user = Auth::user();
+        abort_unless(in_array($user->type, ['admin', 'scholar']), 403);
+
+        $request->validate([
+            'student_id' => 'required|exists:users,id',
+        ]);
+
+        $student = User::where('type', 'student')->findOrFail($request->student_id);
+
+        if ($user->type === 'scholar') {
+            $scholar = Scholars::where('email', $user->email)->first();
+            abort_unless($scholar && (int) $student->scholar === (int) $scholar->id, 403);
+        }
+
+        $query = LessonRecord::where('user_id', $student->id)
+            ->with('user')
+            ->orderBy('lesson_date', 'asc')
+            ->orderBy('id', 'asc');
+
+        if ($request->filled('lesson_type')) $query->where('lesson_type', $request->lesson_type);
+        if ($request->filled('year'))        $query->whereYear('lesson_date', $request->year);
+        if ($request->filled('month'))       $query->whereMonth('lesson_date', $request->month);
+
+        $records    = $query->get();
+        $typeLabels = StudentCourse::types();
+
+        $monthName  = $request->filled('month') ? (\App\FeeRecord::$months[(int) $request->month] ?? '') : '';
+        $period     = trim($monthName . ' ' . $request->input('year', ''));
+        if ($period === '') $period = 'All Records';
+
+        $pdf = \PDF::loadView('admin.lessons.report_pdf', compact(
+            'records', 'student', 'typeLabels', 'period', 'request'
+        ))->setPaper('a4', 'landscape');
+
+        $fileName = 'lesson-report-' . \Illuminate\Support\Str::slug($student->name)
+                . ($period !== 'All Records' ? '-' . \Illuminate\Support\Str::slug($period) : '')
+                . '.pdf';
+
+        return $pdf->download($fileName);
     }
 }

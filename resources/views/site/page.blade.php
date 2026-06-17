@@ -30,7 +30,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-lg-12">
                                     <div class="contact-form text-center mb-5">
-                                       <form action="" style="max-width: 100% !important;">
+                                       <form action="" style="max-width: 100% !important;" id="searchForm">
                                             <div class="d-flex flex-wrap align-items-center mb-4" id="stickyFormContainer" style="justify-content: space-evenly;">                                                
                                                 @if($prev)
                                                     <div>
@@ -43,15 +43,16 @@
                                                         style="width: 180px; height: 45px; padding: 0 15px; border: 1px solid #e1e1e1; 
                                                             margin: 0; box-sizing: border-box; text-align: center; border-radius: 0;">
                                                         
-                                                        <option value="">-- Mazoon --</option>
+                                                        <option value="">-- Select --</option>
                                                         
                                                         @foreach($takhtis as $t)
-                                                            <option value="{{ $t->takhti_number }}" 
-                                                                {{ $activeTakhti == $t->takhti_number ? 'selected' : '' }}>
-                                                                {{ $t->subject }} - {{ $t->takhti_number }}  
+                                                            <option value="{{ $t->takhti_number }}"
+                                                                    data-subject="{{ \Illuminate\Support\Str::slug($t->subject) }}"
+                                                                    {{ $activeTakhti == $t->takhti_number ? 'selected' : '' }}>
+                                                                {{ $t->subject }} - {{ $t->takhti_number }}
                                                             </option>
                                                         @endforeach
-                                                        
+                                                                                                                
                                                     </select>
                                                 </div>
 
@@ -60,7 +61,7 @@
                                                 </div>
 
                                                 <div>
-                                                    <button class="thm-btn brd-rd40 m-0" type="submit" style="height: 45px; display: inline-flex; align-items: center; justify-content: center; padding: 0 30px; border: none; box-sizing: border-box; cursor: pointer;">Search</button>
+                                                    <button class="thm-btn brd-rd40 m-0" id="pageSearchBtn" type="submit" style="height: 45px; display: inline-flex; align-items: center; justify-content: center; padding: 0 30px; border: none; box-sizing: border-box; cursor: pointer;">Search</button>
                                                 </div>
 
                                                 @if($next)
@@ -113,3 +114,21 @@
         @include('site.inc.footer')
     </main>
 @stop
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var form      = document.getElementById('searchForm');
+    var takhti    = form.querySelector('select[name="takhti"]');
+    var searchBtn = document.getElementById('pageSearchBtn');
+    var base      = window.location.pathname;
+
+    takhti.addEventListener('change', function () {
+        var num = this.value;
+        if (!num) { window.location.href = base; return; }
+        window.location.href = base + '?takhti=' + encodeURIComponent(num);
+    });
+
+    searchBtn.addEventListener('click', function () {
+        takhti.disabled = true;
+    });
+});
+</script>
