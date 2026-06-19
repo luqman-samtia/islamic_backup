@@ -138,7 +138,7 @@
     </table>
 
     <div class="footer">
-        {{ $student->name }} — {{ $period }} | Page generated automatically
+        {{ $student->name }} — {{ $period }} | Taleem-ul-Quran Institute
     </div>
 </body>
 </html>
