@@ -39,7 +39,10 @@
     <form id="feeForm">
         <input type="hidden" name="user_id" value="{{ $student->id }}">
         <input type="hidden" name="year" value="{{ $year }}">
-
+         <div class="fs-foot">
+                <span class="fs-hint"><i class="fa fa-info-circle"></i> Outstanding is calculated automatically as fee minus received.</span>
+                <button type="submit" class="fs-save"><i class="fa fa-save"></i> Save Fee Sheet</button>
+            </div>
         <div class="fs-card">
             <div class="fs-tablewrap">
                 <table class="fs-tbl">
@@ -62,15 +65,18 @@
                             <td class="fs-month">{{ $row['month_name'] }}</td>
                             <td class="r">
                                 <input type="number" step="0.01" class="form-control monthly-fee"
-                                       name="months[{{ $row['month'] }}][monthly_fee]" value="{{ $row['monthly_fee'] }}">
+                                    name="months[{{ $row['month'] }}][monthly_fee]" 
+                                    value="{{ $row['monthly_fee'] == 0 ? '' : $row['monthly_fee'] }}">
                             </td>
                             <td class="r">
                                 <input type="number" step="0.01" class="form-control received"
-                                       name="months[{{ $row['month'] }}][received]" value="{{ $row['received'] }}">
+                                    name="months[{{ $row['month'] }}][received]" 
+                                    value="{{ $row['received'] == 0 ? '' : $row['received'] }}">
                             </td>
                             <td class="r">
                                 <input type="number" step="0.01" class="form-control outstanding"
-                                       name="months[{{ $row['month'] }}][outstanding]" value="{{ $row['outstanding'] }}" readonly>
+                                    name="months[{{ $row['month'] }}][outstanding]" 
+                                    value="{{ $row['outstanding'] == 0 ? '' : $row['outstanding'] }}" readonly>
                             </td>
                             <td>
                                 <input type="date" class="form-control fs-date"
@@ -118,11 +124,6 @@
                         </tr>
                     </tfoot>
                 </table>
-            </div>
-
-            <div class="fs-foot">
-                <span class="fs-hint"><i class="fa fa-info-circle"></i> Outstanding is calculated automatically as fee minus received.</span>
-                <button type="submit" class="fs-save"><i class="fa fa-save"></i> Save Fee Sheet</button>
             </div>
         </div>
     </form>

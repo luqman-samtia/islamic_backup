@@ -207,6 +207,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                     <button type="button" class="btn btn-danger pull-left" id="removeScholarBtn" style="margin-right:auto;">
+                        <i class="fa fa-user-times"></i> Remove Scholar
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
@@ -720,6 +723,7 @@
                 $('#student_name').val(data.name);
                 $('#student_email').val(data.email);
                 $('#scholar').val(data.scholar || '');
+                $('#removeScholarBtn').toggle(!!data.scholar);
                 $('#assignScholarModal').modal('show');
             }
         });
@@ -739,6 +743,39 @@
             },
             error: function () {
                 Swal.fire('Error!', 'An error occurred while assigning the scholar.', 'error');
+            }
+        });
+    });
+
+    /* ---- remove scholar ---- */
+    $(document).on('click', '#removeScholarBtn', function () {
+        var studentId = $('#id').val();
+        if (!studentId) return;
+
+        Swal.fire({
+            title: 'Remove assigned scholar?',
+            text: "This student will have no scholar.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, remove it!'
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                $.ajax({
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    url: '{{ route('admin.student.remove-scholar') }}',
+                    method: 'POST',
+                    data: { id: studentId },
+                    success: function (response) {
+                        $('#assignScholarModal').modal('hide');
+                        Swal.fire('Removed!', response.success, 'success');
+                        datatable.ajax.reload(null, false);
+                    },
+                    error: function (xhr) {
+                        Swal.fire('Error!', (xhr.responseJSON && xhr.responseJSON.error) || 'An error occurred.', 'error');
+                    }
+                });
             }
         });
     });

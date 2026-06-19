@@ -225,23 +225,68 @@ class LessonController extends Controller
     }
 
     // Build a column config array from the posted columns[] data
+    // protected function buildColumns(Request $request)
+    // {
+    //     $pool    = LessonType::$pool;
+    //     $columns = [];
+
+    //     foreach ((array) $request->input('columns', []) as $key => $data) {
+    //         // only keep columns the admin actually ticked
+    //         if (empty($data['enabled']) || !isset($pool[$key])) {
+    //             continue;
+    //         }
+    //         $label = trim($data['label'] ?? '') ?: $pool[$key][0];
+    //         $type  = ($data['type'] ?? '') === 'dropdown' ? 'dropdown' : 'text';
+    //         // attendance & notes look best as dropdowns, but admin's choice wins
+    //         $columns[] = ['key' => $key, 'label' => $label, 'type' => $type];
+    //     }
+
+    //     return $columns;
+    // }
+
+    // Build a column config array from the posted columns[] data
     protected function buildColumns(Request $request)
     {
         $pool    = LessonType::$pool;
         $columns = [];
+        $seen    = [];
 
+        // Existing pool-based columns (admin ne tick kiye)
         foreach ((array) $request->input('columns', []) as $key => $data) {
-            // only keep columns the admin actually ticked
             if (empty($data['enabled']) || !isset($pool[$key])) {
                 continue;
             }
             $label = trim($data['label'] ?? '') ?: $pool[$key][0];
-            $type  = ($data['type'] ?? '') === 'dropdown' ? 'dropdown' : 'text';
-            // attendance & notes look best as dropdowns, but admin's choice wins
-            $columns[] = ['key' => $key, 'label' => $label, 'type' => $type];
+            $type  = $this->normalizeColType($data['type'] ?? '');
+            $columns[]  = ['key' => $key, 'label' => $label, 'type' => $type];
+            $seen[$key] = true;
+        }
+
+        foreach ((array) $request->input('custom_columns', []) as $data) {
+            $label = trim($data['label'] ?? '');
+            if ($label === '') {
+                continue; 
+            }
+
+            $base = \Illuminate\Support\Str::slug($label, '_') ?: 'col';
+            $key  = $base;
+            $j    = 1;
+            while (isset($seen[$key]) || isset($pool[$key])) {
+                $key = $base . '_' . (++$j);
+            }
+
+            $type = $this->normalizeColType($data['type'] ?? '');
+            $columns[]  = ['key' => $key, 'label' => $label, 'type' => $type];
+            $seen[$key] = true;
         }
 
         return $columns;
+    }
+
+    protected function normalizeColType($type)
+    {
+        $allowed = ['text', 'number', 'dropdown'];
+        return in_array($type, $allowed, true) ? $type : 'text';
     }
 
     public function storeLessonType(Request $request)
@@ -279,7 +324,7 @@ class LessonController extends Controller
         $type = LessonType::findOrFail($request->id);
 
         $type->label      = $request->input('label', $type->label);
-        $type->is_active  = $request->boolean('is_active');
+        $type->is_active  = filter_var($request->input('is_active'), FILTER_VALIDATE_BOOLEAN);
         $type->sort_order = (int) $request->input('sort_order', $type->sort_order);
 
         // Columns are optional on update; only replace if any were submitted
@@ -349,16 +394,20 @@ class LessonController extends Controller
                 'options'  => $this->optionsFor($type),
                 'records'  => LessonRecord::where('user_id', $student->id)
                                 ->where('lesson_type', $type)
-                                ->orderBy('lesson_date', 'desc')
-                                ->orderBy('id', 'desc')
+                                // ->orderBy('lesson_date', 'asc')
+                                ->orderBy('id', 'asc')
                                 ->get(),
                 'can_write' => $this->canWrite($student, $type),
             ];
         }
 
         $typeLabels = StudentCourse::types();
+         $scholarName = null;
+        if (!empty($student->scholar)) {
+            $scholarName = optional(Scholars::find($student->scholar))->name;
+        }
 
-        return view('admin.lessons.entry', compact('student', 'tables', 'typeLabels'));
+        return view('admin.lessons.entry', compact('student', 'tables', 'typeLabels','scholarName'));
     }
 
     public function deleteRecord(Request $request)
@@ -463,7 +512,6 @@ class LessonController extends Controller
 
         $records = $query->paginate(10)->appends($request->query());
         $students = User::whereIn('id', $studentIds)->select('id', 'name')->orderBy('name')->get();
-
         return view('admin.lessons.report', compact('records', 'students'));
     }
     public function reportPdf(Request $request)
@@ -493,13 +541,13 @@ class LessonController extends Controller
 
         $records    = $query->get();
         $typeLabels = StudentCourse::types();
-
+         $info = \App\Information::query()->first();
         $monthName  = $request->filled('month') ? (\App\FeeRecord::$months[(int) $request->month] ?? '') : '';
         $period     = trim($monthName . ' ' . $request->input('year', ''));
         if ($period === '') $period = 'All Records';
 
         $pdf = \PDF::loadView('admin.lessons.report_pdf', compact(
-            'records', 'student', 'typeLabels', 'period', 'request'
+            'records', 'student', 'typeLabels', 'period', 'request', 'info'
         ))->setPaper('a4', 'landscape');
 
         $fileName = 'lesson-report-' . \Illuminate\Support\Str::slug($student->name)

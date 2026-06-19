@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 
-@section('title', 'Student')
+@section('title', 'Update Password')
 
 @section('content_header')
 <!-- Add SweetAlert CSS and JS -->
@@ -11,7 +11,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <h1>
-        {{ auth()->user()->type ==='admin' ? 'Admin' : 'Student' }}
+       {{ auth()->user()->type === 'admin' ? 'Admin' : (auth()->user()->type === 'scholar' ? 'Scholar' : 'Student') }}
          Update Password
         {{-- <a href="" class="btn btn-sm btn-success pull-right"><i class="fa fa-plus"></i> New Scholars</a> --}}
     </h1>

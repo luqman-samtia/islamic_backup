@@ -5,6 +5,28 @@
 <style>
     * { font-family: DejaVu Sans, sans-serif; }
     body { color: #2d3748; font-size: 11px; margin: 0; }
+
+    .academy-header {
+        text-align: center;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+    }
+    .academy-header img {
+        height: 60px;
+        margin-bottom: 6px;
+    }
+    .academy-header .academy-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: #1a202c;
+        margin: 2px 0;
+    }
+    .academy-header .academy-contact {
+        font-size: 10px;
+        color: #718096;
+        margin-top: 3px;
+    }
+
     .header {
         border-bottom: 3px solid #2c7be5; padding-bottom: 12px; margin-bottom: 18px;
     }
@@ -16,11 +38,12 @@
     .meta-table .val { color: #1a202c; font-weight: bold; }
     table.data { width: 100%; border-collapse: collapse; }
     table.data thead th {
-        background: #2c7be5; color: #fff; padding: 7px 6px; text-align: left;
+        background: #2d3748; color: #fff; padding: 7px 6px; text-align: left;
         font-size: 10px; text-transform: uppercase; letter-spacing: .3px;
+        font-weight: bold; border: 1px solid #2d3748;
     }
     table.data tbody td {
-        padding: 6px; border-bottom: 1px solid #e2e8f0; font-size: 10.5px; vertical-align: top;
+        padding: 6px; border: 1px solid #cbd5e0; font-size: 10.5px; vertical-align: top;
     }
     table.data tbody tr:nth-child(even) { background: #f7fafc; }
     .badge {
@@ -36,6 +59,16 @@
 </style>
 </head>
 <body>
+    <div class="academy-header">
+        <img src="{{ public_path('assets/images/logo1.png') }}" alt="Logo">
+        <div class="academy-name">Taleem-ul-Quran Institute</div>
+        <div class="academy-contact">
+             {{ optional($info)->whatsapp1['value'] ?? '' }}
+            &nbsp;|&nbsp;
+           {{ optional($info)->email['value'] ?? '' }}
+        </div>
+    </div>
+
     <div class="header">
         <h1>Lessons Report</h1>
         <div class="sub">Student progress sheet</div>

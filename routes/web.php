@@ -87,6 +87,7 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     // Assign scholar to student   
     Route::get('/student/{id}', 'StudentController@getStudent')->name('admin.student.get');
     Route::post('/students/assign-scholar', 'StudentController@assignScholar')->name('admin.student.assign-scholar');
+    Route::post('/student/remove-scholar', 'StudentController@removeScholar')->name('admin.student.remove-scholar');
     // end>>>>>>>>>>
     Route::post('/students/destroy', 'StudentController@students_destroy')->name('admin.student.destroy');
     Route::get('/student/add-links/{id}','StudentController@showAddLinksForm')->name('admin.student.addLinks');
@@ -102,11 +103,20 @@ Route::middleware('auth')->prefix('admin')->group(function(){
     if (Auth::check() && Auth::user()->type === 'admin') {
         return redirect('/admin/admin/update/password');
     }
+    if (Auth::check() && Auth::user()->type === 'scholar') {
+        return redirect('/admin/scholar/update/password');
+    }
     return view('admin.students.updatepassword');
 })->middleware('auth')->name('student.update-password');
 
 Route::get('/admin/update/password', function () {
     if (Auth::check() && Auth::user()->type !== 'admin') {
+        return redirect('/student/update/password');
+    }
+    return view('admin.students.updatepassword');
+})->middleware('auth')->name('admin.update-password');
+Route::get('/scholar/update/password', function () {
+    if (Auth::check() && Auth::user()->type !== 'scholar') {
         return redirect('/student/update/password');
     }
     return view('admin.students.updatepassword');

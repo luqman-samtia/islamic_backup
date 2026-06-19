@@ -95,6 +95,7 @@
                     <td>
                         <select class="form-control input-sm col-type" data-key="{{ $key }}">
                             <option value="text"     {{ $meta[1] === 'text' ? 'selected' : '' }}>Text</option>
+                            <option value="number"   {{ $meta[1] === 'number' ? 'selected' : '' }}>Number</option>
                             <option value="dropdown" {{ $meta[1] === 'dropdown' ? 'selected' : '' }}>Dropdown</option>
                         </select>
                     </td>
@@ -104,7 +105,28 @@
         </table>
         <small class="text-muted">
             <b>Dropdown</b> = admin-managed "Add Item" list (Lesson Options page).
-            <b>Text</b> = free typing. A "Day &amp; Date" column is always added automatically.
+            <b>Text</b> = free typing. <b>Number</b> = numeric input only.
+            A "Day &amp; Date" column is always added automatically.
+        </small>
+
+        {{-- ===== Custom / New Fields ===== --}}
+        <label style="margin-top:20px">Custom Fields (apne naye column banayein)</label>
+        <table class="table table-bordered" style="max-width:700px" id="customColsTable">
+            <thead>
+                <tr class="bg-gray">
+                    <th>Display Label</th>
+                    <th style="width:140px">Input Type</th>
+                    <th style="width:60px"></th>
+                </tr>
+            </thead>
+            <tbody id="customColsBody"></tbody>
+        </table>
+        <button type="button" class="btn btn-default btn-sm" id="addCustomCol">
+            <i class="fa fa-plus"></i> Add Custom Field
+        </button>
+        <small class="text-muted" style="display:block;margin-top:6px">
+            Key label se khud ban jati hai. Dropdown custom field ke options baad mein
+            Lesson Options page se add ho sakte hain.
         </small>
     </div>
     <div class="box-footer">
@@ -128,9 +150,10 @@ function clearForm() {
     $('#typeLabel').val('');
     $('#formTitle').text('Add New Lesson Type');
     $('.col-enable').prop('checked', false);
+    $('#customColsBody').empty();
 }
 
-// Collect ticked columns into the columns[key][...] structure
+// Collect ticked pool columns into the columns[key][...] structure
 function collectColumns() {
     var cols = {};
     $('.col-enable:checked').each(function () {
@@ -144,17 +167,62 @@ function collectColumns() {
     return cols;
 }
 
+// Collect admin's custom fields into the custom_columns[] structure
+function collectCustomColumns() {
+    var custom = [];
+    $('#customColsBody tr').each(function () {
+        var label = $(this).find('.custom-label').val().trim();
+        if (!label) return;
+        custom.push({
+            label: label,
+            type:  $(this).find('.custom-type').val()
+        });
+    });
+    return custom;
+}
+
+// Add a custom field row
+function addCustomRow(label, type) {
+    label = label || '';
+    type  = type  || 'text';
+    var row =
+        '<tr>' +
+            '<td><input type="text" class="form-control input-sm custom-label" placeholder="e.g. Marks" value="' + label + '"></td>' +
+            '<td>' +
+                '<select class="form-control input-sm custom-type">' +
+                    '<option value="text">Text</option>' +
+                    '<option value="number">Number</option>' +
+                    '<option value="dropdown">Dropdown</option>' +
+                '</select>' +
+            '</td>' +
+            '<td class="text-center"><button type="button" class="btn btn-danger btn-xs del-custom"><i class="fa fa-times"></i></button></td>' +
+        '</tr>';
+    var $row = $(row);
+    $row.find('.custom-type').val(type);
+    $('#customColsBody').append($row);
+}
+
+$('#addCustomCol').on('click', function () { addCustomRow(); });
+
+$(document).on('click', '.del-custom', function () {
+    $(this).closest('tr').remove();
+});
+
 // Save (create or update)
 $('#saveType').on('click', function () {
     var id    = $('#typeId').val();
     var label = $('#typeLabel').val().trim();
     if (!label) { Swal.fire('Wait', 'Enter a type name.', 'warning'); return; }
 
-    var cols = collectColumns();
-    if ($.isEmptyObject(cols)) { Swal.fire('Wait', 'Tick at least one column.', 'warning'); return; }
+    var cols   = collectColumns();
+    var custom = collectCustomColumns();
+    if ($.isEmptyObject(cols) && custom.length === 0) {
+        Swal.fire('Wait', 'Tick at least one column or add a custom field.', 'warning');
+        return;
+    }
 
     var url  = id ? '{{ route('admin.lessons.types.update') }}' : '{{ route('admin.lessons.types.store') }}';
-    var data = { label: label, columns: cols };
+    var data = { label: label, columns: cols, custom_columns: custom };
     if (id) { data.id = id; data.is_active = 1; }
 
     $.post(url, data)
@@ -180,10 +248,19 @@ $(document).on('click', '.edit-type', function () {
     $('#typeLabel').val(label);
     $('#formTitle').text('Edit Lesson Type: ' + label);
 
+    var poolKeys = [];
+    $('.col-enable').each(function () { poolKeys.push(String($(this).data('key'))); });
+
     columns.forEach(function (c) {
-        $('.col-enable[data-key="' + c.key + '"]').prop('checked', true);
-        $('.col-label[data-key="' + c.key + '"]').val(c.label);
-        $('.col-type[data-key="' + c.key + '"]').val(c.type);
+        if (poolKeys.indexOf(String(c.key)) !== -1) {
+            // known pool column
+            $('.col-enable[data-key="' + c.key + '"]').prop('checked', true);
+            $('.col-label[data-key="' + c.key + '"]').val(c.label);
+            $('.col-type[data-key="' + c.key + '"]').val(c.type);
+        } else if (c.key !== 'day' && c.key !== 'lesson_date') {
+            // custom column saved earlier -> show as editable custom row
+            addCustomRow(c.label, c.type);
+        }
     });
 
     $('html, body').animate({ scrollTop: $('#formTitle').offset().top - 80 }, 300);

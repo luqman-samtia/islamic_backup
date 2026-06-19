@@ -15,6 +15,9 @@
     $hasPic  = isset($form) && $form->pic;
     $rollNo  = $form->roll_no ?? null;
     $feeVal  = $form->fee ?? null;
+
+    // Form pehle se submit ho chuka hai? to locked (student edit nahi kar sakta)
+    $isLocked = isset($form) && $form->exists;
 @endphp
 
 <div class="my-adm">
@@ -25,11 +28,25 @@
         <div>
             <p class="ma-eyebrow">Admission</p>
             <h1 class="ma-title">My Admission Form</h1>
-            <p class="ma-sub">Fill in or update your details. Roll No and Fee are assigned by the admin.</p>
+            <p class="ma-sub">
+                @if($isLocked)
+                    Your form has been submitted. It is now locked — contact the admin for any changes.
+                @else
+                    Fill in your details. Roll No and Fee are assigned by the admin. You can submit only once.
+                @endif
+            </p>
         </div>
     </div>
 
+    @if($isLocked)
+        <div class="ma-locked-banner">
+            <i class="fa fa-lock"></i>
+            <span>This form is submitted and locked. You cannot edit it. Please contact the admin if you need to make changes.</span>
+        </div>
+    @endif
+
     <form id="myAdmissionForm" enctype="multipart/form-data">
+        <fieldset {{ $isLocked ? 'disabled' : '' }} style="border:none;padding:0;margin:0;min-width:0;">
         <div class="ma-grid">
 
             {{-- ===== DETAILS ===== --}}
@@ -69,8 +86,12 @@
                     </div>
                 </div>
                 <div class="ma-cardft">
-                    <button type="submit" class="ma-save"><i class="fa fa-save"></i> Save My Form</button>
-                    <span class="ma-hint"><i class="fa fa-info-circle"></i> Fields marked * are required.</span>
+                    @if($isLocked)
+                        <span class="ma-hint"><i class="fa fa-lock"></i> Your form is submitted and locked. Contact the admin for any changes.</span>
+                    @else
+                        <button type="submit" class="ma-save"><i class="fa fa-save"></i> Save My Form</button>
+                        <span class="ma-hint"><i class="fa fa-info-circle"></i> Fields marked * are required.</span>
+                    @endif
                 </div>
             </div>
 
@@ -84,11 +105,13 @@
                         <span id="maPlaceholder" class="ma-photo-ph" style="background:{{ $maColor }};{{ $hasPic ? 'display:none' : '' }}">{{ $maIni }}</span>
                     </div>
 
-                    <label class="ma-upload" title="Upload a photo">
-                        <i class="fa fa-upload"></i> <span>{{ $hasPic ? 'Change photo' : 'Upload photo' }}</span>
-                        <input type="file" id="maPic" name="pic" accept="image/*" style="display:none">
-                    </label>
-                    <p class="ma-uploadnote">JPG or PNG, a clear front-facing photo works best.</p>
+                    @if(!$isLocked)
+                        <label class="ma-upload" title="Upload a photo">
+                            <i class="fa fa-upload"></i> <span>{{ $hasPic ? 'Change photo' : 'Upload photo' }}</span>
+                            <input type="file" id="maPic" name="pic" accept="image/*" style="display:none">
+                        </label>
+                        <p class="ma-uploadnote">JPG or PNG, a clear front-facing photo works best.</p>
+                    @endif
 
                     <div class="ma-assigned">
                         <p class="ma-assigned-hd">Assigned by admin</p>
@@ -105,6 +128,7 @@
             </div>
 
         </div>
+        </fieldset>
     </form>
 
 </div>
@@ -131,6 +155,11 @@
 .my-adm .ma-title{font-size:25px;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.05;color:var(--ink)}
 .my-adm .ma-sub{margin:4px 0 0;color:var(--muted);font-size:13px}
 
+/* locked banner */
+.my-adm .ma-locked-banner{display:flex;align-items:center;gap:10px;background:var(--warn-bg);border:1px solid var(--warn-br);
+    color:var(--warn);font-size:13px;font-weight:600;padding:11px 16px;border-radius:12px;margin-bottom:18px}
+.my-adm .ma-locked-banner i{font-size:15px}
+
 /* layout */
 .my-adm .ma-grid{display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start}
 .my-adm .ma-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 1px 3px rgba(16,24,40,.05);overflow:hidden}
@@ -148,6 +177,8 @@
 .my-adm .form-control::placeholder{color:#B8BEC9}
 .my-adm .form-control:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(79,70,229,.15);outline:none}
 .my-adm textarea.form-control{resize:vertical;min-height:64px}
+/* disabled (locked) look */
+.my-adm fieldset:disabled .form-control{background:#F6F7F9;color:#7A828E;cursor:not-allowed}
 
 /* footer */
 .my-adm .ma-cardft{padding:16px 22px;border-top:1px solid var(--line);background:#FCFCFD;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -207,23 +238,44 @@ $('#maPic').on('change', function () {
 
 $('#myAdmissionForm').on('submit', function (e) {
     e.preventDefault();
-    var fd = new FormData(this);
-    $.ajax({
-        url: '{{ route('admission.my-form.store') }}',
-        method: 'POST',
-        data: fd,
-        processData: false,
-        contentType: false,
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-        beforeSend: function(){ Swal.fire({title:'Saving...', didOpen:()=>Swal.showLoading(), allowOutsideClick:false}); },
-        success: function (res) {
-            Swal.fire('Success', res.message, 'success').then(function(){ location.reload(); });
-        },
-        error: function (xhr) {
-            var msg = 'Something went wrong.';
-            if (xhr.status === 422) msg = Object.values(xhr.responseJSON.errors).flat().join('\n');
-            Swal.fire('Error', msg, 'error');
-        }
+    var form = this;
+
+    // Confirm before final submit — student ko clearly bata dein ke edit nahi hoga
+    Swal.fire({
+        title: 'Submit your admission form?',
+        html: 'Please double-check all your details.<br><br>' +
+              '<b>Once submitted, you will not be able to edit this form.</b><br>' +
+              'For any changes afterwards, you will need to contact the admin.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#4F46E5',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: 'Yes, submit it',
+        cancelButtonText: 'Review again',
+        reverseButtons: true
+    }).then(function (result) {
+        if (!result.isConfirmed) return;
+
+        var fd = new FormData(form);
+        $.ajax({
+            url: '{{ route('admission.my-form.store') }}',
+            method: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            beforeSend: function(){ Swal.fire({title:'Submitting...', didOpen:()=>Swal.showLoading(), allowOutsideClick:false}); },
+            success: function (res) {
+                Swal.fire('Submitted!', (res.message || 'Your admission form has been submitted and is now locked.'), 'success')
+                    .then(function(){ location.reload(); });
+            },
+            error: function (xhr) {
+                var msg = 'Something went wrong.';
+                if (xhr.status === 422) msg = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                else if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+                Swal.fire('Error', msg, 'error');
+            }
+        });
     });
 });
 </script>

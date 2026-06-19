@@ -36,6 +36,7 @@ class CustomGateFilter implements FilterInterface
                 // 'admin/student/update/password',
                 'admin/student/submit/feedback',
                 'admin/student/show/info',
+                'admin/scholars/students',
                 // === NEW: student-only items hidden from admin ===
                 'admin/admission/my-form',
                 'admin/fees/my/report',
@@ -68,6 +69,7 @@ class CustomGateFilter implements FilterInterface
                 'admin/home',
                 'admin/scholars/students',
                 'admin/scholars/students/info',
+                'admin/student/update/password',
                 // === NEW: scholar ko Lessons Report dikhao ===
                 'admin/lessons/report',
             ])) {

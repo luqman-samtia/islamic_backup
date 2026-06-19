@@ -128,16 +128,22 @@ return [
             'url'  => 'admin/student/update/password',
             'can' => 'studentcontroller.change-password' 
         ],
+        // [
+        //     'text' => 'Student Report',
+        //     'icon' => 'graduation-cap',
+        //     'url'  => 'admin/student/show/info',
+        //     'can' => 'studentcontroller.add-info' 
+        // ],
+        // [
+        //     'text' => 'Students ',
+        //     'icon' => 'graduation-cap',
+        //     'url'  => 'admin/scholars/students/info',
+        //     'can' => 'scholarscontroller.studentsDetails' 
+        // ],
         [
-            'text' => 'Student Report',
+            'text' => 'Students ',
             'icon' => 'graduation-cap',
-            'url'  => 'admin/student/show/info',
-            'can' => 'studentcontroller.add-info' 
-        ],
-        [
-            'text' => 'Students Report',
-            'icon' => 'graduation-cap',
-            'url'  => 'admin/scholars/students/info',
+            'url'  => 'admin/scholars/students',
             'can' => 'scholarscontroller.studentsDetails' 
         ],
 

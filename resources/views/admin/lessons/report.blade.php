@@ -157,6 +157,7 @@
 @stop
 
 @section('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .report-card-foot{
     display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
@@ -176,7 +177,8 @@
 .report-title i { color:#2c7be5; }
 .stat-row { margin-bottom: 5px; }
 .stat-card {
-    background:#fff; border-radius:12px; padding:18px 20px; display:flex; align-items:center;
+    background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px 20px;
+    display:flex; align-items:center;
     box-shadow:0 2px 12px rgba(0,0,0,.06); margin-bottom:18px;
 }
 .stat-icon {
@@ -188,7 +190,7 @@
 .bg-purple{background:linear-gradient(135deg,#8965e0,#7048c5);}
 .stat-info{display:flex;flex-direction:column;}
 .stat-num{font-size:22px;font-weight:700;color:#2d3748;line-height:1.1;}
-.stat-label{font-size:12px;color:#a0aec0;text-transform:uppercase;letter-spacing:.5px;}
+.stat-label{font-size:12px;color:#718096;text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
 
 .report-card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden;}
 .report-card-head{padding:18px 20px;border-bottom:1px solid #edf2f7;}
@@ -198,13 +200,15 @@
 .filter-bar .btn{border-radius:8px;height:38px;}
 .filter-bar .pull-right{margin-left:auto;}
 
-.modern-table{margin:0;}
+.modern-table{margin:0;border-collapse:separate;border-spacing:0;}
 .modern-table thead th{
-    background:#f7fafc;color:#718096;font-size:11px;text-transform:uppercase;
-    letter-spacing:.4px;border:none;border-bottom:2px solid #edf2f7;padding:12px 14px;
+    background:#2d3748;color:#fff;font-size:11px;text-transform:uppercase;font-weight:700;
+    letter-spacing:.4px;border:1px solid #2d3748;padding:12px 14px;
 }
-.modern-table tbody td{padding:12px 14px;border-top:1px solid #edf2f7;vertical-align:middle;font-size:13px;}
-.modern-table tbody tr:hover{background:#f7faff;}
+.modern-table tbody td{
+    padding:12px 14px;border:1px solid #e2e8f0;vertical-align:middle;font-size:13px;
+}
+.modern-table tbody tr:hover td{background:#f7faff;}
 .muted{color:#a0aec0;}
 .notes-cell{max-width:200px;color:#4a5568;}
 
@@ -220,12 +224,30 @@
 .pill-gray{background:#edf2f7;color:#718096;}
 .empty-state{text-align:center;color:#cbd5e0;padding:40px;font-size:14px;}
 .empty-state i{font-size:34px;margin-bottom:8px;display:block;}
+
+/* Select2 height match with bootstrap form-control */
+.filter-bar .select2-container{min-width:220px;}
+.filter-bar .select2-container .select2-selection--single{
+    height:38px;border:1px solid #d2d6de;border-radius:8px;display:flex;align-items:center;
+}
+.filter-bar .select2-container--default .select2-selection--single .select2-selection__arrow{
+    height:36px;
+}
 </style>
 @stop
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+$(function () {
+    $('#studentSelect').select2({
+        placeholder: 'Search student...',
+        allowClear: true,
+        width: '220px'
+    });
+});
+
 $('#downloadPdf').on('click', function (e) {
     e.preventDefault();
     var studentId = $('#studentSelect').val();

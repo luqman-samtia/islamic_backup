@@ -314,7 +314,8 @@ class StudentController extends Controller
                     'users.*',
                     'scholars.name as scholar_name',
                     'admission_forms.id as admission_form_id',
-                    'admission_forms.pic as admission_pic'
+                    'admission_forms.pic as admission_pic',
+                    'admission_forms.student_name as admission_name'
                 )
                 ->orderBy('id','desc');
  
@@ -328,6 +329,9 @@ class StudentController extends Controller
             return DataTables::of($query)
                 ->addColumn('scholar', function ($row) {
                     return $row->scholar_name ?? 'No Scholar';
+                })
+                ->editColumn('name', function ($row) {
+                    return $row->admission_name ?: $row->name;
                 })
                 ->make(true);
         }
@@ -438,6 +442,18 @@ class StudentController extends Controller
             $student->save();
 
             return response()->json(['success' => 'Scholar assigned successfully.']);
+        }
+         public function removeScholar(Request $request)
+        {
+            $request->validate([
+                'id' => 'required|exists:users,id',
+            ]);
+
+            $student = User::find($request->id);
+            $student->scholar = null;
+            $student->save();
+
+            return response()->json(['success' => 'Scholar removed successfully.']);
         }
         public function students_destroy(Request $request){
 

@@ -2,11 +2,24 @@
 
 @section('title', 'Lessons')
 
-@section('content_header')
+{{-- @section('content_header')
     <h1 class="lessons-page-title">
         <i class="fa fa-graduation-cap"></i> Lessons
         <small class="text-muted">— {{ $student->name }}</small>
     </h1>
+@stop --}}
+@section('content_header')
+    <div class="lessons-head-row">
+        <h1 class="lessons-page-title">
+            <i class="fa fa-graduation-cap"></i> Lessons
+            <small class="text-muted">— {{ $student->name }}</small>
+        </h1>
+        <div class="lessons-scholar">
+            <i class="fa fa-user-circle"></i>
+            <span class="ls-label">Scholar:</span>
+            <span class="ls-name">{{ $scholarName ?? 'Not assigned' }}</span>
+        </div>
+    </div>
 @stop
 
 @section('content')
@@ -86,7 +99,9 @@
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
 <style>
-    .lessons-page-title { font-weight: 700; }
+    .lessons-page-title { font-weight: 700; font-size: 20px; margin: 0; }
+    .lessons-page-title i { font-size: 18px; }
+    .lessons-page-title small { font-size: 14px; }
 
     .content-wrapper { overflow-x: hidden; }
 
@@ -103,8 +118,20 @@
     /* ---------- Header ---------- */
     .lesson-head {
         display:flex; align-items:center; justify-content:space-between;
-        padding:14px 18px; background:#fff; border-bottom:1px solid #eef1f5;
+        padding:5px 10px; background:#fff; border-bottom:1px solid #eef1f5;
     }
+    .lessons-head-row {
+        display:flex; align-items:center; justify-content:space-between;
+        flex-wrap:wrap; gap:5px;
+    }
+    .lessons-scholar {
+        display:inline-flex; align-items:center; gap:7px;
+        background:#eef5fb; border:1px solid #cfe0ee; color:#2c6f9b;
+        padding:7px 14px; border-radius:8px; font-size:14px; font-weight:600;
+    }
+    .lessons-scholar i { font-size:16px; }
+    .lessons-scholar .ls-label { color:#6b7785; font-weight:500; }
+    .lessons-scholar .ls-name { color:#243240; font-weight:700; }
     .lesson-title { display:flex; align-items:center; }
     .lesson-icon {
         width:36px; height:36px; margin-right:12px; border-radius:9px;
@@ -113,7 +140,7 @@
         background:linear-gradient(135deg,#3c8dbc 0%,#2c6f9b 100%);
         box-shadow:0 3px 8px rgba(44,111,155,.35);
     }
-    .lesson-title-text { font-size:19px; font-weight:800; color:#243240; letter-spacing:.2px; }
+    .lesson-title-text { font-size:18px; font-weight:800; color:#243240; letter-spacing:.2px; }
     .lesson-actions { display:flex; align-items:center; }
     .lesson-actions .btn { margin-left:8px; font-weight:600; border-radius:7px; padding:7px 14px; }
     .btn-ghost { background:#fff; color:#3c8dbc; border:1px solid #cfe0ee; }

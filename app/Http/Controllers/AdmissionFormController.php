@@ -23,6 +23,15 @@ class AdmissionFormController extends Controller
     // Save / update the logged-in student's own admission form
     public function studentStore(Request $request)
     {
+        $user = Auth::user();
+
+        $existing = AdmissionForm::where('user_id', $user->id)->first();
+        if ($existing) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Your admission form is already submitted and cannot be edited. Please contact the admin for changes.',
+            ], 422);
+        }
         $request->validate([
             'student_name'   => 'required|string|max:255',
             'father_name'    => 'nullable|string|max:255',
