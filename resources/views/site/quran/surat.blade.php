@@ -58,7 +58,7 @@
                                             <select name="surat">
                                                 <option value="">-- Select Surah --</option>
                                                 @foreach ($quran as $surat_item)
-                                                    <option value="{{ $surat_item->slug }}" {{ $surat_item->id === $surat->id ? 'selected' : '' }}>
+                                                    <option value="{{ $surat_item->slug }}" data-first="{{ $surat_item->first_page }}" {{ $surat_item->id === $surat->id ? 'selected' : '' }}>
                                                         {{ $surat_item->title }}
                                                     </option>
                                                 @endforeach
@@ -112,9 +112,9 @@
 
         @include('site.inc.footer')
     </main>
-@stop
+{{-- @stop --}}
 
-@section('custom_js')
+{{-- @section('custom_js') --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var contactFormRow = ($('.contact-form-row').offset().top - 92);
@@ -130,5 +130,26 @@
                 }
             });
         });
+        // var suratSelect = document.querySelector('select[name="surat"]');
+        // if (suratSelect) {
+        //     suratSelect.addEventListener('change', function () {
+        //         if (this.value) {
+        //             window.location.href = "{{ route('quranSurat', '') }}/" + this.value;
+        //         }
+        //     });
+        // }
+        var suratSelect = document.querySelector('select[name="surat"]');
+            if (suratSelect) {
+                suratSelect.addEventListener('change', function () {
+                    if (!this.value) { return; }
+                    var first = this.options[this.selectedIndex].getAttribute('data-first');
+                    if (first) {
+                        window.location.href = "{{ route('quranSurat.page', ['__SLUG__','__PAGE__']) }}"
+                            .replace('__SLUG__', this.value).replace('__PAGE__', first);
+                    } else {
+                        window.location.href = "{{ route('quranSurat', '') }}/" + this.value;
+                    }
+                });
+            }
     </script>
 @stop

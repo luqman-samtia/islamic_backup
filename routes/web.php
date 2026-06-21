@@ -35,6 +35,12 @@ Route::get('admin/check-student-status/{id}', [StudentController::class, 'checkS
 Route::get('admin/check-student-disable/{id}', [StudentController::class, 'checkStudentDisable']);
 Route::post('admin/student/change-password', [StudentController::class, 'changeStudentPassword'])->name('admin.student.changePassword');
 Route::post('admin/student/bulk-delete', 'StudentController@bulkDestroy')->name('admin.student.bulk-delete');
+// ===== NOTIFICATIONS =====
+Route::get('admin/notifications', 'StudentController@getAdminNotifications')->name('admin.notifications');
+Route::post('admin/notifications/read-all', 'StudentController@markAllNotificationsRead')->name('admin.notifications.readAll');
+Route::post('admin/notifications/{id}/read', 'StudentController@markNotificationRead')->name('admin.notifications.read');
+Route::delete('admin/notifications/clear-all', 'StudentController@clearAllNotifications')->name('admin.notifications.clearAll');
+Route::delete('admin/notifications/{id}', 'StudentController@deleteNotification')->name('admin.notifications.delete');
 
 
 // END

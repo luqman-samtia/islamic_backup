@@ -78,6 +78,12 @@ class StudentController extends Controller
                                         ? $request->file('pic')->store('admissions/images')
                                         : null,
             ]);
+            \App\AdminNotification::create([
+                    'user_id' => $user->id,
+                    'type'    => 'registration',
+                    'message' => 'New student has registered: ' . $user->name,
+                    'is_read' => false,
+                ]);
            
             try {
                 Mail::to('shifaacademy63@gmail.com')->send(new AdminVerification($user));
@@ -91,6 +97,82 @@ class StudentController extends Controller
        
     }
 
+    // ===== NOTIFICATION METHODS =====
+
+    private function ensureAdmin()
+    {
+        if (Auth::user()->type !== 'admin') {
+            abort(403, 'Unauthorized');
+        }
+    }
+
+    // List + unread count
+    public function getAdminNotifications()
+    {
+        $this->ensureAdmin();
+
+        $notifications = \App\AdminNotification::orderBy('created_at', 'desc')
+            ->take(15)
+            ->get()
+            ->map(function ($n) {
+                $admission = \App\AdmissionForm::where('user_id', $n->user_id)->first();
+
+                $n->link = $admission
+                    ? route('admin.admission.show', $admission->id)
+                    : route('students'); 
+
+                return $n;
+            });
+
+        return response()->json([
+            'count'         => \App\AdminNotification::where('is_read', false)->count(),
+            'notifications' => $notifications,
+        ]);
+    }
+    // Single read
+    public function markNotificationRead($id)
+    {
+        $this->ensureAdmin();
+
+        $notif = \App\AdminNotification::find($id);
+        if (!$notif) {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+        $notif->is_read = 1;
+        $notif->save();
+        return response()->json(['success' => true]);
+    }
+
+    // All read
+    public function markAllNotificationsRead()
+    {
+        $this->ensureAdmin();
+
+        \App\AdminNotification::where('is_read', false)->update(['is_read' => true]);
+        return response()->json(['success' => true]);
+    }
+
+    // Single delete
+    public function deleteNotification($id)
+    {
+        $this->ensureAdmin();
+
+        $notif = \App\AdminNotification::find($id);
+        if (!$notif) {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+        $notif->delete();
+        return response()->json(['success' => true]);
+    }
+
+    // Clear all
+    public function clearAllNotifications()
+    {
+        $this->ensureAdmin();
+
+        \App\AdminNotification::truncate();
+        return response()->json(['success' => true]);
+    }
     // Student login
     public function login(Request $request)
     {

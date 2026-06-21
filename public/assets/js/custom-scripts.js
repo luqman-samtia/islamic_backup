@@ -71,7 +71,9 @@ $('.rspn-mnu-cls').on('click', function () {
     $('.rsnp-mnu').removeClass('slidein');
     return false;
 });
-
+$(document).on('click', '[onclick*="openModal"]', function () {
+    $('.rsnp-mnu').removeClass('slidein');
+});
 $('.rsnp-mnu li.menu-item-has-children > a').on('click', function () {
     $(this).parent().siblings().children('ul').slideUp();
     $(this).parent().siblings().removeClass('active');
@@ -537,4 +539,16 @@ $(document).ready(function() {
             }
         }
     });
+
+    var sf = document.getElementById('searchForm'); 
+  if (sf) {
+      sf.addEventListener('submit', function (e) {
+          var pageVal  = (sf.querySelector('input[name="page"]') || {}).value || '';
+          var suratVal = (sf.querySelector('select[name="surat"]') || {}).value || '';
+          var paraVal  = (sf.querySelector('select[name="para"]') || {}).value || '';
+          if (!pageVal.trim() && !suratVal && !paraVal) {
+              e.preventDefault();   // sab khali -> submit hi na ho
+          }
+      });
+  }
 });

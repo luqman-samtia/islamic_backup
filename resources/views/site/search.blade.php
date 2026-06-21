@@ -65,19 +65,14 @@
                                             <form id="searchForm" action="{{ route('search') }}">
                                                 <div class="row mrg20 justify-content-center align-items-center text-center">
                                                     <div class="col-md-2 col-sm-6 col-lg-2">
-                                                        <select name="surat" onchange="this.form.submit()">
+                                                        <select name="surat" onchange="this.form.submit()" id="suratSelect">
                                                             <option value="">-- Select Option --</option>
                                                             @foreach($quran as $surat)
-                                                                <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}">{{ $surat->title }}</option>
+                                                                <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}" data-first="{{ $surat->first_page }}">{{ $surat->title }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    {{-- <div class="col-md-2 col-sm-6 col-lg-2">
-                                                        <input type="number" name="ayat_from" placeholder="Ayat From" value="{{ $request->ayat_from }}">
-                                                    </div>
-                                                    <div class="col-md-2 col-sm-6 col-lg-2">
-                                                        <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
-                                                    </div> --}}
+                                
                                                     <div class="col-md-2 col-sm-6 col-lg-2">
                                                         <input type="number" name="page" placeholder="Enter Page No" value="">
                                                     </div>
@@ -85,10 +80,7 @@
                                                     <div class="col-md-2 col-sm-12 col-lg-2">
                                                         <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                     </div>
-                                                    {{-- <div class="col-md-2 col-sm-12 col-lg-2">
-                                                        <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"   >Search</button>
-    
-                                                    </div> --}}
+                                                    
                                                 </div>
                                             </form>
                                         </div>
@@ -107,13 +99,7 @@
                                                                 <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40 mt-2" type="submit">Previous</a>
                                                             @endif
                                                         </div>
-                                                        <!-- Center Button -->
-                                                        {{-- <div>
-                                                            @if($parent_slug)
-                                                                <a href="{{ route('quranSurat', $parent_slug) }}" class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
-                                                            @endif
-                                                        </div> --}}
-                                                        <!-- Next Button -->
+                                                      
                                                         <div>
                                                             @if(@$next)
                                                                 <a href="{{ route('search', $next) }}" class="thm-btn brd-rd40 mt-2" type="submit">Next</a>
@@ -194,9 +180,9 @@
 
         @include('site.inc.footer')
     </main>
-@stop
+{{-- @stop --}}
 
-@section('custom_js')
+{{-- @section('custom_js') --}}
     <script >
   $(document).ready(function() {
         var contactFormRow = $('#stickyFormContainer').offset().top;
@@ -248,6 +234,30 @@ window.onscroll = function() {
         navbar.classList.remove("sticky");
     }
 };
+    var suratSelect = document.getElementById('suratSelect');
+    if (suratSelect) {
+        suratSelect.addEventListener('change', function () {
+            if (!this.value) { return; }  
+            var first = this.options[this.selectedIndex].getAttribute('data-first');
+            if (first) {
+                window.location.href = "{{ route('quranSurat.page', ['__SLUG__','__PAGE__']) }}"
+                    .replace('__SLUG__', this.value)
+                    .replace('__PAGE__', first);
+            } else {
+                window.location.href = "{{ route('quranSurat', '') }}/" + this.value;
+            }
+        });
+    }
 
+    var qForm = document.getElementById('searchForm');
+    if (qForm) {
+        qForm.addEventListener('submit', function (e) {
+            var pageVal  = (qForm.querySelector('input[name="page"]') || {}).value || '';
+            var suratVal = (qForm.querySelector('select[name="surat"]') || {}).value || '';
+            if (!pageVal.trim() && !suratVal) {
+                e.preventDefault();
+            }
+        });
+    }
     </script>
 @stop

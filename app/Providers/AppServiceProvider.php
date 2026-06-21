@@ -47,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
                 
                 config(['adminlte.logo' => $logo]);
                 config(['adminlte.logo_mini' => $logoMini]);
+
             }
         });
     }

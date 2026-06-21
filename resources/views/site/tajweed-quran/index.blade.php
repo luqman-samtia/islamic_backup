@@ -108,7 +108,7 @@
                                                     <select name="surat" id="tajweed-surah-select">
                                                         <option value="">-- Select Surah --</option>
                                                         @foreach($quran as $surat)
-                                                            <option value="{{ $surat->slug }}">{{ $surat->title }}</option>
+                                                            <option value="{{ $surat->slug }}" data-first="{{ $surat->first_page }}">{{ $surat->title }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -291,7 +291,30 @@
                         tajweedParaButton.classList.add('active');
                     }
                 });
-
+                // Surah select change -> turant us surat par jao
+                    // const tajweedSurahSelect = document.getElementById('tajweed-surah-select');
+                    // if (tajweedSurahSelect) {
+                    //     tajweedSurahSelect.addEventListener('change', function () {
+                    //         if (this.value) {
+                    //             window.location.href = "{{ route('tajweedQuranSurat', '') }}/" + this.value;
+                    //         }
+                    //     });
+                    // }
+                    const tajweedSurahSelect = document.getElementById('tajweed-surah-select');
+                        if (tajweedSurahSelect) {
+                            tajweedSurahSelect.addEventListener('change', function () {
+                                if (!this.value) { return; }
+                                var opt   = this.options[this.selectedIndex];
+                                var first = opt.getAttribute('data-first');
+                                if (first) {
+                                    window.location.href = "{{ route('tajweedQuranSurat.page', ['__SLUG__', '__PAGE__']) }}"
+                                        .replace('__SLUG__', this.value)
+                                        .replace('__PAGE__', first);
+                                } else {
+                                    window.location.href = "{{ route('tajweedQuranSurat', '') }}/" + this.value;
+                                }
+                            });
+                        }
                 // Handle para select change
                 tajweedParaSelect.addEventListener('change', function(e) {
                     if (this.value) {

@@ -138,7 +138,8 @@ class PublicController extends Controller
                 session(['active_takhti' => request()->takhti]);  
                 return redirect()->route('page', [
                     'slug' => $slug,
-                    'page' => $firstPage->number
+                    'page' => $firstPage->number,
+                    'takhti' => request()->takhti,
                 ]);
             }
         }
@@ -153,12 +154,20 @@ class PublicController extends Controller
 
         $resource->setRelation('children', $children);
 
+        // $activeTakhti = null;
+        // if (request()->page && $children->isNotEmpty()) {
+        //     $activeTakhti = $children->first()->takhti_number;
+        // }
         $activeTakhti = null;
-        if (request()->page && $children->isNotEmpty()) {
-            $activeTakhti = $children->first()->takhti_number;
-        }
+            if (request()->filled('takhti')) {
+                $activeTakhti = request()->takhti;
+            }
+            //  elseif (request()->page && $children->isNotEmpty()) {
+            //     $activeTakhti = $children->first()->takhti_number;
+            // }
 
-        $sessionTakhti = session('active_takhti');
+        // $sessionTakhti = session('active_takhti');
+        $sessionTakhti = request()->filled('takhti') ? request()->takhti : session('active_takhti');
 
         $prev = $next = null;
         if (request()->page) {
@@ -260,6 +269,11 @@ class PublicController extends Controller
 public function quran()
 {
     $quran = Quran::whereNull('parent_id')->orderBy('number', 'asc')->get();
+    $quran->each(function ($surat) {
+        $surat->first_page = Quran::where('parent_id', $surat->id)
+            ->orderBy('number', 'asc')
+            ->value('number');
+    });
     return view('site.quran.index', compact('quran'));
 }
 
@@ -345,7 +359,9 @@ public function quranParaShow($para_no)
 public function quranSurat($slug)
 {
     $quran = Quran::whereNull('parent_id')->orderBy('number', 'asc')->get();
-    
+    $quran->each(function ($s) {
+     $s->first_page = Quran::where('parent_id', $s->id)->orderBy('number','asc')->value('number');
+    });
     $surat = Quran::with(['children' => function($query){
         $query->orderBy('number', 'asc');
     }])->where('slug', $slug)->first(); 
@@ -470,11 +486,19 @@ public function quranSuratPage($slug, $page)
 }
     public function tajweedQuran(){
         $quran = TajweedQuran::whereNull('parent_id')->orderBy('number')->get();
+        $quran->each(function ($surat) {
+        $surat->first_page = TajweedQuran::where('parent_id', $surat->id)
+            ->orderBy('number', 'asc')
+            ->value('number');
+    });
         return view('site.tajweed-quran.index', compact('quran'));
     }
 
     public function tajweedQuranSurat($slug){
         $data['tajweedQuran'] = TajweedQuran::whereNull('parent_id')->orderBy('number', 'asc')->get();
+        $data['tajweedQuran']->each(function ($s) {
+            $s->first_page = TajweedQuran::where('parent_id', $s->id)->orderBy('number','asc')->value('number');
+        });
         $data['surat'] = TajweedQuran::with(['children' => function($query){
         $query->orderBy('number', 'asc');
     }])->where('slug', $slug)->first();
@@ -685,7 +709,12 @@ public function tajweedQuranParaShow($para_no)
      */
     public function search(Request $request){
     $data['request'] = $request;
-    $data['quran'] = Quran::parent(null)->get();
+    $data['quran'] = Quran::parent(null)->orderBy('number', 'asc')->get();
+    $data['quran']->each(function ($s) {
+        $s->first_page = Quran::where('parent_id', $s->id)
+            ->orderBy('number', 'asc')
+            ->value('number');
+        });
     $url = request()->all();
     $surat = Quran::find($request->page);
 
@@ -753,7 +782,12 @@ public function tajweedQuranParaShow($para_no)
      */
      public function tajweedQuranSearch(Request $request){
     $data['request'] = $request;
-    $data['quran'] = TajweedQuran::parent(null)->get();
+    $data['quran'] = TajweedQuran::parent(null)->orderBy('number', 'asc')->get();
+    $data['quran']->each(function ($s) {
+        $s->first_page = TajweedQuran::where('parent_id', $s->id)
+            ->orderBy('number', 'asc')
+            ->value('number');
+        });
     $url = request()->all();
     $surat = Quran::find($request->page);
 

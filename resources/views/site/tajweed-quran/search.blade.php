@@ -47,7 +47,7 @@
                                                     <select name="surat" onchange="this.form.submit()">
                                                         <option value="">-- Select Option --</option>
                                                         @foreach($quran as $surat)
-                                                            <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}">{{ $surat->title }}</option>
+                                                            <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}" data-first="{{ $surat->first_page }}">{{ $surat->title }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -206,14 +206,14 @@
                                             </div>
                                             
                                             <!-- Center Button -->
-                                            <div>
+                                            {{-- <div>
                                                 @if($parent_slug)
                                                 <a href="{{ route('tajweedQuranSurat', $parent_slug) }}" 
                                                    class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
                                                    @endif
     
                                             </div>
-                                    
+                                     --}}
                                             <!-- Next Button -->
                                             <div>
                                                 @if(@$next)
@@ -249,9 +249,9 @@
     @if(Session::has('error'))
         toastr.error("{{ Session::get('error') }}");
     @endif
-@stop
+{{-- @stop --}}
 
-@section('custom_js')
+{{-- @section('custom_js') --}}
     <script !src="">
         var contactFormRow = ($('.contact-form-row').offset().top - 92);
 
@@ -265,5 +265,31 @@
                 $('.contact-form-row').removeClass('sticky');
             }
         });
+
+        var tjSuratSelect = document.getElementById('tajweedSuratSelect');
+if (tjSuratSelect) {
+    tjSuratSelect.addEventListener('change', function () {
+        if (!this.value) { return; }
+        var first = this.options[this.selectedIndex].getAttribute('data-first');
+        if (first) {
+            window.location.href = "{{ route('tajweedQuranSurat.page', ['__SLUG__','__PAGE__']) }}"
+                .replace('__SLUG__', this.value)
+                .replace('__PAGE__', first);
+        } else {
+            window.location.href = "{{ route('tajweedQuranSurat', '') }}/" + this.value;
+        }
+    });
+}
+
+var tjForm = document.getElementById('tajweedSearch');
+if (tjForm) {
+    tjForm.addEventListener('submit', function (e) {
+        var pageVal  = (tjForm.querySelector('input[name="page"]') || {}).value || '';
+        var suratVal = (tjForm.querySelector('select[name="surat"]') || {}).value || '';
+        if (!pageVal.trim() && !suratVal) {
+            e.preventDefault();
+        }
+    });
+}
     </script>
 @stop

@@ -134,3 +134,6 @@
         <!-- ./col -->
     </div>
 @stop
+{{-- @section('js')
+    @include('partials.notifications')
+@stop --}}
