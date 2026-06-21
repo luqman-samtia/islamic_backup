@@ -26,6 +26,36 @@
     background-color: white; /* Background color for visibility */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
 }
+/* sab ek line par, beech mein space */
+.search-bar {
+    gap: 18px;
+}
+
+.search-bar select,
+.search-bar input[type="number"] {
+    height: 48px;
+    padding: 0 15px;
+    width: auto;          
+    flex: 0 1 220px;      
+}
+
+/* ---- Tablet ---- */
+@media (max-width: 991px) {
+    .search-bar { gap: 14px; }
+}
+
+@media (max-width: 575px) {
+    .search-bar {
+        gap: 12px;
+        flex-direction: column;   
+    }
+    .search-bar > *,
+    .search-bar select,
+    .search-bar input[type="number"] {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -59,7 +89,7 @@
                     <div class="prtfl-wrap">
                         <div class="serv-wrap remove-ext3">
                             {{-- <header class="style1"> --}}
-                                <div class="row contact-form-row style1" id="stickyFormContainer" >
+                                {{-- <div class="row contact-form-row style1" id="stickyFormContainer" >
                                     <div class="col-md-12">
                                         <div class="contact-form " id="stickyForm">
                                             <form id="searchForm" action="{{ route('search') }}">
@@ -87,13 +117,11 @@
                                          
                                     </div>
 
-                                       <!-- Your navigation content -->
                                        <div class="col-md-12 col-lg-12 w-100 text-center">
                                         <div class="navbar-container">
-                                            <div id="navbar" class="navbar"> <!-- Ensure this ID is present -->
+                                            <div id="navbar" class="navbar"> 
                                                 <div class="col-md-12 w-100 text-center">
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <!-- Previous Button -->
                                                         <div>
                                                             @if(@$previous)
                                                                 <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40 mt-2" type="submit">Previous</a>
@@ -110,7 +138,38 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
+
+                               <div class="row contact-form-row style1" id="stickyFormContainer">
+    <div class="col-md-12">
+        <div class="contact-form" id="stickyForm">
+            <form id="searchForm" action="{{ route('search') }}">
+                <div class="search-bar d-flex flex-wrap justify-content-center align-items-center text-center mrg20">
+
+                    @if(@$previous)
+                        <a href="{{ route('search', $previous) }}" class="thm-btn brd-rd40">Previous</a>
+                    @endif
+
+                    <select name="surat" onchange="this.form.submit()" id="suratSelect">
+                        <option value="">-- Select Option --</option>
+                        @foreach($quran as $surat)
+                            <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}" data-first="{{ $surat->first_page }}">{{ $surat->title }}</option>
+                        @endforeach
+                    </select>
+
+                    <input type="number" name="page" placeholder="Enter Page No" value="">
+
+                    <button class="thm-btn brd-rd40" type="submit">Search</button>
+
+                    @if(@$next)
+                        <a href="{{ route('search', $next) }}" class="thm-btn brd-rd40" type="submit">Next</a>
+                    @endif
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
                             {{-- </header> --}}
                             
 

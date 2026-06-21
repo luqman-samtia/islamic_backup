@@ -86,9 +86,9 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Student</th>
-                    <th>Type</th>
                     <th>Day &amp; Date</th>
+                    <th>Student</th>
+                    {{-- <th>Type</th> --}}
                     <th>Attendance</th>
                     <th>Course</th>
                     <th>Lesson</th>
@@ -109,17 +109,18 @@
                 <tr>
                     {{-- <td class="muted">{{ $i + 1 }}</td> --}}
                     <td class="muted">{{ $records->firstItem() + $i }}</td>
+                     <td>
+                        <strong>{{ $r->day }}</strong><br>
+                        <small class="muted">{{ $r->lesson_date ? \Carbon\Carbon::parse($r->lesson_date)->format('d-M-Y') : '' }}</small>
+                    </td>
                     <td>
                         <div class="student-cell">
                             <span class="avatar">{{ strtoupper(substr(optional($r->user)->name ?? '?', 0, 1)) }}</span>
                             <span>{{ optional($r->user)->name }}</span>
                         </div>
                     </td>
-                    <td><span class="pill pill-type">{{ $typeLabels[$r->lesson_type] ?? ucfirst($r->lesson_type) }}</span></td>
-                    <td>
-                        <strong>{{ $r->day }}</strong><br>
-                        <small class="muted">{{ $r->lesson_date ? \Carbon\Carbon::parse($r->lesson_date)->format('d-M-Y') : '' }}</small>
-                    </td>
+                    {{-- <td><span class="pill pill-type">{{ $typeLabels[$r->lesson_type] ?? ucfirst($r->lesson_type) }}</span></td> --}}
+                   
                     <td>
                         @if($att)
                             <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">

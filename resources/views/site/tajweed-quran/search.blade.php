@@ -10,6 +10,43 @@
         .contact-form > form input, .contact-form > form select, .contact-form > form textarea{
             border: 1px solid #ededed;
         }
+        .contact-form > form{
+            max-width: none;
+        }
+        .contact-form > form input, .contact-form > form select, .contact-form > form textarea{
+            border: 1px solid #ededed;
+        }
+
+        /* sab ek line par, beech mein space */
+        .search-bar {
+            gap: 18px;
+        }
+        .search-bar select,
+        .search-bar input[type="number"] {
+            height: 48px;
+            padding: 0 15px;
+            width: auto;
+            flex: 0 1 220px;
+        }
+
+        /* Tablet */
+        @media (max-width: 991px) {
+            .search-bar { gap: 14px; }
+        }
+
+        /* Mobile: sab full width */
+        @media (max-width: 575px) {
+            .search-bar {
+                gap: 12px;
+                flex-direction: column;
+            }
+            .search-bar > *,
+            .search-bar select,
+            .search-bar input[type="number"] {
+                width: 100%;
+                flex: 1 1 100%;
+            }
+        }
     </style>
 @stop
 
@@ -38,7 +75,7 @@
                 <div class="container">
                     <div class="prtfl-wrap">
                         <div class="serv-wrap remove-ext3">
-                            <div class="row contact-form-row">
+                            {{-- <div class="row contact-form-row">
                                 <div class="col-md-12" id="stickyFormContainer">
                                     <div class="contact-form mb-5"  >
                                         <form id="tajweedSearch" action="{{ route('tajweedQuranSearch') }}">
@@ -51,80 +88,51 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                {{-- <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    <input type="number" name="ayat_from" placeholder="Ayat From" value="{{ $request->ayat_from }}">
-                                                </div>
-                                                <div class="col-md-2 col-sm-6 col-lg-2">
-                                                    <input type="number" name="ayat_to" placeholder="Ayat To" value="{{ $request->ayat_to }}">
-                                                </div> --}}
+                                                
                                                 <div class="col-md-3 col-sm-6 col-lg-3">
                                                     <input type="number" name="page" placeholder="Enter Page No" >
                                                 </div>
                                                 <div class="col-md-3 col-sm-12 col-lg-3">
                                                     <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
                                                 </div>
-                                                {{-- <div class="col-md-3 col-sm-12 col-lg-3">
-                                                    <button type="button" class="thm-btn brd-rd40 mt-3"  onclick="openPageModal()"  >Search</button>
-
-                                                </div> --}}
+                                                
                                             </div>
                                         </form>
                                     </div>
-                                       <!-- Modal -->
-                              <!-- Modal -->
-                            <div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="pageModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="pageModalLabel">Go to Page</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <input type="number" id="pageInput" placeholder="Enter Page No" class="form-control">
-                                        </div>
-                                        <div class="modal-footer">
-                                            {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                                            <button type="button" class="btn thm-btn" onclick="confirmPage()">Go to Page</button>
+                                                         
+                                </div>
+                            </div> --}}
+
+                            <div class="row contact-form-row">
+                                    <div class="col-md-12" id="stickyFormContainer">
+                                        <div class="contact-form mb-5">
+                                            <form id="tajweedSearch" action="{{ route('tajweedQuranSearch') }}">
+                                                <div class="search-bar d-flex flex-wrap justify-content-center align-items-center text-center mrg20">
+
+                                                    @if(@$previous)
+                                                        <a href="{{ route('tajweedQuranSearch', $previous) }}" class="thm-btn brd-rd40">Previous</a>
+                                                    @endif
+
+                                                    <select name="surat" onchange="this.form.submit()">
+                                                        <option value="">-- Select Option --</option>
+                                                        @foreach($quran as $surat)
+                                                            <option {{ $request->surat == $surat->slug ? "selected" : "" }} value="{{ $surat->slug }}" data-first="{{ $surat->first_page }}">{{ $surat->title }}</option>
+                                                        @endforeach
+                                                    </select>
+
+                                                    <input type="number" name="page" placeholder="Enter Page No">
+
+                                                    <button class="thm-btn brd-rd40" type="submit">Search</button>
+
+                                                    @if(@$next)
+                                                        <a href="{{ route('tajweedQuranSearch', $next) }}" class="thm-btn brd-rd40" type="submit">Next</a>
+                                                    @endif
+
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- JavaScript -->
-                            <script>
-
-                            function openPageModal() {
-                                    $('#pageModal').modal('show')
-                                    .on('shown.bs.modal', function () {
-                                        // Add and remove classes once the modal is fully shown
-                                        $('.modal-backdrop').remove();
-                                    });
-                                }
-                            
-                                
-                                    function confirmPage() {
-                                    var pageNumber = document.getElementById('pageInput').value;
-                                    if (pageNumber) {
-                                        // Set the page input in the form
-                                        var input = document.createElement('input');
-                                        input.type = 'hidden';
-                                        input.name = 'page';
-                                        input.value = pageNumber;
-                                        document.getElementById('tajweedSearch').appendChild(input);
-
-                                        // Submit the form
-                                        document.getElementById('tajweedSearch').submit();
-                                    } else {
-                                        alert('Please enter a page number');
-                                    }
-                                }
-                                
-                            </script>
-                                                            {{-- End Modal --}} 
-                                </div>
-                            </div>
 
                             <div class="row">
                                 @if(isset($error))
@@ -132,9 +140,8 @@
                                 {{ $error }}
                             </div>
                                 @endif
-                                <div class="col-md-12 w-100 text-center">
+                                {{-- <div class="col-md-12 w-100 text-center">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <!-- Previous Button -->
                                         <div>
                                             @if(@$previous)
                                                 <a href="{{ route('tajweedQuranSearch', $previous) }}" 
@@ -142,23 +149,7 @@
                                                    type="submit">Previous</a>
                                             @endif
                                         </div>
-                                        
-                                        <!-- Center Button -->
-                                        <div>
-                                            {{-- @if($parent_slug)
-                                            <a href="{{ route('tajweedQuranSurat', $parent_slug) }}" 
-                                               class="thm-btn brd-rd40 mt-4">{{ $parent_surat }}</a>
-                                               @endif --}}
-
-                                               {{-- @if(!empty($parent_slug))
-                                                <a href="{{ route('tajweedQuran', ['surat' => $parent_slug]) }}" 
-                                                class="thm-btn brd-rd40 mt-4">
-                                                {{ $parent_surat }}
-                                                </a>
-                                            @endif --}}
-                                        </div>
-                                
-                                        <!-- Next Button -->
+                                                                        
                                         <div>
                                             @if(@$next)
                                                 <a href="{{ route('tajweedQuranSearch', $next ) }}" 
@@ -167,7 +158,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 @foreach($search as $child)
                                     <div class="col-md-12 col-sm-12 col-lg-12 fltr-itm fltr-itm1 mb-3 text-center">
                                         <labe>

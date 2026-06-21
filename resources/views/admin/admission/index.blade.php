@@ -141,6 +141,7 @@ $(function () {
     var table = $('#admissionTable').DataTable({
         processing: true,
         serverSide: true,
+         scrollX: true,  
         ajax: '{{ route('admin.admission.index') }}',
         pageLength: 10,
         lengthMenu: [10, 25, 50, 100],

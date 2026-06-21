@@ -99,8 +99,8 @@
         <thead>
             <tr>
                 <th style="width:24px">#</th>
-                <th>Type</th>
                 <th>Day &amp; Date</th>
+                {{-- <th>Type</th> --}}
                 <th>Attendance</th>
                 <th>Course</th>
                 <th>Lesson</th>
@@ -119,11 +119,15 @@
                 @endphp
                 <tr>
                     <td>{{ $i + 1 }}</td>
-                    <td><span class="badge">{{ $typeLabels[$r->lesson_type] ?? ucfirst($r->lesson_type) }}</span></td>
-                    <td>
+                     <td>
+                        <strong>{{ $r->day }}</strong><br>
+                        <small class="muted">{{ $r->lesson_date ? \Carbon\Carbon::parse($r->lesson_date)->format('d-M-Y') : '' }}</small>
+                    </td>
+                    {{-- <td><span class="badge">{{ $typeLabels[$r->lesson_type] ?? ucfirst($r->lesson_type) }}</span></td> --}}
+                    {{-- <td>
                         {{ $r->day }}<br>
                         <span class="muted">{{ $r->lesson_date ? \Carbon\Carbon::parse($r->lesson_date)->format('d-M-Y') : '' }}</span>
-                    </td>
+                    </td> --}}
                     <td>{{ $r->attendance }}</td>
                     <td>{{ $r->course }}</td>
                     <td>{{ implode(' / ', $lessonBits) ?: '—' }}</td>
