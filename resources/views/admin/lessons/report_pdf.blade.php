@@ -38,11 +38,11 @@
     table.data { width: 100%; border-collapse: collapse; }
     table.data thead th {
         background: #2d3748; color: #fff; padding: 7px 6px; text-align: left;
-        font-size: 9.5px; text-transform: uppercase; letter-spacing: .3px;
+        font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
         font-weight: bold; border: 1px solid #2d3748;
     }
-    table.data tbody td {
-        padding: 6px; border: 1px solid #cbd5e0; font-size: 10px; vertical-align: top;
+   table.data tbody td {
+        padding: 8px 6px; border: 1px solid #cbd5e0; font-size: 13px; font-weight: bold; vertical-align: top;
     }
     table.data tbody tr:nth-child(even) { background: #f7fafc; }
     .muted { color: #a0aec0; }
@@ -173,7 +173,7 @@
                             $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
                             $isRtl = in_array($key, $rtlKeys);
                         @endphp
-                        <td @if($isRtl) dir="rtl" lang="ar" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
+                        <td @if($isRtl) dir="rtl" lang="ar" style="font-size: 16px;" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
                             @if($key === 'attendance')
                                 @if($att)
                                     <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
