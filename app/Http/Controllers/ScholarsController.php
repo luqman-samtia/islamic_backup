@@ -132,7 +132,6 @@ class ScholarsController extends Controller
     public function getStudents(Request $request){
         $user_email = Auth::user()->email;
         $scholar_id = Scholars::where('email', $user_email)->first()->id;
-        // dd($scholar_id);
         if ($request->ajax()) {
             $query = User::where('scholar', $scholar_id)->where('type', 'student');
 

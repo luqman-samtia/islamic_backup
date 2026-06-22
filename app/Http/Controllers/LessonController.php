@@ -363,7 +363,7 @@ class LessonController extends Controller
                 'options'  => $this->optionsFor($type),
                 'records'  => LessonRecord::where('user_id', $student->id)
                                 ->where('lesson_type', $type)
-                                ->orderBy('id', 'asc')
+                                ->orderBy('id', 'desc')
                                 ->get(),
                 'can_write' => $this->canWrite($student, $type),
             ];
