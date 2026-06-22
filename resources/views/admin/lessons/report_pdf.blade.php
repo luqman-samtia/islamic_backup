@@ -126,12 +126,12 @@
                     @forelse($g['records'] as $i => $r)
                     <tr>
                         <td class="muted">{{ $i + 1 }}</td>
-                        <td>
+                        {{-- <td>
                             <div class="student-cell">
                                 <span class="avatar">{{ strtoupper(substr(optional($r->user)->name ?? '?', 0, 1)) }}</span>
                                 <span>{{ optional($r->user)->name }}</span>
                             </div>
-                        </td>
+                        </td> --}}
                         @foreach($g['columns'] as $col)
                             @php
                                 $key = $col['key'];
@@ -156,7 +156,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="{{ count($g['columns']) + 2 }}" class="empty-state">
+                        <td colspan="{{ count($g['columns']) + 1 }}" class="empty-state">
                             <i class="fa fa-inbox"></i><br>No lessons found.
                         </td>
                     </tr>

@@ -104,11 +104,11 @@
     <div class="report-card-body table-responsive">
         <table class="table modern-table">
             <thead>
-                <tr>
-                    <th style="width:42px">#</th>
-                    <th>Student</th>
+                <tr >
+                    <th style="width:42px;color: #ffff !important;">#</th>
+                    <th style = "color: #ffff !important;">Student</th>
                     @foreach($g['columns'] as $col)
-                        <th>{{ $col['label'] }}</th>
+                        <th style = "color: #ffff !important;">{{ $col['label'] }}</th>
                     @endforeach
                 </tr>
             </thead>
