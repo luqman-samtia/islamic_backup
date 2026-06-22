@@ -13,19 +13,19 @@
     }
     .academy-header img { height: 60px; margin-bottom: 6px; }
     .academy-header .academy-name {
-        font-size: 18px; font-weight: bold; color: #1a202c; margin: 2px 0;
+        font-size: 20px; font-weight: bold; color: #1a202c; margin: 2px 0;
     }
     .academy-header .academy-contact {
-        font-size: 10px; color: #718096; margin-top: 3px;
+        font-size: 14px; color: #718096; margin-top: 3px;
     }
 
     .header { border-bottom: 3px solid #2c7be5; padding-bottom: 12px; margin-bottom: 18px; }
     .header h1 { margin: 0; font-size: 22px; color: #1a202c; }
-    .header .sub { color: #718096; font-size: 14px; margin-top: 4px; }
+    .header .sub { color: #718096; font-size: 16px; margin-top: 4px; font-weight: bold; }
 
     .meta-table { width: 100%; margin-bottom: 16px; border-collapse: collapse; }
     .meta-table td { padding: 4px 8px; font-size: 16px; }
-    .meta-table .lbl { color: #718096; width: 90px; }
+    .meta-table .lbl { color: #718096; width: 90px; font-weight: bold; }
     .meta-table .val { color: #1a202c; font-weight: bold; }
 
     /* per-type section */
@@ -48,7 +48,7 @@
     .muted { color: #a0aec0; }
     .footer {
         position: fixed; bottom: 0; left: 0; right: 0; text-align: center;
-        color: #a0aec0; font-size: 9px; padding: 6px 0; border-top: 1px solid #e2e8f0;
+        color: #a0aec0; font-size: 14px; padding: 6px 0; border-top: 1px solid #e2e8f0;
     }
     .empty { text-align: center; color: #a0aec0; padding: 30px; }
 </style>
@@ -173,7 +173,7 @@
                             $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
                             $isRtl = in_array($key, $rtlKeys);
                         @endphp
-                        <td @if($isRtl) dir="rtl" lang="ar" style="font-size: 14px;" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
+                        <td @if($isRtl) dir="rtl" lang="ar" style="font-size: 12px;" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
                             @if($key === 'attendance')
                                 @if($att)
                                     <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">

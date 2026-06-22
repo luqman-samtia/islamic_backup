@@ -292,39 +292,41 @@
         });
     });
 
-    function recalc() {
-        var tf = 0, tr = 0, to = 0, ta = 0;
-        $('#feeForm tbody tr').each(function () {
-            var fee = parseFloat($(this).find('.monthly-fee').val()) || 0;
-            var rec = parseFloat($(this).find('.received').val()) || 0;
-            var out = Math.max(fee - rec, 0);
-            var adv = Math.max(rec - fee, 0);   // extra/advance
+ function recalc() {
+    var tf = 0, tr = 0, to = 0;
+    var carry = 0;   
+    $('#feeForm tbody tr').each(function () {
+        var fee = parseFloat($(this).find('.monthly-fee').val()) || 0;
+        var rec = parseFloat($(this).find('.received').val()) || 0;
 
-            var $out = $(this).find('.outstanding');
-            $out.val(out.toFixed(2))
-                .toggleClass('has-due', out > 0)
-                .toggleClass('has-advance', adv > 0);
+        var pool = rec + carry;
+        var out  = Math.max(fee - pool, 0);
+        var adv  = Math.max(rec - fee, 0);   
+        carry    = Math.max(pool - fee, 0);  
 
-            // per-row advance tag
-            var $tag = $(this).find('.fs-adv-tag');
-            if (adv > 0) {
-                $tag.show().find('.fs-adv-val').text(adv.toFixed(0));
-            } else {
-                $tag.hide();
-            }
+        var $out = $(this).find('.outstanding');
+        $out.val(out.toFixed(2))
+            .toggleClass('has-due', out > 0)
+            .toggleClass('has-advance', adv > 0);
 
-            tf += fee; tr += rec; to += out; ta += adv;
-        });
-        $('#totalFee').text(tf.toFixed(2));
-        $('#totalReceived').text(tr.toFixed(2));
-        $('#totalOutstanding').text(to.toFixed(2));
-        $('#totalAdvance').text(ta.toFixed(2));
-        $('.adv-wrap').toggle(ta > 0);   // advance ho to hi total dikhayein
-    }
+        var $tag = $(this).find('.fs-adv-tag');
+        if (adv > 0) {
+            $tag.show().find('.fs-adv-val').text(adv.toFixed(0));
+        } else {
+            $tag.hide();
+        }
+
+        tf += fee; tr += rec; to += out;
+    });
+    $('#totalFee').text(tf.toFixed(2));
+    $('#totalReceived').text(tr.toFixed(2));
+    $('#totalOutstanding').text(to.toFixed(2));
+    $('#totalAdvance').text(carry.toFixed(2));  
+    $('.adv-wrap').toggle(carry > 0);
+}
     $(document).on('input', '.monthly-fee, .received', recalc);
     $(recalc);
 
-    // When admin marks a month "Received", default the received amount to the monthly fee
     $(document).on('change', '.fee-status', function () {
         if ($(this).val() !== 'received') return;
         var tr  = $(this).closest('tr');

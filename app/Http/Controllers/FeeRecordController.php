@@ -148,7 +148,7 @@ class FeeRecordController extends Controller
     //         'rows', 'year', 'years', 'totalFee', 'totalReceived', 'totalOutstanding'
     //     ));
     // }
-    public function myFees(Request $request)
+   public function myFees(Request $request)
     {
         $user = Auth::user();
         $year = $request->input('year', date('Y'));
@@ -157,35 +157,34 @@ class FeeRecordController extends Controller
             ->get()->keyBy('month');
 
         $rows = [];
-        $totalFee = $totalReceived = $totalOutstanding = $totalAdvance = 0;  
+        $totalFee = $totalReceived = $totalOutstanding = 0;
+        $carry = 0;   
+
         foreach (FeeRecord::$months as $num => $name) {
             $rec = $existing->get($num);
             $fee = $rec->monthly_fee ?? 0;
             $rcv = $rec->received ?? 0;
 
-            $out     = max($fee - $rcv, 0);
-            $advance = max($rcv - $fee, 0);         
+            $pool  = $rcv + $carry;          
+            $out   = max($fee - $pool, 0);   
+            $carry = max($pool - $fee, 0);  
 
-            $totalFee += $fee; $totalReceived += $rcv;
-            $totalOutstanding += $out;
-            $totalAdvance += $advance;          
+            $advance = max($rcv - $fee, 0); 
+
+            $totalFee += $fee; $totalReceived += $rcv; $totalOutstanding += $out;
 
             $rows[] = [
-                'month'       => $num,
-                'month_name'  => $name,
-                'monthly_fee' => $fee,
-                'received'    => $rcv,
-                'outstanding' => $out,
-                'advance'     => $advance,          
-                'paid_date'   => optional($rec)->paid_date,
-                'proof'       => optional($rec)->proof,
-                'status'      => $rec->status ?? 'pending',
+                'month' => $num, 'month_name' => $name,
+                'monthly_fee' => $fee, 'received' => $rcv,
+                'outstanding' => $out, 'advance' => $advance,
+                'paid_date' => optional($rec)->paid_date,
+                'proof' => optional($rec)->proof,
+                'status' => $rec->status ?? 'pending',
             ];
         }
 
-        $years = FeeRecord::where('user_id', $user->id)
-            ->selectRaw('DISTINCT year')->orderBy('year', 'desc')->pluck('year');
-        if ($years->isEmpty()) $years = collect([date('Y')]);
+        $totalAdvance = $carry;   
+        $years = range(date('Y') + 1, 2022);
 
         return view('admin.fees.my_fees', compact(
             'rows', 'year', 'years', 'totalFee', 'totalReceived', 'totalOutstanding', 'totalAdvance'
