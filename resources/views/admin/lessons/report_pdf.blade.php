@@ -17,7 +17,7 @@
     }
 
     * { font-family: 'Amiri', 'DejaVu Sans', sans-serif; }
-    body { color: #2d3748; font-size: 11px; margin: 0; }
+    body { color: #2d3748; font-size: 16px; margin: 0; }
 
     .academy-header {
         text-align: center;
@@ -122,17 +122,23 @@
         //     return $v;
         // };
         $cellVal = function ($r, $key) {
-            $v = $r->{$key} ?? null;
-            if (($v === null || $v === '') && !empty($r->extra) && is_array($r->extra)) {
-                $v = $r->extra[$key] ?? null;
-            }
-            if ($key === 'lesson_date') {
-                return $v ? \Carbon\Carbon::parse($v)->format('d-M-Y') : '';
-            }
-            return $v;
-        };
+        $v = $r->{$key} ?? null;
+        if (($v === null || $v === '') && !empty($r->extra) && is_array($r->extra)) {
+            $v = $r->extra[$key] ?? null;
+        }
+        if ($key === 'lesson_date') {
+            return $v ? \Carbon\Carbon::parse($v)->format('d-M-Y') : '';
+        }
+        return $v;
+    };
 
-        $rtlKeys = ['para_name', 'surah_name'];
+    $rtlKeys = ['para_name', 'surah_name'];
+
+    $arabic = new \ArPHP\I18N\Arabic();
+    $shapeAr = function ($text) use ($arabic) {
+        if ($text === null || $text === '') return $text;
+        return $arabic->utf8Glyphs($text);
+    };
     @endphp
 
     @forelse($grouped as $type => $g)
@@ -178,23 +184,21 @@
                                 @endif
                             </td>
                         @endforeach --}}
-                        @foreach($g['columns'] as $col)
+                       @foreach($g['columns'] as $col)
                                 @php
                                     $key = $col['key'];
                                     $val = $cellVal($r, $key);
                                     $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
                                     $isRtl = in_array($key, $rtlKeys);
+                                    if ($isRtl) {
+                                        $val = $shapeAr($val);
+                                    }
                                 @endphp
                                 <td @if($isRtl) dir="rtl" lang="ar" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
                                     @if($key === 'attendance')
-                                        @if($att)
-                                            <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
-                                                {{ $val }}
-                                            </span>
-                                        @else <span class="muted">—</span> @endif
+                                        ...
                                     @elseif($key === 'lesson_date')
-                                        {{ $val ?: '—' }}
-                                        @if($r->day)<br><small class="muted">{{ $r->day }}</small>@endif
+                                        ...
                                     @else
                                         {{ ($val !== null && $val !== '') ? $val : '—' }}
                                     @endif

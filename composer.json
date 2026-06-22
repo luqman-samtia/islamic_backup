@@ -12,6 +12,7 @@
         "barryvdh/laravel-dompdf": "^0.9.0",
         "fideloper/proxy": "^4.0",
         "jeroennoten/laravel-adminlte": "^1.25",
+        "khaled.alshamaa/ar-php": "^7.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "spatie/laravel-permission": "^2.37",
