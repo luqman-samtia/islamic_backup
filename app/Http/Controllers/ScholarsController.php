@@ -134,9 +134,12 @@ class ScholarsController extends Controller
         $scholar_id = Scholars::where('email', $user_email)->first()->id;
         // dd($scholar_id);
         if ($request->ajax()) {
-            return DataTables::of(
-                User::where('scholar', $scholar_id)->where('type', 'student')
-            )
+            $query = User::where('scholar', $scholar_id)->where('type', 'student');
+
+                if ($request->filled('student_id')) {
+                    $query->where('id', $request->student_id);
+                }
+             return DataTables::of($query)
             ->addColumn('lessons_action', function($row) {
                 return '
                     <a href="'.route('admin.lessons.entry', $row->id).'" class="btn btn-primary btn-xs" title="Lessons">
