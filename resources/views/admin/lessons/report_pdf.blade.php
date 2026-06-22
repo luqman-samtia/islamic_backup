@@ -3,20 +3,7 @@
 <head>
 <meta charset="utf-8">
 <style>
-    @font-face {
-    font-family: 'Amiri';
-    font-style: normal;
-    font-weight: normal;
-    src: url('{{ storage_path('fonts/Amiri-Regular.ttf') }}') format('truetype');
-    }
-    @font-face {
-        font-family: 'Amiri';
-        font-style: normal;
-        font-weight: bold;
-        src: url('{{ storage_path('fonts/Amiri-Bold.ttf') }}') format('truetype');
-    }
-
-    * { font-family: 'Amiri', 'DejaVu Sans', sans-serif; }
+    * { font-family: 'amiri', sans-serif; }
     body { color: #2d3748; font-size: 16px; margin: 0; }
 
     .academy-header {
@@ -134,11 +121,6 @@
 
     $rtlKeys = ['para_name', 'surah_name'];
 
-    $arabic = new \ArPHP\I18N\Arabic();
-    $shapeAr = function ($text) use ($arabic) {
-        if ($text === null || $text === '') return $text;
-        return $arabic->utf8Glyphs($text);
-    };
     @endphp
 
     @forelse($grouped as $type => $g)
@@ -184,30 +166,28 @@
                                 @endif
                             </td>
                         @endforeach --}}
-                       @foreach($g['columns'] as $col)
-                                @php
-                                    $key = $col['key'];
-                                    $val = $cellVal($r, $key);
-                                    $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
-                                    $isRtl = in_array($key, $rtlKeys);
-                                    if ($isRtl) {
-                                        $val = $shapeAr($val);
-                                    }
-                                @endphp
-                        <td @if($isRtl) lang="ar" style="text-align: right;" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">                                @if($key === 'attendance')
-                                    @if($att)
-                                        <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
-                                            {{ $val }}
-                                        </span>
-                                    @else <span class="muted">—</span> @endif
-                                @elseif($key === 'lesson_date')
-                                    {{ $val ?: '—' }}
-                                    @if($r->day)<br><small class="muted">{{ $r->day }}</small>@endif
-                                @else
-                                    {{ ($val !== null && $val !== '') ? $val : '—' }}
-                                @endif
-                                </td>
-                            @endforeach
+                    @foreach($g['columns'] as $col)
+                        @php
+                            $key = $col['key'];
+                            $val = $cellVal($r, $key);
+                            $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
+                            $isRtl = in_array($key, $rtlKeys);
+                        @endphp
+                        <td @if($isRtl) dir="rtl" lang="ar" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
+                            @if($key === 'attendance')
+                                @if($att)
+                                    <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
+                                        {{ $val }}
+                                    </span>
+                                @else <span class="muted">—</span> @endif
+                            @elseif($key === 'lesson_date')
+                                {{ $val ?: '—' }}
+                                @if($r->day)<br><small class="muted">{{ $r->day }}</small>@endif
+                            @else
+                                {{ ($val !== null && $val !== '') ? $val : '—' }}
+                            @endif
+                        </td>
+                    @endforeach
                     </tr>
                     @empty
                     <tr>

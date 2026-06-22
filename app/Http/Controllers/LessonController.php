@@ -655,14 +655,48 @@ class LessonController extends Controller
         $period     = trim($monthName . ' ' . $request->input('year', ''));
         if ($period === '') $period = 'All Records';
 
-        $pdf = \PDF::loadView('admin.lessons.report_pdf', compact(
-            'grouped', 'records', 'student', 'typeLabels', 'period', 'request', 'info'
-        ))->setPaper('a4', 'landscape');
+        // $pdf = \PDF::loadView('admin.lessons.report_pdf', compact(
+        //     'grouped', 'records', 'student', 'typeLabels', 'period', 'request', 'info'
+        // ))->setPaper('a4', 'landscape');
 
+        // $fileName = 'lesson-report-' . \Illuminate\Support\Str::slug($student->name)
+        //         . ($period !== 'All Records' ? '-' . \Illuminate\Support\Str::slug($period) : '')
+        //         . '.pdf';
+
+        // return $pdf->download($fileName);
         $fileName = 'lesson-report-' . \Illuminate\Support\Str::slug($student->name)
-                . ($period !== 'All Records' ? '-' . \Illuminate\Support\Str::slug($period) : '')
-                . '.pdf';
+        . ($period !== 'All Records' ? '-' . \Illuminate\Support\Str::slug($period) : '')
+        . '.pdf';
 
-        return $pdf->download($fileName);
+            $html = view('admin.lessons.report_pdf', compact(
+                'grouped', 'records', 'student', 'typeLabels', 'period', 'request', 'info'
+            ))->render();
+
+            $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+            $fontDirs      = $defaultConfig['fontDir'];
+
+            $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+            $fontData          = $defaultFontConfig['fontdata'];
+
+            $mpdf = new \Mpdf\Mpdf([
+                'mode'        => 'utf-8',
+                'format'      => 'A4-L',
+                'autoScriptToLang' => true,
+                'autoLangToFont'   => true,
+                'fontDir'     => array_merge($fontDirs, [storage_path('fonts')]),
+                'fontdata'    => $fontData + [
+                    'amiri' => [
+                        'R' => 'Amiri-Regular.ttf',
+                        'B' => 'Amiri-Bold.ttf',
+                    ],
+                ],
+                'default_font' => 'amiri',
+            ]);
+
+            $mpdf->WriteHTML($html);
+
+            return response($mpdf->Output($fileName, \Mpdf\Output\Destination::DOWNLOAD), 200, [
+                'Content-Type' => 'application/pdf',
+            ]);
     }
 }
