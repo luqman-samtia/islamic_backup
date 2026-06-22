@@ -98,6 +98,16 @@
         //     }
         //     return $v;
         // };
+        // $cellVal = function ($r, $key) {
+        //     $v = $r->{$key} ?? null;
+        //     if (($v === null || $v === '') && !empty($r->extra) && is_array($r->extra)) {
+        //         $v = $r->extra[$key] ?? null;
+        //     }
+        //     if ($key === 'lesson_date') {
+        //         return $v ? \Carbon\Carbon::parse($v)->format('d-M-Y') : '';
+        //     }
+        //     return $v;
+        // };
         $cellVal = function ($r, $key) {
             $v = $r->{$key} ?? null;
             if (($v === null || $v === '') && !empty($r->extra) && is_array($r->extra)) {
@@ -108,6 +118,8 @@
             }
             return $v;
         };
+
+        $rtlKeys = ['para_name', 'surah_name'];
     @endphp
 
     @forelse($grouped as $type => $g)
@@ -132,7 +144,7 @@
                                 <span>{{ optional($r->user)->name }}</span>
                             </div>
                         </td> --}}
-                        @foreach($g['columns'] as $col)
+                        {{-- @foreach($g['columns'] as $col)
                             @php
                                 $key = $col['key'];
                                 $val = $cellVal($r, $key);
@@ -152,7 +164,29 @@
                                     {{ ($val !== null && $val !== '') ? $val : '—' }}
                                 @endif
                             </td>
-                        @endforeach
+                        @endforeach --}}
+                        @foreach($g['columns'] as $col)
+                                @php
+                                    $key = $col['key'];
+                                    $val = $cellVal($r, $key);
+                                    $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
+                                    $isRtl = in_array($key, $rtlKeys);
+                                @endphp
+                                <td @if($isRtl) dir="rtl" lang="ar" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
+                                    @if($key === 'attendance')
+                                        @if($att)
+                                            <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
+                                                {{ $val }}
+                                            </span>
+                                        @else <span class="muted">—</span> @endif
+                                    @elseif($key === 'lesson_date')
+                                        {{ $val ?: '—' }}
+                                        @if($r->day)<br><small class="muted">{{ $r->day }}</small>@endif
+                                    @else
+                                        {{ ($val !== null && $val !== '') ? $val : '—' }}
+                                    @endif
+                                </td>
+                            @endforeach
                     </tr>
                     @empty
                     <tr>
