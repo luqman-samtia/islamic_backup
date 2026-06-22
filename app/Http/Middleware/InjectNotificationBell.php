@@ -10,15 +10,35 @@ class InjectNotificationBell
     {
         $response = $next($request);
 
-        if (auth()->check() && auth()->user()->type === 'admin') {
+        if (auth()->check()) {
+
+            // sirf HTML responses pe kaam karo (JSON / file download skip)
+            if (!method_exists($response, 'getContent')) {
+                return $response;
+            }
 
             $content = $response->getContent();
 
-            if (is_string($content) && strpos($content, 'navbar-custom-menu') !== false) {
+            // Ye string AdminLTE 2 ke HAR admin page par hoti hai
+            $isAdminLtePage = is_string($content)
+                && strpos($content, 'AdminLTE.min.css') !== false;
 
-                $bell = view('partials.notifications')->render();
+            if ($isAdminLtePage) {
 
-                $content = str_replace('</body>', $bell . '</body>', $content);
+                /* ---------- 1) Premium CSS inject (</head> se pehle) ---------- */
+                $cssTag = '<link rel="stylesheet" href="' . asset('/assets/css/admin-custom.css') . '?v=' . time() . '">';
+
+                if (strpos($content, '</head>') !== false &&
+                    strpos($content, 'admin-custom.css') === false) {
+                    $content = str_replace('</head>', $cssTag . "\n</head>", $content);
+                }
+
+                /* ---------- 2) Notification bell (sirf admin) ---------- */
+                if (auth()->user()->type === 'admin' &&
+                    strpos($content, '</body>') !== false) {
+                    $bell = view('partials.notifications')->render();
+                    $content = str_replace('</body>', $bell . '</body>', $content);
+                }
 
                 $response->setContent($content);
             }

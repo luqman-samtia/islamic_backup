@@ -86,7 +86,7 @@ class StudentController extends Controller
                 ]);
            
             try {
-                Mail::to('shifaacademy63@gmail.com')->send(new AdminVerification($user));
+                Mail::to('infotaleemulquraninstitute@gmail.com')->send(new AdminVerification($user));
                 $successMessage = 'Registration successful! Waiting for admin approval.';
             } catch (\Exception $e) {
                 \Log::error('Mail sending failed: ' . $e->getMessage());

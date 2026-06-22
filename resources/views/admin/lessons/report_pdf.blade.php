@@ -11,45 +11,40 @@
         margin-bottom: 14px;
         padding-bottom: 10px;
     }
-    .academy-header img {
-        height: 60px;
-        margin-bottom: 6px;
-    }
+    .academy-header img { height: 60px; margin-bottom: 6px; }
     .academy-header .academy-name {
-        font-size: 18px;
-        font-weight: bold;
-        color: #1a202c;
-        margin: 2px 0;
+        font-size: 18px; font-weight: bold; color: #1a202c; margin: 2px 0;
     }
     .academy-header .academy-contact {
-        font-size: 10px;
-        color: #718096;
-        margin-top: 3px;
+        font-size: 10px; color: #718096; margin-top: 3px;
     }
 
-    .header {
-        border-bottom: 3px solid #2c7be5; padding-bottom: 12px; margin-bottom: 18px;
-    }
+    .header { border-bottom: 3px solid #2c7be5; padding-bottom: 12px; margin-bottom: 18px; }
     .header h1 { margin: 0; font-size: 20px; color: #1a202c; }
     .header .sub { color: #718096; font-size: 12px; margin-top: 4px; }
+
     .meta-table { width: 100%; margin-bottom: 16px; border-collapse: collapse; }
     .meta-table td { padding: 4px 8px; font-size: 11px; }
     .meta-table .lbl { color: #718096; width: 90px; }
     .meta-table .val { color: #1a202c; font-weight: bold; }
+
+    /* per-type section */
+    .type-section { margin-bottom: 20px; }
+    .type-title {
+        background: #ebf4ff; color: #2c7be5; font-weight: bold; font-size: 12px;
+        padding: 6px 10px; border-radius: 4px; margin-bottom: 6px;
+    }
+
     table.data { width: 100%; border-collapse: collapse; }
     table.data thead th {
         background: #2d3748; color: #fff; padding: 7px 6px; text-align: left;
-        font-size: 10px; text-transform: uppercase; letter-spacing: .3px;
+        font-size: 9.5px; text-transform: uppercase; letter-spacing: .3px;
         font-weight: bold; border: 1px solid #2d3748;
     }
     table.data tbody td {
-        padding: 6px; border: 1px solid #cbd5e0; font-size: 10.5px; vertical-align: top;
+        padding: 6px; border: 1px solid #cbd5e0; font-size: 10px; vertical-align: top;
     }
     table.data tbody tr:nth-child(even) { background: #f7fafc; }
-    .badge {
-        background: #ebf4ff; color: #2c7be5; padding: 2px 7px; border-radius: 10px;
-        font-size: 9px; font-weight: bold;
-    }
     .muted { color: #a0aec0; }
     .footer {
         position: fixed; bottom: 0; left: 0; right: 0; text-align: center;
@@ -95,51 +90,87 @@
         </tr>
     </table>
 
-    <table class="data">
-        <thead>
-            <tr>
-                <th style="width:24px">#</th>
-                <th>Day &amp; Date</th>
-                {{-- <th>Type</th> --}}
-                <th>Attendance</th>
-                <th>Course</th>
-                <th>Lesson</th>
-                <th>Page</th>
-                <th>From &rarr; To</th>
-                <th>Notes</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($records as $i => $r)
-                @php
-                    $lessonBits = array_filter([$r->para_name, $r->surah_name, $r->tehti_number, $r->select_lesson]);
-                    $fromTo = ($r->ayat_from || $r->ayat_to)
-                                ? trim(($r->ayat_from ?? '') . ' → ' . ($r->ayat_to ?? ''), ' →')
-                                : trim(($r->line_from ?? '') . ' → ' . ($r->line_to ?? ''), ' →');
-                @endphp
-                <tr>
-                    <td>{{ $i + 1 }}</td>
-                     <td>
-                        <strong>{{ $r->day }}</strong><br>
-                        <small class="muted">{{ $r->lesson_date ? \Carbon\Carbon::parse($r->lesson_date)->format('d-M-Y') : '' }}</small>
-                    </td>
-                    {{-- <td><span class="badge">{{ $typeLabels[$r->lesson_type] ?? ucfirst($r->lesson_type) }}</span></td> --}}
-                    {{-- <td>
-                        {{ $r->day }}<br>
-                        <span class="muted">{{ $r->lesson_date ? \Carbon\Carbon::parse($r->lesson_date)->format('d-M-Y') : '' }}</span>
-                    </td> --}}
-                    <td>{{ $r->attendance }}</td>
-                    <td>{{ $r->course }}</td>
-                    <td>{{ implode(' / ', $lessonBits) ?: '—' }}</td>
-                    <td>{{ $r->page_number }}</td>
-                    <td>{{ $fromTo ?: '—' }}</td>
-                    <td>{{ $r->notes }}</td>
-                </tr>
-            @empty
-                <tr><td colspan="9" class="empty">No lessons found for this period.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
+    @php
+        // $cellVal = function ($r, $key) {
+        //     $v = $r->{$key} ?? null;
+        //     if ($key === 'lesson_date') {
+        //         return $v ? \Carbon\Carbon::parse($v)->format('d-M-Y') : '';
+        //     }
+        //     return $v;
+        // };
+        $cellVal = function ($r, $key) {
+            $v = $r->{$key} ?? null;
+            if (($v === null || $v === '') && !empty($r->extra) && is_array($r->extra)) {
+                $v = $r->extra[$key] ?? null;
+            }
+            if ($key === 'lesson_date') {
+                return $v ? \Carbon\Carbon::parse($v)->format('d-M-Y') : '';
+            }
+            return $v;
+        };
+    @endphp
+
+    @forelse($grouped as $type => $g)
+        <div class="type-section">
+            <div class="type-title">{{ $typeLabels[$type] ?? ucfirst($type) }} ({{ $g['records']->count() }})</div>
+            <table class="data">
+                <thead>
+                    <tr>
+                        <th style="width:24px">#</th>
+                        @foreach($g['columns'] as $col)
+                            <th>{{ $col['label'] }}</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($g['records'] as $i => $r)
+                    <tr>
+                        <td class="muted">{{ $i + 1 }}</td>
+                        <td>
+                            <div class="student-cell">
+                                <span class="avatar">{{ strtoupper(substr(optional($r->user)->name ?? '?', 0, 1)) }}</span>
+                                <span>{{ optional($r->user)->name }}</span>
+                            </div>
+                        </td>
+                        @foreach($g['columns'] as $col)
+                            @php
+                                $key = $col['key'];
+                                $val = $cellVal($r, $key);
+                                $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
+                            @endphp
+                            <td class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
+                                @if($key === 'attendance')
+                                    @if($att)
+                                        <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
+                                            {{ $val }}
+                                        </span>
+                                    @else <span class="muted">—</span> @endif
+                                @elseif($key === 'lesson_date')
+                                    {{ $val ?: '—' }}
+                                    @if($r->day)<br><small class="muted">{{ $r->day }}</small>@endif
+                                @else
+                                    {{ ($val !== null && $val !== '') ? $val : '—' }}
+                                @endif
+                            </td>
+                        @endforeach
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="{{ count($g['columns']) + 2 }}" class="empty-state">
+                            <i class="fa fa-inbox"></i><br>No lessons found.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    @empty
+        <table class="data">
+            <tbody>
+                <tr><td class="empty">No lessons found for this period.</td></tr>
+            </tbody>
+        </table>
+    @endforelse
 
     <div class="footer">
         {{ $student->name }} — {{ $period }} | Taleem-ul-Quran Institute

@@ -29,23 +29,40 @@
         </form>
     </div>
 
-    {{-- ============ OUTSTANDING BALANCE ============ --}}
-    <div class="fr-outstanding {{ $totalOutstanding > 0 ? 'has-due' : 'clear' }}">
-        @if($totalOutstanding > 0)
-            <div class="ic"><i class="fa fa-exclamation-circle"></i></div>
+    {{-- ============ BALANCE CARDS ============ --}}
+    <div class="fr-balance-grid {{ ($totalAdvance ?? 0) > 0 ? 'two' : '' }}">
+
+        {{-- Outstanding --}}
+        <div class="fr-outstanding {{ $totalOutstanding > 0 ? 'has-due' : 'clear' }}">
+            @if($totalOutstanding > 0)
+                <div class="ic"><i class="fa fa-exclamation-circle"></i></div>
+                <div class="body">
+                    <p class="lbl">Outstanding Balance</p>
+                    <div class="amt fee-num"><span class="cur">Rs</span>{{ number_format($totalOutstanding, 0) }}</div>
+                    <p class="sub">Total amount due for {{ $year }}. Please clear your pending dues.</p>
+                </div>
+            @else
+                <div class="ic"><i class="fa fa-check-circle"></i></div>
+                <div class="body">
+                    <p class="lbl">Outstanding Balance</p>
+                    <div class="amt fee-num"><span class="cur">Rs</span>0</div>
+                    <p class="sub">You're all caught up for {{ $year }}. Nothing is due.</p>
+                </div>
+            @endif
+        </div>
+
+        {{-- Advance / Credit (sirf jab extra paid ho) --}}
+        @if(($totalAdvance ?? 0) > 0)
+        <div class="fr-outstanding advance">
+            <div class="ic"><i class="fa fa-arrow-circle-up"></i></div>
             <div class="body">
-                <p class="lbl">Outstanding Balance</p>
-                <div class="amt fee-num"><span class="cur">Rs</span>{{ number_format($totalOutstanding, 0) }}</div>
-                <p class="sub">Total amount due for {{ $year }}. Please clear your pending dues.</p>
+                <p class="lbl">Advance Balance</p>
+                <div class="amt fee-num"><span class="cur">Rs</span>{{ number_format($totalAdvance, 0) }}</div>
+                <p class="sub">Extra amount you paid for {{ $year }}. It will be adjusted in upcoming months.</p>
             </div>
-        @else
-            <div class="ic"><i class="fa fa-check-circle"></i></div>
-            <div class="body">
-                <p class="lbl">Outstanding Balance</p>
-                <div class="amt fee-num"><span class="cur">Rs</span>0</div>
-                <p class="sub">You're all caught up for {{ $year }}. Nothing is due.</p>
-            </div>
+        </div>
         @endif
+
     </div>
 
     {{-- ============ STATEMENT TABLE ============ --}}
@@ -81,6 +98,8 @@
                         <td class="r">
                             @if($row['outstanding'] > 0)
                                 <span class="fr-amt due">{{ number_format($row['outstanding'], 0) }}</span>
+                            @elseif(!empty($row['advance']) && $row['advance'] > 0)
+                                <span class="fr-amt advance">+{{ number_format($row['advance'], 0) }} Adv</span>
                             @else
                                 <span class="fr-amt muted">0</span>
                             @endif
@@ -120,11 +139,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        {{-- <td colspan="2" class="lbl">Total</td> --}}
-                        {{-- <td class="r fr-amt">{{ number_format($totalFee, 0) }}</td> --}}
-                        {{-- <td class="r fr-amt" style="color:var(--ok)">{{ number_format($totalReceived, 0) }}</td> --}}
-                        {{-- <td class="r fr-amt" style="color:var(--bad)">{{ number_format($totalOutstanding, 0) }}</td> --}}
-                        {{-- <td colspan="3"></td> --}}
+                        {{-- totals row (optional) --}}
                     </tr>
                 </tfoot>
             </table>
@@ -137,6 +152,7 @@
         <div>
             After paying your fee, upload the transaction screenshot here.
             Once the admin verifies it, the status will be marked as <b>Received</b>.
+            If you pay more than the monthly fee, the extra amount shows as <b>Advance</b> in green.
         </div>
     </div>
 
@@ -181,22 +197,30 @@
 .fee-report .fr-select:hover{border-color:#cfd3dc}
 .fee-report .fr-select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(79,70,229,.15)}
 
-/* outstanding balance card */
+/* balance grid */
+.fee-report .fr-balance-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:18px}
+.fee-report .fr-balance-grid.two{grid-template-columns:1fr 1fr}
+@media(max-width:760px){.fee-report .fr-balance-grid.two{grid-template-columns:1fr}}
+
+/* balance card (outstanding / advance) */
 .fee-report .fr-outstanding{display:flex;align-items:center;gap:18px;background:var(--surface);
-    border:1px solid var(--line);border-radius:16px;padding:20px 24px;margin-bottom:18px;
+    border:1px solid var(--line);border-radius:16px;padding:20px 24px;
     box-shadow:0 1px 2px rgba(16,24,40,.04);position:relative;overflow:hidden}
 .fee-report .fr-outstanding:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
 .fee-report .fr-outstanding.has-due:before{background:var(--bad)}
 .fee-report .fr-outstanding.clear:before{background:var(--ok)}
+.fee-report .fr-outstanding.advance:before{background:var(--ok)}
 .fee-report .fr-outstanding .ic{flex:0 0 52px;height:52px;width:52px;border-radius:14px;display:flex;
     align-items:center;justify-content:center;font-size:22px}
 .fee-report .fr-outstanding.has-due .ic{background:var(--bad-bg);color:var(--bad)}
 .fee-report .fr-outstanding.clear .ic{background:var(--ok-bg);color:var(--ok)}
+.fee-report .fr-outstanding.advance .ic{background:var(--ok-bg);color:var(--ok)}
 .fee-report .fr-outstanding .lbl{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
     color:var(--faint);margin:0 0 4px}
 .fee-report .fr-outstanding .amt{font-size:32px;font-weight:800;letter-spacing:-.025em;line-height:1}
 .fee-report .fr-outstanding.has-due .amt{color:var(--bad)}
 .fee-report .fr-outstanding.clear .amt{color:var(--ok)}
+.fee-report .fr-outstanding.advance .amt{color:var(--ok)}
 .fee-report .fr-outstanding .amt .cur{font-size:15px;font-weight:600;margin-right:4px;letter-spacing:0;opacity:.7}
 .fee-report .fr-outstanding .sub{margin:6px 0 0;font-size:13px;color:var(--muted)}
 
@@ -221,6 +245,7 @@
 .fee-report .fr-amt{font-variant-numeric:tabular-nums;font-weight:600}
 .fee-report .fr-amt.due{color:var(--bad)}
 .fee-report .fr-amt.paid{color:var(--ok)}
+.fee-report .fr-amt.advance{color:var(--ok)}
 .fee-report .fr-amt.muted{color:var(--faint);font-weight:500}
 .fee-report .fr-date{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
 

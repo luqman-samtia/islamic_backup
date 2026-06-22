@@ -41,6 +41,7 @@ class CustomGateFilter implements FilterInterface
                 'admin/admission/my-form',
                 'admin/fees/my/report',
                 'admin/lessons/my',
+                'admin/lessons/my-report'
             ])) {
                 return false;
             }
@@ -60,6 +61,7 @@ class CustomGateFilter implements FilterInterface
                 'admin/admission/my-form',
                 'admin/fees/my/report',
                 'admin/lessons/my',
+                'admin/lessons/my-report'
             ])) {
                 return true;
             }

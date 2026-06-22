@@ -14,13 +14,16 @@ class LessonRecord extends Model
         'tekhti_number',
         'select_lesson',
         'page_number', 'line_from', 'line_to', 'notes',
-        'created_by', 'creator_role',
+        'created_by', 'creator_role','extra'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    protected $casts = [
+        'extra' => 'array',
+        ];
 
     /**
      * Column layout for a lesson type.

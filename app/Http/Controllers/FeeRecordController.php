@@ -112,6 +112,42 @@ class FeeRecordController extends Controller
      |  STUDENT SIDE  (view own fee report - read only)
      |=========================================================*/
 
+    // public function myFees(Request $request)
+    // {
+    //     $user = Auth::user();
+    //     $year = $request->input('year', date('Y'));
+
+    //     $existing = FeeRecord::where('user_id', $user->id)->where('year', $year)
+    //         ->get()->keyBy('month');
+
+    //     $rows = [];
+    //     $totalFee = $totalReceived = $totalOutstanding = 0;
+    //     foreach (FeeRecord::$months as $num => $name) {
+    //         $rec = $existing->get($num);
+    //         $fee = $rec->monthly_fee ?? 0;
+    //         $rcv = $rec->received ?? 0;
+    //         $out = $rec->outstanding ?? 0;
+    //         $totalFee += $fee; $totalReceived += $rcv; $totalOutstanding += $out;
+    //         $rows[] = [
+    //             'month'       => $num,
+    //             'month_name'  => $name,
+    //             'monthly_fee' => $fee,
+    //             'received'    => $rcv,
+    //             'outstanding' => $out,
+    //             'paid_date'   => optional($rec)->paid_date,
+    //             'proof'       => optional($rec)->proof,
+    //             'status'      => $rec->status ?? 'pending',
+    //         ];
+    //     }
+
+    //     $years = FeeRecord::where('user_id', $user->id)
+    //         ->selectRaw('DISTINCT year')->orderBy('year', 'desc')->pluck('year');
+    //     if ($years->isEmpty()) $years = collect([date('Y')]);
+
+    //     return view('admin.fees.my_fees', compact(
+    //         'rows', 'year', 'years', 'totalFee', 'totalReceived', 'totalOutstanding'
+    //     ));
+    // }
     public function myFees(Request $request)
     {
         $user = Auth::user();
@@ -121,19 +157,26 @@ class FeeRecordController extends Controller
             ->get()->keyBy('month');
 
         $rows = [];
-        $totalFee = $totalReceived = $totalOutstanding = 0;
+        $totalFee = $totalReceived = $totalOutstanding = $totalAdvance = 0;  
         foreach (FeeRecord::$months as $num => $name) {
             $rec = $existing->get($num);
             $fee = $rec->monthly_fee ?? 0;
             $rcv = $rec->received ?? 0;
-            $out = $rec->outstanding ?? 0;
-            $totalFee += $fee; $totalReceived += $rcv; $totalOutstanding += $out;
+
+            $out     = max($fee - $rcv, 0);
+            $advance = max($rcv - $fee, 0);         
+
+            $totalFee += $fee; $totalReceived += $rcv;
+            $totalOutstanding += $out;
+            $totalAdvance += $advance;          
+
             $rows[] = [
                 'month'       => $num,
                 'month_name'  => $name,
                 'monthly_fee' => $fee,
                 'received'    => $rcv,
                 'outstanding' => $out,
+                'advance'     => $advance,          
                 'paid_date'   => optional($rec)->paid_date,
                 'proof'       => optional($rec)->proof,
                 'status'      => $rec->status ?? 'pending',
@@ -145,7 +188,7 @@ class FeeRecordController extends Controller
         if ($years->isEmpty()) $years = collect([date('Y')]);
 
         return view('admin.fees.my_fees', compact(
-            'rows', 'year', 'years', 'totalFee', 'totalReceived', 'totalOutstanding'
+            'rows', 'year', 'years', 'totalFee', 'totalReceived', 'totalOutstanding', 'totalAdvance'
         ));
     }
 

@@ -239,6 +239,7 @@
                                 const option = document.createElement('option');
                                 option.value = para.para_no;
                                 option.textContent = para.para_name;
+                                option.setAttribute('data-first', para.first_page);
                                 paraSelect.appendChild(option);
                             });
                             
@@ -283,8 +284,20 @@
                         });
                     }
             // Handle para select change
+            // paraSelect.addEventListener('change', function(e) {
+            //     if (this.value) {
+            //         window.location.href = "{{ route('quran.para', '') }}/" + this.value;
+            //     }
+            // });
             paraSelect.addEventListener('change', function(e) {
-                if (this.value) {
+                if (!this.value) { return; }
+                var opt   = this.options[this.selectedIndex];
+                var first = opt.getAttribute('data-first');
+                if (first) {
+                    window.location.href = "{{ route('quranSurat.page', ['__SLUG__', '__PAGE__']) }}"
+                        .replace('__SLUG__', 'para-' + this.value)
+                        .replace('__PAGE__', first);
+                } else {
                     window.location.href = "{{ route('quran.para', '') }}/" + this.value;
                 }
             });

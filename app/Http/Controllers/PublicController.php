@@ -290,6 +290,10 @@ public function quranParaList()
                   ->get()
                   ->map(function($para) {
                       $para['para_name'] = QuranParas::getParaName($para->para_no);
+                      $para['first_page'] = Quran::where('para_no', $para->para_no)
+                          ->whereNotNull('parent_id')
+                          ->orderBy('number', 'asc')
+                          ->value('number');
                       return $para;
                   });
 
@@ -595,27 +599,31 @@ public function quranSuratPage($slug, $page)
         return view('site.tajweed-quran.suratpage', $data);
     }
     public function tajweedQuranParaList()
-{
-    $paraIds = TajweedQuran::whereNotNull('para_no')
-                    ->whereNotNull('parent_id')
-                    ->groupBy('para_no')
-                    ->selectRaw('MIN(id) as id')
-                    ->pluck('id');
+    {
+        $paraIds = TajweedQuran::whereNotNull('para_no')
+                        ->whereNotNull('parent_id')
+                        ->groupBy('para_no')
+                        ->selectRaw('MIN(id) as id')
+                        ->pluck('id');
 
-    $paras = TajweedQuran::whereIn('id', $paraIds)
-                  ->orderBy('para_no', 'asc')
-                  ->get()
-                  ->map(function($para) {
-                      $para['para_name'] = QuranParas::getParaName($para->para_no);
-                      return $para;
-                  });
+        $paras = TajweedQuran::whereIn('id', $paraIds)
+                    ->orderBy('para_no', 'asc')
+                    ->get()
+                    ->map(function($para) {
+                        $para['para_name'] = QuranParas::getParaName($para->para_no);
+                        $para['first_page'] = TajweedQuran::where('para_no', $para->para_no)
+                            ->whereNotNull('parent_id')
+                            ->orderBy('number', 'asc')
+                            ->value('number');
+                        return $para;
+                    });
 
-    if (request()->ajax()) {
-        return response()->json($paras);
+        if (request()->ajax()) {
+            return response()->json($paras);
+        }
+
+        return view('site.tajweed-quran.para_list', compact('paras'));
     }
-
-    return view('site.tajweed-quran.para_list', compact('paras'));
-}
 
 public function tajweedQuranParaShow($para_no)
 {

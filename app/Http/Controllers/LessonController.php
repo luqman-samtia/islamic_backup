@@ -73,10 +73,6 @@ class LessonController extends Controller
     // All dropdown options for a type, grouped by field_key
     protected function optionsFor($type)
     {
-        // return LessonOption::where('lesson_type', $type)
-        //     ->orderBy('sort_order')->orderBy('label')
-        //     ->get()
-        //     ->groupBy('field_key');
         return LessonOption::where('lesson_type', $type)
         ->get()
         ->groupBy('field_key')
@@ -178,13 +174,6 @@ class LessonController extends Controller
             'label'       => 'required|string|max:255',
         ]);
 
-        // $option = LessonOption::firstOrCreate([
-        //     'lesson_type' => $request->lesson_type,
-        //     'field_key'   => $request->field_key,
-        //     'label'       => $request->label,
-        // ], [
-        //     'sort_order'  => (int) $request->input('sort_order', 0),
-        // ]);
         $option = LessonOption::firstOrCreate([
             'lesson_type' => $request->lesson_type,
             'field_key'   => $request->field_key,
@@ -225,26 +214,6 @@ class LessonController extends Controller
     }
 
     // Build a column config array from the posted columns[] data
-    // protected function buildColumns(Request $request)
-    // {
-    //     $pool    = LessonType::$pool;
-    //     $columns = [];
-
-    //     foreach ((array) $request->input('columns', []) as $key => $data) {
-    //         // only keep columns the admin actually ticked
-    //         if (empty($data['enabled']) || !isset($pool[$key])) {
-    //             continue;
-    //         }
-    //         $label = trim($data['label'] ?? '') ?: $pool[$key][0];
-    //         $type  = ($data['type'] ?? '') === 'dropdown' ? 'dropdown' : 'text';
-    //         // attendance & notes look best as dropdowns, but admin's choice wins
-    //         $columns[] = ['key' => $key, 'label' => $label, 'type' => $type];
-    //     }
-
-    //     return $columns;
-    // }
-
-    // Build a column config array from the posted columns[] data
     protected function buildColumns(Request $request)
     {
         $pool    = LessonType::$pool;
@@ -265,7 +234,7 @@ class LessonController extends Controller
         foreach ((array) $request->input('custom_columns', []) as $data) {
             $label = trim($data['label'] ?? '');
             if ($label === '') {
-                continue; 
+                continue;
             }
 
             $base = \Illuminate\Support\Str::slug($label, '_') ?: 'col';
@@ -394,7 +363,6 @@ class LessonController extends Controller
                 'options'  => $this->optionsFor($type),
                 'records'  => LessonRecord::where('user_id', $student->id)
                                 ->where('lesson_type', $type)
-                                // ->orderBy('lesson_date', 'asc')
                                 ->orderBy('id', 'asc')
                                 ->get(),
                 'can_write' => $this->canWrite($student, $type),
@@ -402,12 +370,12 @@ class LessonController extends Controller
         }
 
         $typeLabels = StudentCourse::types();
-         $scholarName = null;
+        $scholarName = null;
         if (!empty($student->scholar)) {
             $scholarName = optional(Scholars::find($student->scholar))->name;
         }
 
-        return view('admin.lessons.entry', compact('student', 'tables', 'typeLabels','scholarName'));
+        return view('admin.lessons.entry', compact('student', 'tables', 'typeLabels', 'scholarName'));
     }
 
     public function deleteRecord(Request $request)
@@ -427,6 +395,60 @@ class LessonController extends Controller
     }
 
     // Save all rows for one (student, type)
+    // public function saveLessons(Request $request)
+    // {
+    //     $request->validate([
+    //         'user_id'     => 'required|exists:users,id',
+    //         'lesson_type' => 'required|exists:lesson_types,key',
+    //     ]);
+
+    //     $student = User::findOrFail($request->user_id);
+    //     $type    = $request->lesson_type;
+
+    //     if (!$this->canWrite($student, $type)) {
+    //         return response()->json(['error' => 'You do not have permission to edit these lessons.'], 403);
+    //     }
+
+    //     $rows        = $request->input('rows', []);
+    //     $allowedKeys = collect(LessonRecord::columns($type))->pluck('key')->toArray();
+
+    //     $existing    = LessonRecord::where('user_id', $student->id)->where('lesson_type', $type)->pluck('id')->toArray();
+    //     $keptIds     = [];
+
+    //     foreach ($rows as $row) {
+    //         $payload = [
+    //             'user_id'      => $student->id,
+    //             'lesson_type'  => $type,
+    //             'created_by'   => Auth::id(),
+    //             'creator_role' => $this->role(),
+    //         ];
+
+    //         foreach ($allowedKeys as $key) {
+    //             $payload[$key] = $row[$key] ?? null;
+    //         }
+
+    //         // day auto-derived from date if a date is present and day is blank
+    //         if (!empty($payload['lesson_date']) && empty($row['day'])) {
+    //             try {
+    //                 $payload['day'] = Carbon::parse($payload['lesson_date'])->format('l');
+    //             } catch (\Exception $e) {}
+    //         } elseif (!empty($row['day'])) {
+    //             $payload['day'] = $row['day'];
+    //         }
+
+    //         if (!empty($row['id']) && in_array((int) $row['id'], $existing)) {
+    //             LessonRecord::where('id', $row['id'])->update($payload);
+    //             $keptIds[] = (int) $row['id'];
+    //         } else {
+    //             $new = LessonRecord::create($payload);
+    //             $keptIds[] = $new->id;
+    //         }
+    //     }
+
+    //     return response()->json(['success' => true, 'message' => ucfirst($type) . ' lessons saved!']);
+    // }
+
+    // Save all rows for one (student, type)
     public function saveLessons(Request $request)
     {
         $request->validate([
@@ -441,11 +463,20 @@ class LessonController extends Controller
             return response()->json(['error' => 'You do not have permission to edit these lessons.'], 403);
         }
 
-        $rows        = $request->input('rows', []);
-        $allowedKeys = collect(LessonRecord::columns($type))->pluck('key')->toArray();
+        $rows = $request->input('rows', []);
 
-        $existing    = LessonRecord::where('user_id', $student->id)->where('lesson_type', $type)->pluck('id')->toArray();
-        $keptIds     = [];
+        // Is type ke saare columns (pool + custom)
+        $allKeys = collect(LessonRecord::columns($type))->pluck('key')->toArray();
+
+        // Sirf wahi keys jo lesson_records table mein REAL columns hain
+        $tableColumns = \Illuminate\Support\Facades\Schema::getColumnListing((new LessonRecord)->getTable());
+        $realKeys     = array_values(array_intersect($allKeys, $tableColumns));
+
+        // Baqi keys = custom fields -> 'extra' JSON mein jaayengi
+        $customKeys   = array_values(array_diff($allKeys, $tableColumns));
+
+        $existing = LessonRecord::where('user_id', $student->id)->where('lesson_type', $type)->pluck('id')->toArray();
+        $keptIds  = [];
 
         foreach ($rows as $row) {
             $payload = [
@@ -455,11 +486,22 @@ class LessonController extends Controller
                 'creator_role' => $this->role(),
             ];
 
-            foreach ($allowedKeys as $key) {
+            // 1) Real DB columns
+            foreach ($realKeys as $key) {
                 $payload[$key] = $row[$key] ?? null;
             }
 
-            // day auto-derived from date if a date is present and day is blank
+            // 2) Custom fields -> extra JSON
+            $extra = [];
+            foreach ($customKeys as $key) {
+                if (array_key_exists($key, $row)) {
+                    $extra[$key] = $row[$key];
+                }
+            }
+           if (in_array('extra', $tableColumns, true)) {
+                $payload['extra'] = !empty($extra) ? json_encode($extra) : null;
+            }
+
             if (!empty($payload['lesson_date']) && empty($row['day'])) {
                 try {
                     $payload['day'] = Carbon::parse($payload['lesson_date'])->format('l');
@@ -483,6 +525,20 @@ class LessonController extends Controller
     /* =========================================================
      |  REPORT  (admin / scholar) with filters
      |=========================================================*/
+
+    // Group a flat record collection into [ type => ['columns'=>..,'records'=>..] ]
+    // so each lesson type shows with ITS OWN columns (same as entry page).
+    protected function groupByTypeWithColumns($records)
+    {
+        $grouped = [];
+        foreach ($records->groupBy('lesson_type') as $type => $recs) {
+            $grouped[$type] = [
+                'columns' => LessonRecord::columns($type),
+                'records' => $recs->values(),
+            ];
+        }
+        return $grouped;
+    }
 
     public function report(Request $request)
     {
@@ -510,14 +566,61 @@ class LessonController extends Controller
         if ($request->filled('year'))        $query->whereYear('lesson_date', $request->year);
         if ($request->filled('month'))       $query->whereMonth('lesson_date', $request->month);
 
-        $records = $query->paginate(10)->appends($request->query());
+        $records  = $query->get();
+        $grouped  = $this->groupByTypeWithColumns($records);
+        if ($request->filled('lesson_type') && !isset($grouped[$request->lesson_type])) {
+            $grouped[$request->lesson_type] = [
+                'columns' => LessonRecord::columns($request->lesson_type),
+                'records' => collect(),
+            ];
+        }
         $students = User::whereIn('id', $studentIds)->select('id', 'name')->orderBy('name')->get();
-        return view('admin.lessons.report', compact('records', 'students'));
+        $typeLabels = StudentCourse::types();
+
+        return view('admin.lessons.report', compact('grouped', 'records', 'students', 'typeLabels'));
     }
+
+    /* =========================================================
+     |  STUDENT: own report (read-only, same look as admin)
+     |=========================================================*/
+
+    public function myReport(Request $request)
+    {
+        $student = Auth::user();
+
+        $query = LessonRecord::where('user_id', $student->id)
+            ->with('user')
+            ->orderBy('lesson_date', 'desc')
+            ->orderBy('id', 'desc');
+
+        if ($request->filled('lesson_type')) $query->where('lesson_type', $request->lesson_type);
+        if ($request->filled('year'))        $query->whereYear('lesson_date', $request->year);
+        if ($request->filled('month'))       $query->whereMonth('lesson_date', $request->month);
+
+        $records = $query->get();
+        $grouped = $this->groupByTypeWithColumns($records);
+        if ($request->filled('lesson_type') && !isset($grouped[$request->lesson_type])) {
+            $grouped[$request->lesson_type] = [
+                'columns' => LessonRecord::columns($request->lesson_type),
+                'records' => collect(),
+            ];
+        }
+        // only the types this student is enrolled in (for the filter dropdown)
+        $enrolledTypes = StudentCourse::where('user_id', $student->id)
+            ->pluck('lesson_type')->unique()->values();
+        $allLabels  = StudentCourse::types();
+        $typeLabels = collect($allLabels)->only($enrolledTypes->all())->toArray();
+
+        return view('admin.lessons.my_report', compact('grouped', 'records', 'student', 'typeLabels'));
+    }
+
+    /* =========================================================
+     |  PDF  (admin / scholar / student-own)
+     |=========================================================*/
+
     public function reportPdf(Request $request)
     {
         $user = Auth::user();
-        abort_unless(in_array($user->type, ['admin', 'scholar']), 403);
 
         $request->validate([
             'student_id' => 'required|exists:users,id',
@@ -525,9 +628,14 @@ class LessonController extends Controller
 
         $student = User::where('type', 'student')->findOrFail($request->student_id);
 
+        // Permission: admin all, scholar own, student only self
         if ($user->type === 'scholar') {
             $scholar = Scholars::where('email', $user->email)->first();
             abort_unless($scholar && (int) $student->scholar === (int) $scholar->id, 403);
+        } elseif ($user->type === 'student') {
+            abort_unless((int) $user->id === (int) $student->id, 403);
+        } elseif ($user->type !== 'admin') {
+            abort(403);
         }
 
         $query = LessonRecord::where('user_id', $student->id)
@@ -540,14 +648,15 @@ class LessonController extends Controller
         if ($request->filled('month'))       $query->whereMonth('lesson_date', $request->month);
 
         $records    = $query->get();
+        $grouped    = $this->groupByTypeWithColumns($records);   // dynamic columns per type
         $typeLabels = StudentCourse::types();
-         $info = \App\Information::query()->first();
+        $info       = \App\Information::query()->first();
         $monthName  = $request->filled('month') ? (\App\FeeRecord::$months[(int) $request->month] ?? '') : '';
         $period     = trim($monthName . ' ' . $request->input('year', ''));
         if ($period === '') $period = 'All Records';
 
         $pdf = \PDF::loadView('admin.lessons.report_pdf', compact(
-            'records', 'student', 'typeLabels', 'period', 'request', 'info'
+            'grouped', 'records', 'student', 'typeLabels', 'period', 'request', 'info'
         ))->setPaper('a4', 'landscape');
 
         $fileName = 'lesson-report-' . \Illuminate\Support\Str::slug($student->name)

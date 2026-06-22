@@ -1,0 +1,270 @@
+/* ============================================================
+   AdminLTE Premium Override  —  Dark Premium Polish
+   Place at: public/css/admin-custom.css
+   ============================================================ */
+
+:root {
+    --p-brand: #4f46e5;
+    --p-brand-2: #7c3aed;
+    --p-brand-dark: #4338ca;
+    --p-brand-light: #eef2ff;
+    --p-sidebar-bg: #0f172a;       /* deep navy */
+    --p-sidebar-bg-2: #1e1b4b;     /* indigo navy */
+    --p-sidebar-text: #cbd5e1;
+    --p-sidebar-muted: #64748b;
+    --p-ink: #1e293b;
+    --p-line: #e2e8f0;
+    --p-bg: #f1f5f9;
+}
+
+/* ---------- Global background & font smoothing ---------- */
+body,
+.wrapper {
+    background: var(--p-bg) !important;
+    -webkit-font-smoothing: antialiased;
+}
+.content-wrapper {
+    background: var(--p-bg) !important;
+}
+
+/* ============================================================
+   TOP HEADER / NAVBAR
+   ============================================================ */
+.main-header .navbar,
+.main-header > .navbar {
+    background: linear-gradient(90deg, var(--p-brand), var(--p-brand-2)) !important;
+    border: none !important;
+    box-shadow: 0 4px 18px -6px rgba(79, 70, 229, .55);
+}
+.main-header .navbar .nav > li > a,
+.main-header .navbar .nav > li > a:hover,
+.main-header .navbar .nav > li > a:focus {
+    color: #fff !important;
+}
+.main-header .navbar .nav > li > a:hover {
+    background: rgba(255, 255, 255, .12) !important;
+}
+
+/* Logo block */
+.main-header .logo {
+    background: var(--p-sidebar-bg) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    letter-spacing: .3px;
+    border: none !important;
+    transition: .2s;
+}
+.main-header .logo:hover {
+    background: var(--p-sidebar-bg-2) !important;
+}
+.main-header .logo b {
+    font-weight: 800;
+}
+
+/* sidebar toggle (hamburger) */
+.sidebar-toggle {
+    color: #fff !important;
+}
+.sidebar-toggle:hover {
+    background: rgba(255, 255, 255, .12) !important;
+}
+
+/* ============================================================
+   SIDEBAR  —  Dark Premium
+   ============================================================ */
+.main-sidebar,
+.left-side {
+    background: linear-gradient(180deg, var(--p-sidebar-bg) 0%, var(--p-sidebar-bg-2) 100%) !important;
+    box-shadow: 2px 0 14px -6px rgba(0, 0, 0, .4);
+}
+
+/* Section header text ("MAIN NAVIGATION") */
+.sidebar-menu > li.header {
+    background: transparent !important;
+    color: var(--p-sidebar-muted) !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 18px 18px 8px !important;
+}
+
+/* Menu links */
+.sidebar-menu > li > a {
+    color: var(--p-sidebar-text) !important;
+    border-left: 3px solid transparent !important;
+    border-radius: 0 10px 10px 0;
+    margin: 2px 10px 2px 0;
+    padding: 12px 15px !important;
+    font-size: 14.5px;
+    font-weight: 500;
+    transition: all .18s ease;
+}
+.sidebar-menu > li > a > .fa,
+.sidebar-menu > li > a > .glyphicon,
+.sidebar-menu > li > a > .ion {
+    width: 22px;
+    text-align: center;
+    color: var(--p-sidebar-muted) !important;
+    transition: color .18s ease;
+}
+
+/* Hover state */
+.sidebar-menu > li:hover > a,
+.sidebar-menu > li.active > a {
+    background: rgba(79, 70, 229, .18) !important;
+    color: #fff !important;
+    border-left-color: var(--p-brand) !important;
+}
+.sidebar-menu > li:hover > a > .fa,
+.sidebar-menu > li.active > a > .fa,
+.sidebar-menu > li:hover > a > .glyphicon,
+.sidebar-menu > li.active > a > .glyphicon {
+    color: #a5b4fc !important;
+}
+
+/* Active state — solid gradient accent */
+.sidebar-menu > li.active > a {
+    background: linear-gradient(90deg, rgba(79, 70, 229, .35), rgba(124, 58, 237, .15)) !important;
+    font-weight: 600;
+}
+
+/* Treeview submenu */
+.sidebar-menu .treeview-menu {
+    background: rgba(0, 0, 0, .2) !important;
+    border-radius: 8px;
+    margin: 2px 10px;
+}
+.sidebar-menu .treeview-menu > li > a {
+    color: var(--p-sidebar-text) !important;
+}
+.sidebar-menu .treeview-menu > li.active > a,
+.sidebar-menu .treeview-menu > li > a:hover {
+    color: #fff !important;
+}
+
+/* Sidebar user panel (if present) */
+.user-panel > .info,
+.user-panel > .info > a {
+    color: #fff !important;
+}
+
+/* ============================================================
+   CONTENT HEADER / PAGE TITLE
+   ============================================================ */
+.content-header > h1 {
+    font-weight: 700;
+    color: var(--p-ink);
+    letter-spacing: -.4px;
+}
+.content-header > .breadcrumb {
+    background: #fff;
+    border: 1px solid var(--p-line);
+    border-radius: 30px;
+    padding: 6px 16px;
+    box-shadow: 0 2px 8px -4px rgba(15, 23, 42, .12);
+}
+.content-header > .breadcrumb > li > a {
+    color: var(--p-brand);
+}
+
+/* ============================================================
+   BOXES / CARDS  (AdminLTE 2 .box)
+   ============================================================ */
+.box {
+    border: 1px solid var(--p-line) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px -8px rgba(15, 23, 42, .08) !important;
+    border-top: none !important;
+    overflow: hidden;
+}
+.box.box-primary {
+    border-top: 3px solid var(--p-brand) !important;
+}
+.box-header {
+    border-bottom: 1px solid var(--p-line);
+    padding: 16px 20px;
+}
+.box-header .box-title {
+    font-weight: 700;
+    color: var(--p-ink);
+    font-size: 17px;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-primary {
+    background: var(--p-brand) !important;
+    border-color: var(--p-brand) !important;
+    border-radius: 9px !important;
+    font-weight: 600;
+    box-shadow: 0 4px 12px -4px rgba(79, 70, 229, .5);
+    transition: .15s;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+    background: var(--p-brand-dark) !important;
+    border-color: var(--p-brand-dark) !important;
+}
+.btn-success {
+    border-radius: 9px !important;
+    font-weight: 600;
+}
+.btn {
+    border-radius: 9px;
+}
+.btn-xs {
+    border-radius: 7px;
+}
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+.table > thead > tr > th {
+    border-bottom: 2px solid var(--p-line);
+    color: var(--p-sidebar-muted);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: .5px;
+    font-weight: 700;
+}
+.table-hover > tbody > tr:hover {
+    background: var(--p-brand-light) !important;
+}
+
+/* ============================================================
+   FORMS / INPUTS
+   ============================================================ */
+.form-control {
+    border-radius: 9px;
+    border: 1px solid var(--p-line);
+    box-shadow: none;
+    transition: .15s;
+}
+.form-control:focus {
+    border-color: var(--p-brand);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, .12);
+}
+
+/* ============================================================
+   PAGINATION / DATATABLES
+   ============================================================ */
+.pagination > .active > a,
+.pagination > .active > a:hover {
+    background: var(--p-brand) !important;
+    border-color: var(--p-brand) !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--p-brand) !important;
+    border-color: var(--p-brand) !important;
+    color: #fff !important;
+    border-radius: 8px;
+}
+
+/* Smooth scrollbar in sidebar */
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .15);
+    border-radius: 10px;
+}

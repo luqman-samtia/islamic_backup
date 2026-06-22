@@ -39,10 +39,10 @@
     <form id="feeForm">
         <input type="hidden" name="user_id" value="{{ $student->id }}">
         <input type="hidden" name="year" value="{{ $year }}">
-         <div class="fs-foot">
-                <span class="fs-hint"><i class="fa fa-info-circle"></i> Outstanding is calculated automatically as fee minus received.</span>
-                <button type="submit" class="fs-save"><i class="fa fa-save"></i> Save Fee Sheet</button>
-            </div>
+        <div class="fs-foot">
+            <span class="fs-hint"><i class="fa fa-info-circle"></i> Outstanding is calculated automatically as fee minus received. Extra payment shows as <b>Advance</b> in green.</span>
+            <button type="submit" class="fs-save"><i class="fa fa-save"></i> Save Fee Sheet</button>
+        </div>
         <div class="fs-card">
             <div class="fs-tablewrap">
                 <table class="fs-tbl">
@@ -65,18 +65,19 @@
                             <td class="fs-month">{{ $row['month_name'] }}</td>
                             <td class="r">
                                 <input type="number" step="0.01" class="form-control monthly-fee"
-                                    name="months[{{ $row['month'] }}][monthly_fee]" 
+                                    name="months[{{ $row['month'] }}][monthly_fee]"
                                     value="{{ $row['monthly_fee'] == 0 ? '' : $row['monthly_fee'] }}">
                             </td>
                             <td class="r">
                                 <input type="number" step="0.01" class="form-control received"
-                                    name="months[{{ $row['month'] }}][received]" 
+                                    name="months[{{ $row['month'] }}][received]"
                                     value="{{ $row['received'] == 0 ? '' : $row['received'] }}">
                             </td>
                             <td class="r">
                                 <input type="number" step="0.01" class="form-control outstanding"
-                                    name="months[{{ $row['month'] }}][outstanding]" 
+                                    name="months[{{ $row['month'] }}][outstanding]"
                                     value="{{ $row['outstanding'] == 0 ? '' : $row['outstanding'] }}" readonly>
+                                <span class="fs-adv-tag" style="display:none">+<span class="fs-adv-val">0</span> Adv</span>
                             </td>
                             <td>
                                 <input type="date" class="form-control fs-date"
@@ -120,7 +121,12 @@
                             <td class="r"><span class="cur">Rs</span><span id="totalFee">0</span></td>
                             <td class="r ok"><span class="cur ok">Rs</span><span id="totalReceived">0</span></td>
                             <td class="r bad"><span class="cur bad">Rs</span><span id="totalOutstanding">0</span></td>
-                            <td colspan="3"></td>
+                            <td class="r ok">
+                                <span class="adv-wrap" style="display:none">
+                                    <span class="cur ok">Adv Rs</span><span id="totalAdvance">0</span>
+                                </span>
+                            </td>
+                            <td colspan="2"></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -139,7 +145,8 @@
 
 .fee-sheet{
     --ink:#161A22;--muted:#6B7280;--faint:#9AA1AD;--line:#E9EBF0;--surface:#FFFFFF;
-    --brand:#4F46E5;--brand-d:#4338CA;--ok:#047857;--bad:#BE123C;--bad-bg:#FFF1F2;--bad-br:#FAD1D7;
+    --brand:#4F46E5;--brand-d:#4338CA;--ok:#047857;--ok-bg:#ECFDF5;--ok-br:#A7F3D0;
+    --bad:#BE123C;--bad-bg:#FFF1F2;--bad-br:#FAD1D7;
     color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;
 }
 .fee-sheet *{box-sizing:border-box}
@@ -184,6 +191,9 @@
     text-align:right;font-variant-numeric:tabular-nums;font-weight:600;width:108px}
 .fee-sheet input.outstanding{background:#F7F8FB;color:var(--muted);cursor:default}
 .fee-sheet input.outstanding.has-due{color:var(--bad);background:var(--bad-bg);border-color:var(--bad-br)}
+.fee-sheet input.outstanding.has-advance{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-br);font-weight:700}
+.fee-sheet .fs-adv-tag{display:block;margin-top:4px;font-size:11px;font-weight:700;color:var(--ok);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
 .fee-sheet input.fs-date{width:150px;font-weight:500}
 .fee-sheet select.fee-status{width:152px;appearance:none;-webkit-appearance:none;cursor:pointer;font-weight:600;
     background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.5'><path d='M6 9l6 6 6-6'/></svg>") no-repeat right 10px center;padding-right:30px}
@@ -211,9 +221,10 @@
 
 /* footer */
 .fee-sheet .fs-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;
-    border-top:1px solid var(--line);background:#FCFCFD;flex-wrap:wrap}
+    border:1px solid var(--line);border-radius:14px;background:#FCFCFD;flex-wrap:wrap;margin-bottom:16px}
 .fee-sheet .fs-hint{font-size:12.5px;color:var(--faint)}
 .fee-sheet .fs-hint i{margin-right:4px}
+.fee-sheet .fs-hint b{color:var(--ok);font-weight:700}
 .fee-sheet .fs-save{display:inline-flex;align-items:center;gap:8px;background:var(--brand);color:#fff;border:none;
     font:600 13.5px 'Inter',sans-serif;padding:10px 18px;border-radius:10px;cursor:pointer;transition:.15s}
 .fee-sheet .fs-save:hover{background:var(--brand-d)}
@@ -282,18 +293,33 @@
     });
 
     function recalc() {
-        var tf = 0, tr = 0, to = 0;
+        var tf = 0, tr = 0, to = 0, ta = 0;
         $('#feeForm tbody tr').each(function () {
             var fee = parseFloat($(this).find('.monthly-fee').val()) || 0;
             var rec = parseFloat($(this).find('.received').val()) || 0;
             var out = Math.max(fee - rec, 0);
+            var adv = Math.max(rec - fee, 0);   // extra/advance
+
             var $out = $(this).find('.outstanding');
-            $out.val(out.toFixed(2)).toggleClass('has-due', out > 0);
-            tf += fee; tr += rec; to += out;
+            $out.val(out.toFixed(2))
+                .toggleClass('has-due', out > 0)
+                .toggleClass('has-advance', adv > 0);
+
+            // per-row advance tag
+            var $tag = $(this).find('.fs-adv-tag');
+            if (adv > 0) {
+                $tag.show().find('.fs-adv-val').text(adv.toFixed(0));
+            } else {
+                $tag.hide();
+            }
+
+            tf += fee; tr += rec; to += out; ta += adv;
         });
         $('#totalFee').text(tf.toFixed(2));
         $('#totalReceived').text(tr.toFixed(2));
         $('#totalOutstanding').text(to.toFixed(2));
+        $('#totalAdvance').text(ta.toFixed(2));
+        $('.adv-wrap').toggle(ta > 0);   // advance ho to hi total dikhayein
     }
     $(document).on('input', '.monthly-fee, .received', recalc);
     $(recalc);

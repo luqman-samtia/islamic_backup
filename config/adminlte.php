@@ -186,7 +186,7 @@ return [
         [
             'text'        => 'Lessons Report',
             'url'         => 'admin/lessons/report',
-            'icon'        => 'book',
+            'icon'        => 'file-text',
             'can'         => 'resourcescontroller.index',
         ],
 
@@ -209,6 +209,12 @@ return [
             'text' => 'My Lessons',
             'icon' => 'book',
             'url'  => 'admin/lessons/my',
+            'can'  => 'studentcontroller.StudentDataShow',
+        ],
+        [
+            'text' => 'Lesson Report',
+            'icon' => 'file-text',
+            'url'  => 'admin/lessons/my-report',
             'can'  => 'studentcontroller.StudentDataShow',
         ],
 

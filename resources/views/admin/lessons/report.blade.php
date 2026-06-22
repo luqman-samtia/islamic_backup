@@ -8,10 +8,21 @@
 
 @section('content')
 @php
-    $typeLabels = \App\StudentCourse::types();
-    $totalLessons = $records->count();
+    $totalLessons   = $records->count();
     $uniqueStudents = $records->pluck('user_id')->unique()->count();
-    $latest = optional($records->sortByDesc('lesson_date')->first())->lesson_date;
+    $latest         = optional($records->sortByDesc('lesson_date')->first())->lesson_date;
+
+    // helper: pretty value for a column key (real column ya extra JSON se)
+    $cellVal = function ($r, $key) {
+        $v = $r->{$key} ?? null;
+        if (($v === null || $v === '') && !empty($r->extra) && is_array($r->extra)) {
+            $v = $r->extra[$key] ?? null;
+        }
+        if ($key === 'lesson_date') {
+            return $v ? \Carbon\Carbon::parse($v)->format('d-M-Y') : '';
+        }
+        return $v;
+    };
 @endphp
 
 {{-- ===== Summary cards ===== --}}
@@ -45,7 +56,7 @@
     </div>
 </div>
 
-{{-- ===== Filter + report card ===== --}}
+{{-- ===== Filter card ===== --}}
 <div class="report-card">
     <div class="report-card-head">
         <form method="GET" class="filter-bar" action="{{ route('admin.lessons.report') }}">
@@ -80,101 +91,82 @@
             </a>
         </form>
     </div>
+</div>
+
+{{-- ===== One table per lesson type (dynamic columns) ===== --}}
+@forelse($grouped as $type => $g)
+<div class="report-card type-block">
+    <div class="type-head">
+        <span class="type-badge"><i class="fa fa-book"></i> {{ $typeLabels[$type] ?? ucfirst($type) }}</span>
+        <span class="type-count">{{ $g['records']->count() }} lessons</span>
+    </div>
 
     <div class="report-card-body table-responsive">
         <table class="table modern-table">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Day &amp; Date</th>
+                    <th style="width:42px">#</th>
                     <th>Student</th>
-                    {{-- <th>Type</th> --}}
-                    <th>Attendance</th>
-                    <th>Course</th>
-                    <th>Lesson</th>
-                    <th>Page</th>
-                    <th>From &rarr; To</th>
-                    <th>Notes</th>
+                    @foreach($g['columns'] as $col)
+                        <th>{{ $col['label'] }}</th>
+                    @endforeach
                 </tr>
             </thead>
             <tbody>
-                @forelse($records as $i => $r)
-                @php
-                    $lessonBits = array_filter([$r->para_name, $r->surah_name, $r->tehti_number, $r->select_lesson]);
-                    $fromTo = ($r->ayat_from || $r->ayat_to)
-                                ? trim(($r->ayat_from ?? '') . ' → ' . ($r->ayat_to ?? ''), ' →')
-                                : trim(($r->line_from ?? '') . ' → ' . ($r->line_to ?? ''), ' →');
-                    $att = strtolower(trim($r->attendance ?? ''));
-                @endphp
+                @forelse($g['records'] as $i => $r)
                 <tr>
-                    {{-- <td class="muted">{{ $i + 1 }}</td> --}}
-                    <td class="muted">{{ $records->firstItem() + $i }}</td>
-                     <td>
-                        <strong>{{ $r->day }}</strong><br>
-                        <small class="muted">{{ $r->lesson_date ? \Carbon\Carbon::parse($r->lesson_date)->format('d-M-Y') : '' }}</small>
-                    </td>
+                    <td class="muted">{{ $i + 1 }}</td>
                     <td>
                         <div class="student-cell">
                             <span class="avatar">{{ strtoupper(substr(optional($r->user)->name ?? '?', 0, 1)) }}</span>
                             <span>{{ optional($r->user)->name }}</span>
                         </div>
                     </td>
-                    {{-- <td><span class="pill pill-type">{{ $typeLabels[$r->lesson_type] ?? ucfirst($r->lesson_type) }}</span></td> --}}
-                   
-                    <td>
-                        @if($att)
-                            <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
-                                {{ $r->attendance }}
-                            </span>
-                        @else <span class="muted">—</span> @endif
-                    </td>
-                    <td>{{ $r->course }}</td>
-                    <td>{{ implode(' / ', $lessonBits) ?: '—' }}</td>
-                    <td>{{ $r->page_number }}</td>
-                    <td>{{ $fromTo ?: '—' }}</td>
-                    <td class="notes-cell">{{ $r->notes }}</td>
+                    @foreach($g['columns'] as $col)
+                        @php
+                            $key = $col['key'];
+                            $val = $cellVal($r, $key);
+                            $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
+                        @endphp
+                        <td class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
+                            @if($key === 'attendance')
+                                @if($att)
+                                    <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
+                                        {{ $val }}
+                                    </span>
+                                @else <span class="muted">—</span> @endif
+                            @elseif($key === 'lesson_date')
+                                {{ $val ?: '—' }}
+                                @if($r->day)<br><small class="muted">{{ $r->day }}</small>@endif
+                            @else
+                                {{ ($val !== null && $val !== '') ? $val : '—' }}
+                            @endif
+                        </td>
+                    @endforeach
                 </tr>
                 @empty
-                <tr><td colspan="10" class="empty-state">
-                    <i class="fa fa-inbox"></i><br>No lessons found.
-                </td></tr>
+                <tr>
+                    <td colspan="{{ count($g['columns']) + 2 }}" class="empty-state">
+                        <i class="fa fa-inbox"></i><br>No lessons found.
+                    </td>
+                </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
-    {{-- Pagination --}}
-    @if($records->hasPages())
-    <div class="report-card-foot">
-        <div class="page-info">
-            Showing <strong>{{ $records->firstItem() }}</strong>–<strong>{{ $records->lastItem() }}</strong>
-            of <strong>{{ $records->total() }}</strong> lessons
-        </div>
-        <div class="page-links">
-            {{ $records->links() }}
-        </div>
-    </div>
-    @endif
 </div>
+@empty
+<div class="report-card">
+    <div class="report-card-body">
+        <div class="empty-state"><i class="fa fa-inbox"></i><br>No lessons found.</div>
+    </div>
+</div>
+@endforelse
 @stop
 
 @section('css')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
-    .report-card-foot{
-    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
-    padding:14px 20px;border-top:1px solid #edf2f7;
-}
-.page-info{color:#a0aec0;font-size:13px;}
-.page-links .pagination{margin:0;display:flex;gap:4px;}
-.page-links .pagination > li > a,
-.page-links .pagination > li > span{
-    border:1px solid #edf2f7;border-radius:8px;color:#4a5568;padding:6px 12px;
-}
-.page-links .pagination > .active > a,
-.page-links .pagination > .active > span{
-    background:#2c7be5;border-color:#2c7be5;color:#fff;
-}
-.page-links .pagination > li > a:hover{background:#f7faff;color:#2c7be5;}
 .report-title i { color:#2c7be5; }
 .stat-row { margin-bottom: 5px; }
 .stat-card {
@@ -193,40 +185,46 @@
 .stat-num{font-size:22px;font-weight:700;color:#2d3748;line-height:1.1;}
 .stat-label{font-size:12px;color:#718096;text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
 
-.report-card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden;}
-.report-card-head{padding:18px 20px;border-bottom:1px solid #edf2f7;}
+.report-card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden;margin-bottom:18px;}
+.report-card-head{padding:18px 20px;}
 .filter-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
 .filter-bar .form-control{width:auto;border-radius:8px;height:38px;}
 .filter-bar .year-input{width:90px;}
 .filter-bar .btn{border-radius:8px;height:38px;}
 .filter-bar .pull-right{margin-left:auto;}
 
+.type-block .type-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;border-bottom:1px solid #edf2f7;background:#fafbfc;
+}
+.type-badge{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#243240;}
+.type-badge i{color:#2c7be5;}
+.type-count{font-size:12px;color:#a0aec0;font-weight:600;}
+
 .modern-table{margin:0;border-collapse:separate;border-spacing:0;}
 .modern-table thead th{
     background:#2d3748;color:#fff;font-size:11px;text-transform:uppercase;font-weight:700;
-    letter-spacing:.4px;border:1px solid #2d3748;padding:12px 14px;
+    letter-spacing:.4px;border:1px solid #2d3748;padding:12px 14px;white-space:nowrap;
 }
 .modern-table tbody td{
     padding:12px 14px;border:1px solid #e2e8f0;vertical-align:middle;font-size:13px;
 }
 .modern-table tbody tr:hover td{background:#f7faff;}
 .muted{color:#a0aec0;}
-.notes-cell{max-width:200px;color:#4a5568;}
+.notes-cell{max-width:220px;color:#4a5568;}
 
-.student-cell{display:flex;align-items:center;gap:9px;}
+.student-cell{display:flex;align-items:center;gap:9px;white-space:nowrap;}
 .avatar{
     width:30px;height:30px;border-radius:50%;background:#2c7be5;color:#fff;
     display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;
 }
 .pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
-.pill-type{background:#ebf4ff;color:#2c7be5;}
 .pill-green{background:#e6f9f1;color:#1a9f6c;}
 .pill-red{background:#fdecec;color:#d9534f;}
 .pill-gray{background:#edf2f7;color:#718096;}
 .empty-state{text-align:center;color:#cbd5e0;padding:40px;font-size:14px;}
 .empty-state i{font-size:34px;margin-bottom:8px;display:block;}
 
-/* Select2 height match with bootstrap form-control */
 .filter-bar .select2-container{min-width:220px;}
 .filter-bar .select2-container .select2-selection--single{
     height:38px;border:1px solid #d2d6de;border-radius:8px;display:flex;align-items:center;

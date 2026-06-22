@@ -36,7 +36,16 @@
         $config[$type] = [
             'columns'   => $t['columns'],
             'options'   => $opts,
-            'records'   => $t['records'],
+            // 'records'   => $t['records'],
+            'records'   => $t['records']->map(function ($rec) {
+                $arr = $rec->toArray();
+                if (!empty($arr['extra']) && is_array($arr['extra'])) {
+                    foreach ($arr['extra'] as $k => $v) {
+                        $arr[$k] = $v;
+                    }
+                }
+                return $arr;
+            })->values(),
             'canWrite'  => $t['can_write'],
             'canDelete' => $t['can_write'] && optional(auth()->user())->type !== 'student',
         ];

@@ -192,7 +192,7 @@ Route::get('/scholar/update/password', function () {
     // Report (admin / scholar / student)
     Route::get('/lessons/report', [LessonController::class, 'report'])->name('admin.lessons.report');
     Route::get('/lessons/report/pdf', [LessonController::class, 'reportPdf'])->name('admin.lessons.report.pdf');
-
+    Route::get('/lessons/my-report', [LessonController::class, 'myReport'])->name('lessons.my-report');
     
 
 

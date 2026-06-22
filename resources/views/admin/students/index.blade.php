@@ -402,7 +402,7 @@
             : '<button class="act-btn act-disable unverify_student" data-id="' + id + '" title="Disable student"><i class="fa fa-ban"></i></button>';
         return '<div class="act-group">' +
                '<button class="act-btn change-password" data-id="' + id + '" title="Change password"><i class="fa fa-key"></i></button>' +
-               '<button class="act-btn add-links" data-id="' + id + '" title="Add class links"><i class="fa fa-link"></i></button>' +
+            //    '<button class="act-btn add-links" data-id="' + id + '" title="Add class links"><i class="fa fa-link"></i></button>' +
                '<button class="act-btn show-feedback" data-id="' + id + '" title="Show feedback"><i class="fa fa-comments"></i></button>' +
                vd +
                '<button class="act-btn act-delete delete" data-id="' + id + '" title="Delete student"><i class="fa fa-trash"></i></button></div>';
