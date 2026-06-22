@@ -20,11 +20,11 @@
     }
 
     .header { border-bottom: 3px solid #2c7be5; padding-bottom: 12px; margin-bottom: 18px; }
-    .header h1 { margin: 0; font-size: 20px; color: #1a202c; }
-    .header .sub { color: #718096; font-size: 12px; margin-top: 4px; }
+    .header h1 { margin: 0; font-size: 22px; color: #1a202c; }
+    .header .sub { color: #718096; font-size: 14px; margin-top: 4px; }
 
     .meta-table { width: 100%; margin-bottom: 16px; border-collapse: collapse; }
-    .meta-table td { padding: 4px 8px; font-size: 11px; }
+    .meta-table td { padding: 4px 8px; font-size: 16px; }
     .meta-table .lbl { color: #718096; width: 90px; }
     .meta-table .val { color: #1a202c; font-weight: bold; }
 
@@ -173,7 +173,7 @@
                             $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
                             $isRtl = in_array($key, $rtlKeys);
                         @endphp
-                        <td @if($isRtl) dir="rtl" lang="ar" style="font-size: 16px;" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
+                        <td @if($isRtl) dir="rtl" lang="ar" style="font-size: 14px;" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
                             @if($key === 'attendance')
                                 @if($att)
                                     <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
