@@ -194,14 +194,18 @@
                                         $val = $shapeAr($val);
                                     }
                                 @endphp
-                                <td @if($isRtl) dir="rtl" lang="ar" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
-                                    @if($key === 'attendance')
-                                        ...
-                                    @elseif($key === 'lesson_date')
-                                        ...
-                                    @else
-                                        {{ ($val !== null && $val !== '') ? $val : '—' }}
-                                    @endif
+                        <td @if($isRtl) lang="ar" style="text-align: right;" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">                                @if($key === 'attendance')
+                                    @if($att)
+                                        <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
+                                            {{ $val }}
+                                        </span>
+                                    @else <span class="muted">—</span> @endif
+                                @elseif($key === 'lesson_date')
+                                    {{ $val ?: '—' }}
+                                    @if($r->day)<br><small class="muted">{{ $r->day }}</small>@endif
+                                @else
+                                    {{ ($val !== null && $val !== '') ? $val : '—' }}
+                                @endif
                                 </td>
                             @endforeach
                     </tr>
