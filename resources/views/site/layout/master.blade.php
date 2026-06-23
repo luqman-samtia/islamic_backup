@@ -25,7 +25,7 @@
     <link rel="alternate stylesheet" href="{{ asset('assets/css/colors/color2.css') }}" title="color2" />
     <link rel="alternate stylesheet" href="{{ asset('assets/css/colors/color3.css') }}" title="color3" />
     <link rel="alternate stylesheet" href="{{ asset('assets/css/colors/color4.css') }}" title="color4" />
-
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     @yield('custom_css')
     <script>
         if(performance.navigation.type == 2){
@@ -291,6 +291,145 @@ background-color: rgba(0,0,0,0.4);
     @yield('custom_js')
     <!-- Floating buttons -->
     <div class="floating-buttons">
+    @auth
+            <a href="javascript:void(0)" onclick="toggleDrawingMode()" class="draw-button" title="Draw on Screen"
+                style=" width:50px; height:50px; border-radius:50%; background:#cfa54f; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 8px rgba(0,0,0,0.2); z-index:9999999;">
+                    <span style="font-size:24px;">✏️</span>
+            </a>
+        <div id="drawToolbar" style="display:none; position:fixed; top:50%; right:20px; transform:translateY(-50%); z-index:10000000; background:#1a1a1a; padding:12px 8px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.4); flex-direction:column; gap:8px; align-items:center;">
+            <button onclick="setTool('pen')" id="btnPen" class="draw-tool-btn" title="Pen">✏️</button>
+            <button onclick="setTool('highlighter')" id="btnHighlight" class="draw-tool-btn" title="Highlighter">🖍️</button>
+            <button onclick="setTool('eraser')" id="btnEraser" class="draw-tool-btn" title="Eraser">🧽</button>
+            <input type="color" id="penColor" value="#ff0000" style="width:34px; height:34px; border:none; border-radius:50%; cursor:pointer; padding:0; background:none;">
+            <input type="range" id="penSize" min="2" max="30" value="4" style="writing-mode:vertical-lr; width:30px; height:80px; cursor:pointer;">
+            <button onclick="clearCanvas()" class="draw-tool-btn" title="Clear All" style="color:#ffcc00;">🗑️</button>
+            <button onclick="toggleDrawingMode()" class="draw-tool-btn" title="Close" style="color:#ff5555;">✖️</button>
+        </div>
+
+    
+
+        <canvas id="drawCanvas" style="display:none; position:fixed; top:0; left:0; z-index:9999999; pointer-events:none;"></canvas>
+
+        <style>
+        .draw-tool-btn {
+            background:#333; border:none; color:#fff; width:38px; height:38px;
+            border-radius:8px; font-size:18px; cursor:pointer; transition:0.2s;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .draw-tool-btn:hover { background:#cfa54f; }
+        .draw-tool-btn.active { background:#cfa54f; box-shadow:0 0 8px rgba(207,165,79,0.6); }
+        </style>
+
+        <script>
+        let drawing = false;
+        let isDrawingMode = false;
+        let currentTool = 'pen';
+        let canvas, ctx;
+        let lastX = 0, lastY = 0;
+
+        function initCanvas() {
+            canvas = document.getElementById('drawCanvas');
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+        }
+
+        function resizeCanvas() {
+            let img = canvas.width ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if (img) ctx.putImageData(img, 0, 0);
+        }
+
+        function toggleDrawingMode() {
+            if (!canvas) initCanvas();
+            isDrawingMode = !isDrawingMode;
+            const tb = document.getElementById('drawToolbar');
+            if (isDrawingMode) {
+                canvas.style.display = 'block';
+                canvas.style.pointerEvents = 'auto';
+                canvas.style.cursor = 'crosshair';
+                tb.style.display = 'flex';
+                setTool('pen');
+            } else {
+                canvas.style.pointerEvents = 'none';
+                tb.style.display = 'none';
+            }
+        }
+
+        function setTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.draw-tool-btn').forEach(b => b.classList.remove('active'));
+            const map = {pen:'btnPen', highlighter:'btnHighlight', eraser:'btnEraser'};
+            const el = document.getElementById(map[tool]);
+            if (el) el.classList.add('active');
+        }
+
+        function getPos(e) {
+            if (e.touches && e.touches.length) {
+                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+            return { x: e.clientX, y: e.clientY };
+        }
+
+        function startDraw(e) {
+            if (!isDrawingMode) return;
+            drawing = true;
+            const p = getPos(e);
+            lastX = p.x; lastY = p.y;
+        }
+
+        function draw(e) {
+            if (!drawing || !isDrawingMode) return;
+            e.preventDefault();
+            const p = getPos(e);
+            const size = parseInt(document.getElementById('penSize').value);
+            const color = document.getElementById('penColor').value;
+
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+
+            if (currentTool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = size * 3;
+            } else if (currentTool === 'highlighter') {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 0.35;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = size * 4;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.globalAlpha = 1;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = size;
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+
+            lastX = p.x; lastY = p.y;
+        }
+
+        function stopDraw() { drawing = false; }
+
+        function clearCanvas() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        document.addEventListener('mousedown', startDraw);
+        document.addEventListener('mousemove', draw);
+        document.addEventListener('mouseup', stopDraw);
+        document.addEventListener('touchstart', startDraw, {passive:false});
+        document.addEventListener('touchmove', draw, {passive:false});
+        document.addEventListener('touchend', stopDraw);
+
+        window.addEventListener('resize', function(){ if(canvas) resizeCanvas(); });
+        </script>
+
+    @endauth
         @php($info = \App\Information::query()->first())
         <!-- WhatsApp Button -->
         @if(@$info['whatsapp2']['label'] && @$info['whatsapp2']['value'])      
