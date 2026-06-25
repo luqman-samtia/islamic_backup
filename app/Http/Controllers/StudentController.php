@@ -865,29 +865,205 @@ public function showStudentFeedbacks(Request $request, $id)
     return view('admin.students.feedback.admin_index', compact('student'));
 }
 
- public function forgotPasswordRequest(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|email|exists:users,email',
-    ]);
+//  public function forgotPasswordRequest(Request $request)
+// {
+//     $validator = Validator::make($request->all(), [
+//         'email' => 'required|email|exists:users,email',
+//     ]);
 
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 422);
+//     if ($validator->fails()) {
+//         return response()->json(['errors' => $validator->errors()], 422);
+//     }
+
+//     $status = Password::sendResetLink(
+//         $request->only('email')
+//     );
+
+//     if ($status === Password::RESET_LINK_SENT) {
+//         return response()->json(['success' => true, 'message' => 'Password reset link sent to your email.']);
+//     }
+
+//     return response()->json(['error' => 'Unable to send reset link. Try again later.'], 500);
+// }
+// public function forgotPasswordRequest(Request $request)
+// {
+//     $validator = Validator::make($request->all(), [
+//         'email' => 'required|email|exists:users,email',
+//     ]);
+
+//     if ($validator->fails()) {
+//         return response()->json(['errors' => $validator->errors()], 422);
+//     }
+
+//     $user = User::where('email', $request->email)->first();
+
+//     $token = Password::createToken($user);
+
+//     $resetUrl = url('/password/reset/' . $token . '?email=' . urlencode($user->email));
+
+//     try {
+//         $html = '<p>Click below to reset your password:</p>'
+//             . '<p><a href="' . $resetUrl . '">Reset Password</a></p>'
+//             . '<p>If you did not request this, ignore this email.</p>';
+
+//         $client = new \GuzzleHttp\Client();
+//         $client->post('https://api.resend.com/emails', [
+//             'headers' => [
+//                 'Authorization' => 'Bearer ' . env('RESEND_API_KEY'),
+//                 'Content-Type'  => 'application/json',
+//             ],
+//             'json' => [
+//                 'from'    => 'Taleem ul Quran <noreply@taleemulquraninstitute.com>',
+//                 'to'      => [$user->email],
+//                 'subject' => 'Reset Your Password',
+//                 'html'    => $html,
+//             ],
+//         ]);
+
+//         return response()->json(['success' => true, 'message' => 'Password reset link sent to your email.']);
+//     } catch (\Exception $e) {
+//         \Log::error('Resend reset mail failed: ' . $e->getMessage());
+//         return response()->json(['error' => 'Unable to send reset link. Try again later.'], 500);
+//     }
+// }
+    public function forgotPasswordRequest(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        $token = Password::createToken($user);
+
+        // $resetUrl = url('/password/reset/' . $token . '?email=' . urlencode($user->email));
+        $resetUrl = route('password.reset.form', ['token' => $token]) . '?email=' . urlencode($user->email);
+
+        try {
+            $html = $this->buildResetEmailHtml($user, $resetUrl);
+
+            $client = new \GuzzleHttp\Client();
+            $client->post('https://api.resend.com/emails', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . env('RESEND_API_KEY'),
+                    'Content-Type'  => 'application/json',
+                ],
+                'json' => [
+                    'from'    => 'Taleem ul Quran <noreply@taleemulquraninstitute.com>',
+                    'to'      => [$user->email],
+                    'subject' => 'Reset Your Password — Taleem ul Quran Institute',
+                    'html'    => $html,
+                ],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Password reset link sent to your email.']);
+        } catch (\Exception $e) {
+            \Log::error('Resend reset mail failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Unable to send reset link. Try again later.'], 500);
+        }
     }
 
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
+    /**
+     * Build professional HTML for the password reset email.
+     */
+    private function buildResetEmailHtml($user, $resetUrl)
+    {
+        $name = e($user->name ?? 'Student');
+        $year = date('Y');
 
-    if ($status === Password::RESET_LINK_SENT) {
-        return response()->json(['success' => true, 'message' => 'Password reset link sent to your email.']);
+        return <<<HTML
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reset Your Password</title>
+    </head>
+    <body style="margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, Helvetica, sans-serif;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6f8; padding:30px 0;">
+            <tr>
+                <td align="center">
+                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background-color:#ffffff; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+
+                        <!-- Header -->
+                        <tr>
+                            <td style="background-color:#0b6e4f; padding:30px 40px; text-align:center;">
+                                <h1 style="margin:0; color:#ffffff; font-size:22px; letter-spacing:0.5px;">Taleem ul Quran Institute</h1>
+                                <p style="margin:6px 0 0; color:#cdeede; font-size:13px;">Knowledge • Guidance • Excellence</p>
+                            </td>
+                        </tr>
+
+                        <!-- Body -->
+                        <tr>
+                            <td style="padding:40px;">
+                                <h2 style="margin:0 0 16px; color:#1a1a1a; font-size:20px;">Reset Your Password</h2>
+                                <p style="margin:0 0 16px; color:#444444; font-size:15px; line-height:1.6;">
+                                    Assalam-o-Alaikum <strong>{$name}</strong>,
+                                </p>
+                                <p style="margin:0 0 24px; color:#444444; font-size:15px; line-height:1.6;">
+                                    We received a request to reset the password for your account. Click the button below to set a new password. This link is valid for a limited time.
+                                </p>
+
+                                <!-- Button -->
+                                <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 28px;">
+                                    <tr>
+                                        <td align="center" style="border-radius:6px; background-color:#0b6e4f;">
+                                            <a href="{$resetUrl}" target="_blank"
+                                            style="display:inline-block; padding:14px 36px; color:#ffffff; font-size:15px; font-weight:bold; text-decoration:none; border-radius:6px;">
+                                                Reset Password
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <p style="margin:0 0 12px; color:#666666; font-size:13px; line-height:1.6;">
+                                    If the button doesn't work, copy and paste this link into your browser:
+                                </p>
+                                <p style="margin:0 0 24px; word-break:break-all;">
+                                    <a href="{$resetUrl}" style="color:#0b6e4f; font-size:13px;">{$resetUrl}</a>
+                                </p>
+
+                                <p style="margin:0; color:#999999; font-size:13px; line-height:1.6;">
+                                    If you did not request a password reset, please ignore this email — your password will remain unchanged.
+                                </p>
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style="background-color:#f4f6f8; padding:24px 40px; text-align:center; border-top:1px solid #e6e9ec;">
+                                <p style="margin:0 0 6px; color:#888888; font-size:12px;">
+                                    © {$year} Taleem ul Quran Institute. All rights reserved.
+                                </p>
+                                <p style="margin:0; color:#aaaaaa; font-size:12px;">
+                                    This is an automated message, please do not reply.
+                                </p>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    HTML;
     }
+// public function showResetForm(Request $request, $token)
+// {
+//     return redirect('/?token=' . $token . '&email=' . urlencode($request->email));
+// }
 
-    return response()->json(['error' => 'Unable to send reset link. Try again later.'], 500);
-}
 public function showResetForm(Request $request, $token)
 {
-    return redirect('/?token=' . $token . '&email=' . urlencode($request->email));
+    return view('auth.reset-password', [
+        'token' => $token,
+        'email' => $request->email,
+    ]);
 }
 
 public function submitResetPassword(Request $request)
