@@ -3,6 +3,9 @@
 @section('title', $surat->para_name ?? $surat->title)
 
 @section('custom_css')
+    {{-- Select2 CSS (searchable dropdown). Adblock block kare to bhi plain dropdown chalega. --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet" />
+
     <style>
         .contact-form>form {
             max-width: none;
@@ -13,12 +16,48 @@
         .contact-form>form textarea {
             border: 1px solid #ededed;
         }
+        #searchForm input[type="number"] {
+                height: 48px !important;
+                margin-top :0px !important;
+            }
 
         .contact-form-row.sticky .mb-lg-5{
             margin-bottom: 15px !important;
         }
         .contact-form-row.sticky{
             left: 0px;
+        }
+
+        /* --- Select2 theming to match existing form inputs --- */
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 48px;
+            border: 1px solid #ededed;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            border-radius: 4px;
+            margin-bottom:10px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: normal;
+            color: #333;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 46px;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #c79f1a;
+        }
+
+        .select2-dropdown {
+            border: 1px solid #ededed;
         }
     </style>
 @stop
@@ -55,7 +94,7 @@
                                 <form id="searchForm" action="{{ route('search') }}">
                                     <div class="row mrg20 justify-content-center align-items-center text-center">
                                         <div class="col-md-3 col-sm-6 col-lg-3">
-                                            <select name="surat">
+                                            <select name="surat" id="surah-select">
                                                 <option value="">-- Select Surah --</option>
                                                 @foreach ($quran as $surat_item)
                                                     <option value="{{ $surat_item->slug }}" data-first="{{ $surat_item->first_page }}" {{ $surat_item->id === $surat->id ? 'selected' : '' }}>
@@ -68,7 +107,7 @@
                                             <input type="number" name="page" placeholder=" Enter Page No">
                                         </div>
                                         <div class="col-md-2 col-sm-12 col-lg-2">
-                                            <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
+                                            <button class="thm-btn brd-rd40 " type="submit">Search</button>
                                         </div>
                                     </div>
                                 </form>
@@ -115,32 +154,51 @@
 {{-- @stop --}}
 
 {{-- @section('custom_js') --}}
+    {{-- Self-loading: Select2 ko load karta hai, ready hone par init hota hai.
+         jQuery footer/head kahin bhi ho ya adblock ho, error nahi aayega. --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var contactFormRow = ($('.contact-form-row').offset().top - 92);
+        (function () {
+            function loadScript(src, cb) {
+                var s = document.createElement('script');
+                s.src = src;
+                s.onload = cb;
+                s.onerror = function () { console.warn('Failed to load: ' + src); cb(); };
+                document.head.appendChild(s);
+            }
 
-            //===== Sticky Form =====//
-            $(window).on('scroll', function () {
-                var scroll = $(window).scrollTop();
+            function ensureSelect2(next) {
+                if (window.jQuery && jQuery.fn && jQuery.fn.select2) { next(); return; }
+                loadScript('https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js', next);
+            }
 
-                if (scroll >= contactFormRow) {
-                    $('.contact-form-row').addClass('sticky');
+            function init() {
+                var $ = window.jQuery;
+                var hasSelect2 = !!($ && $.fn && $.fn.select2);
+
+                //===== Sticky Form =====//
+                var contactFormRow = ($('.contact-form-row').offset().top - 92);
+                $(window).on('scroll', function () {
+                    var scroll = $(window).scrollTop();
+                    if (scroll >= contactFormRow) {
+                        $('.contact-form-row').addClass('sticky');
+                    } else {
+                        $('.contact-form-row').removeClass('sticky');
+                    }
+                });
+
+                //===== Select2 init (searchable surah dropdown) =====//
+                if (hasSelect2) {
+                    $('#surah-select').select2({
+                        placeholder: '-- Select Surah --',
+                        allowClear: true,
+                        width: '100%'
+                    });
                 } else {
-                    $('.contact-form-row').removeClass('sticky');
+                    console.warn('Select2 not available - plain dropdown will be used.');
                 }
-            });
-        });
-        // var suratSelect = document.querySelector('select[name="surat"]');
-        // if (suratSelect) {
-        //     suratSelect.addEventListener('change', function () {
-        //         if (this.value) {
-        //             window.location.href = "{{ route('quranSurat', '') }}/" + this.value;
-        //         }
-        //     });
-        // }
-        var suratSelect = document.querySelector('select[name="surat"]');
-            if (suratSelect) {
-                suratSelect.addEventListener('change', function () {
+
+                //===== Surah change -> us surat ke pehle page par jao =====//
+                $('#surah-select').on('change', function () {
                     if (!this.value) { return; }
                     var first = this.options[this.selectedIndex].getAttribute('data-first');
                     if (first) {
@@ -151,5 +209,19 @@
                     }
                 });
             }
+
+            // Chain: Select2 load -> init (jQuery already project mein maujood maan kar)
+            ensureSelect2(function () {
+                if (window.jQuery) {
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', init);
+                    } else {
+                        init();
+                    }
+                } else {
+                    console.warn('jQuery not found - sticky form & select2 skipped.');
+                }
+            });
+        })();
     </script>
 @stop

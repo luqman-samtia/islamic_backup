@@ -203,18 +203,59 @@ class PublicController extends Controller
         ]);
     }
 
-    public function contactUs(Request $request){
-        if($request->post()){
+    // public function contactUs(Request $request){
+    //     if($request->post()){
+    //         $request->validate([
+    //             'name' => 'required',
+    //             'email' => 'required|email',
+    //             'subject' => 'required',
+    //             'message' => 'required'
+    //         ]);
+    //         Mail::to('infotaleemulquraninstitute@gmail.com')->send(new ContacMail($request));
+    //         return redirect()->back()->with('success', 'Email has been sent to the team.');
+    //     }
+    //     return view('site.contact_us');
+    // }
+public function contactUs(Request $request){
+    if($request->post()){
             $request->validate([
                 'name' => 'required',
                 'email' => 'required|email',
                 'subject' => 'required',
                 'message' => 'required'
             ]);
-            Mail::to('hafizhabib5651@gmail.com')->send(new ContacMail($request));
+
+            try {
+                $this->sendResendMail('infotaleemulquraninstitute@gmail.com', 'Contact Us Message', new ContacMail($request));
+            } catch (\Exception $e) {
+                \Log::error('Mail sending failed: ' . $e->getMessage());
+            }
+
             return redirect()->back()->with('success', 'Email has been sent to the team.');
         }
         return view('site.contact_us');
+    }
+
+    /**
+     * Resend API ke through email bhejne ka helper
+     */
+    private function sendResendMail($toEmail, $subject, $mailable)
+    {
+        $html = $mailable->render();
+
+        $client = new \GuzzleHttp\Client();
+        $client->post('https://api.resend.com/emails', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . env('RESEND_API_KEY'),
+                'Content-Type'  => 'application/json',
+            ],
+            'json' => [
+                'from'    => 'Taleem ul Quran <noreply@taleemulquraninstitute.com>',
+                'to'      => [$toEmail],
+                'subject' => $subject,
+                'html'    => $html,
+            ],
+        ]);
     }
 
     /**
@@ -341,13 +382,24 @@ public function quranParaShow($para_no)
                  ->orderBy('para_no', 'asc')
                  ->value('para_no');
 
-     $allParas = [];
-    for ($i = 1; $i <= 30; $i++) {
-        $allParas[] = [
-            'para_no' => $i,
-            'para_name' => QuranParas::getParaName($i)
-        ];
-    }
+    //  $allParas = [];
+    // for ($i = 1; $i <= 30; $i++) {
+    //     $allParas[] = [
+    //         'para_no' => $i,
+    //         'para_name' => QuranParas::getParaName($i)
+    //     ];
+    // }
+    $allParas = [];
+        for ($i = 1; $i <= 30; $i++) {
+            $allParas[] = [
+                'para_no' => $i,
+                'para_name' => QuranParas::getParaName($i),
+                'first_page' => Quran::where('para_no', $i)
+                    ->whereNotNull('parent_id')
+                    ->orderBy('number', 'asc')
+                    ->value('number'),
+            ];
+        }
 
     return view('site.quran.para_show', [
         'para_name' => $para_name,
@@ -662,13 +714,17 @@ public function tajweedQuranParaShow($para_no)
                  ->orderBy('para_no', 'asc')
                  ->value('para_no');
 
-     $allParas = [];
-    for ($i = 1; $i <= 30; $i++) {
-        $allParas[] = [
-            'para_no' => $i,
-            'para_name' => QuranParas::getParaName($i)
-        ];
-    }
+    $allParas = [];
+        for ($i = 1; $i <= 30; $i++) {
+            $allParas[] = [
+                'para_no' => $i,
+                'para_name' => QuranParas::getParaName($i),
+                'first_page' => TajweedQuran::where('para_no', $i)
+                    ->whereNotNull('parent_id')
+                    ->orderBy('number', 'asc')
+                    ->value('number'),
+            ];
+        }
 
     return view('site.tajweed-quran.para_show', [
         'para_name' => $para_name,

@@ -3,12 +3,46 @@
 @section('title', $para_name)
 
 @section('custom_css')
+    {{-- Select2 CSS (searchable dropdown). Adblock block kare to bhi plain dropdown chalega. --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet" />
+
     <style>
         .contact-form-row.sticky .mb-lg-5{
             margin-bottom: 15px !important;
         }
         .contact-form-row.sticky{
             left: 0px;
+        }
+
+        /* --- Select2 theming to match existing form inputs --- */
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 48px;
+            border: 1px solid #ededed;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            border-radius: 4px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: normal;
+            color: #333;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 46px;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #c79f1a;
+        }
+
+        .select2-dropdown {
+            border: 1px solid #ededed;
         }
     </style>
 @stop
@@ -61,10 +95,10 @@
                         <div class="row mrg20 justify-content-center align-items-center text-center">
                             <!-- Para Select - Populated from PHP -->
                             <div id="para-select-container" class="col-md-3 col-sm-6 col-lg-3">
-                                <select name="para" id="para-select" onchange="changeParaPage(this.value)">
+                                <select name="para" id="para-select">
                                     <option value="">-- Select Para --</option>
                                     @foreach($allParas as $para)
-                                        <option value="{{ $para['para_no'] }}" {{ $para['para_no'] == $para_no ? 'selected' : '' }}>
+                                        <option value="{{ $para['para_no'] }}" data-first="{{ $para['first_page'] ?? '' }}" {{ $para['para_no'] == $para_no ? 'selected' : '' }}>
                                             {{ $para['para_name'] }}
                                         </option>
                                     @endforeach
@@ -116,24 +150,82 @@
             }
         }
 </script>
-@section('custom_js')
+{{-- @section('custom_js') --}}
+    {{-- Self-loading: jQuery -> Select2 -> init. Adblock/slow network ho ya jQuery footer mein ho, error nahi aayega. --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            var contactFormRow = ($('.contact-form-row').offset().top - 92);
+        (function () {
+            function loadScript(src, cb) {
+                var s = document.createElement('script');
+                s.src = src;
+                s.onload = cb;
+                s.onerror = function () { console.warn('Failed to load: ' + src); cb(); };
+                document.head.appendChild(s);
+            }
 
-            $(window).on('scroll', function () {
-                var scroll = $(window).scrollTop();
+            function ensureJQuery(next) {
+                if (window.jQuery) { next(); return; }
+                // Project ki local jQuery pehle (adblock isko block nahi karta), warna CDN
+                loadScript("{{ asset('assets/js/jquery.min.js') }}", function () {
+                    if (window.jQuery) { next(); }
+                    else { loadScript('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js', next); }
+                });
+            }
 
-                if (scroll >= contactFormRow) {
-                    $('.contact-form-row').addClass('sticky');
+            function ensureSelect2(next) {
+                if (window.jQuery && jQuery.fn && jQuery.fn.select2) { next(); return; }
+                loadScript('https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js', next);
+            }
+
+            function init() {
+                var $ = window.jQuery;
+                var hasSelect2 = !!($ && $.fn && $.fn.select2);
+
+                //===== Sticky Form =====//
+                var contactFormRow = ($('.contact-form-row').offset().top - 92);
+                $(window).on('scroll', function () {
+                    var scroll = $(window).scrollTop();
+                    if (scroll >= contactFormRow) {
+                        $('.contact-form-row').addClass('sticky');
+                    } else {
+                        $('.contact-form-row').removeClass('sticky');
+                    }
+                });
+
+                //===== Select2 init (searchable para dropdown) =====//
+                if (hasSelect2) {
+                    $('#para-select').select2({
+                        placeholder: '-- Select Para --',
+                        allowClear: true,
+                        width: '100%'
+                    });
                 } else {
-                    $('.contact-form-row').removeClass('sticky');
+                    console.warn('Select2 not available - plain dropdown will be used.');
                 }
-            });
-        });
 
-        // Function to change para
-       
+                //===== Para change -> us para ke pehle page par jao (jaise surah mein) =====//
+                $('#para-select').on('change', function () {
+                    if (!this.value) { return; }
+                    var first = this.options[this.selectedIndex].getAttribute('data-first');
+                    if (first) {
+                        window.location.href = "{{ route('tajweedQuranSurat.page', ['__SLUG__','__PAGE__']) }}"
+                            .replace('__SLUG__', 'para-' + this.value)
+                            .replace('__PAGE__', first);
+                    } else {
+                        window.location.href = "{{ route('tajweedQuran.para', '') }}/" + this.value;
+                    }
+                });
+            }
+
+            // Chain: jQuery -> Select2 -> init
+            ensureJQuery(function () {
+                ensureSelect2(function () {
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', init);
+                    } else {
+                        init();
+                    }
+                });
+            });
+        })();
     </script>
-@stop
+{{-- @stop --}}

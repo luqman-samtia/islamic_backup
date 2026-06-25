@@ -85,13 +85,37 @@ class StudentController extends Controller
                     'is_read' => false,
                 ]);
            
+            // try {
+            //     Mail::to('infotaleemulquraninstitute@gmail.com')->send(new AdminVerification($user));
+            //     $successMessage = 'Registration successful! Waiting for admin approval.';
+            // } catch (\Exception $e) {
+            //     \Log::error('Mail sending failed: ' . $e->getMessage());
+            //     $successMessage = 'Registration successful! However, we were unable to send an email notification to the admin.';
+            // }
+            // return response()->json(['message' => $successMessage]);
             try {
-                Mail::to('infotaleemulquraninstitute@gmail.com')->send(new AdminVerification($user));
+                $html = (new \App\Mail\AdminVerification($user))->render();
+
+                $client = new \GuzzleHttp\Client();
+                $client->post('https://api.resend.com/emails', [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . env('RESEND_API_KEY'),
+                        'Content-Type'  => 'application/json',
+                    ],
+                    'json' => [
+                        'from'    => 'Taleem ul Quran <noreply@taleemulquraninstitute.com>',
+                        'to'      => ['infotaleemulquraninstitute@gmail.com'],
+                        'subject' => 'New Student Registration',
+                        'html'    => $html,
+                    ],
+                ]);
+
                 $successMessage = 'Registration successful! Waiting for admin approval.';
             } catch (\Exception $e) {
-                \Log::error('Mail sending failed: ' . $e->getMessage());
+                \Log::error('Resend mail failed: ' . $e->getMessage());
                 $successMessage = 'Registration successful! However, we were unable to send an email notification to the admin.';
             }
+
             return response()->json(['message' => $successMessage]);
         }
        
@@ -212,13 +236,20 @@ class StudentController extends Controller
         $user->is_verified = 1; 
         $user->save();
             
-        try {
-            Mail::to($user->email)->send(new StudentVerified($user));
-            $successMessage = 'Student verified successfully!';
-        } catch (\Exception $e) {
-            \Log::error('Mail sending failed: ' . $e->getMessage());
-            $successMessage = 'Student verified successfully! However, we were unable to send an email notification';
-        }
+        // try {
+        //     Mail::to($user->email)->send(new StudentVerified($user));
+        //     $successMessage = 'Student verified successfully!';
+        // } catch (\Exception $e) {
+        //     \Log::error('Mail sending failed: ' . $e->getMessage());
+        //     $successMessage = 'Student verified successfully! However, we were unable to send an email notification';
+        // }
+         try {
+                $this->sendResendMail($user->email, 'Account Verified', new StudentVerified($user));
+                $successMessage = 'Student verified successfully!';
+            } catch (\Exception $e) {
+                \Log::error('Mail sending failed: ' . $e->getMessage());
+                $successMessage = 'Student verified successfully! However, we were unable to send an email notification';
+            }
         return response()->json(['success' => $successMessage]);
 
     }
@@ -237,14 +268,21 @@ class StudentController extends Controller
         $user->is_verified = 1;
         $user->save();
 
-        try {
-            Mail::to($user->email)->send(new StudentVerified($user));
-            $successMessage = 'Student verified successfully!';
-        } catch (\Exception $e) {
+        // try {
+        //     Mail::to($user->email)->send(new StudentVerified($user));
+        //     $successMessage = 'Student verified successfully!';
+        // } catch (\Exception $e) {
             
-            \Log::error('Mail sending failed: ' . $e->getMessage());
-            $successMessage = 'Student verified successfully! However, we were unable to send an email notification';
-        }
+        //     \Log::error('Mail sending failed: ' . $e->getMessage());
+        //     $successMessage = 'Student verified successfully! However, we were unable to send an email notification';
+        // }
+        try {
+                $this->sendResendMail($user->email, 'Account Verified', new StudentVerified($user));
+                $successMessage = 'Student verified successfully!';
+            } catch (\Exception $e) {
+                \Log::error('Mail sending failed: ' . $e->getMessage());
+                $successMessage = 'Student verified successfully! However, we were unable to send an email notification';
+            }
     
         return redirect()->route('site')->with('success', $successMessage);
    
@@ -263,11 +301,18 @@ class StudentController extends Controller
         $user->save();
 
  
+        // try {
+        //     Mail::to($user->email)->send(new StudentDisable($user));
+        //     $successMessage = 'Student Disabled successfully!!';
+        // } catch (\Exception $e) {
+         
+        //     \Log::error('Mail sending failed: ' . $e->getMessage());
+        //     $successMessage = 'Student Disabled successfully!! However, we were unable to send an email notification';
+        // }
         try {
-            Mail::to($user->email)->send(new StudentDisable($user));
+            $this->sendResendMail($user->email, 'Account Disabled', new StudentDisable($user));
             $successMessage = 'Student Disabled successfully!!';
         } catch (\Exception $e) {
-         
             \Log::error('Mail sending failed: ' . $e->getMessage());
             $successMessage = 'Student Disabled successfully!! However, we were unable to send an email notification';
         }
@@ -275,7 +320,27 @@ class StudentController extends Controller
         return response()->json(['success' => $successMessage]);
     
     }
-   
+    /**
+     * Resend API ke through email bhejne ka helper
+     */
+    private function sendResendMail($toEmail, $subject, $mailable)
+    {
+        $html = $mailable->render();
+
+        $client = new \GuzzleHttp\Client();
+        $client->post('https://api.resend.com/emails', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . env('RESEND_API_KEY'),
+                'Content-Type'  => 'application/json',
+            ],
+            'json' => [
+                'from'    => 'Taleem ul Quran <noreply@taleemulquraninstitute.com>',
+                'to'      => [$toEmail],
+                'subject' => $subject,
+                'html'    => $html,
+            ],
+        ]);
+    }
     public function checkStudentStatus($id)
     {
         $user = User::find($id);

@@ -35,7 +35,17 @@
         padding: 6px 10px; border-radius: 4px; margin-bottom: 6px;
     }
 
-    table.data { width: 100%; border-collapse: collapse; }
+    /* table.data { width: 100%; border-collapse: collapse; } */
+    table.data {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        word-wrap: break-word;
+    }
+    table.data th,
+    table.data td {
+        word-break: break-word !important;
+    }
     table.data thead th {
         background: #2d3748; color: #fff; padding: 7px 6px; text-align: left;
         font-size: 11px; text-transform: uppercase; letter-spacing: .3px;

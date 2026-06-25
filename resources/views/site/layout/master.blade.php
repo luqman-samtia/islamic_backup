@@ -296,138 +296,325 @@ background-color: rgba(0,0,0,0.4);
                 style=" width:50px; height:50px; border-radius:50%; background:#cfa54f; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 8px rgba(0,0,0,0.2); z-index:9999999;">
                     <span style="font-size:24px;">✏️</span>
             </a>
-        <div id="drawToolbar" style="display:none; position:fixed; top:50%; right:20px; transform:translateY(-50%); z-index:10000000; background:#1a1a1a; padding:12px 8px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.4); flex-direction:column; gap:8px; align-items:center;">
-            <button onclick="setTool('pen')" id="btnPen" class="draw-tool-btn" title="Pen">✏️</button>
-            <button onclick="setTool('highlighter')" id="btnHighlight" class="draw-tool-btn" title="Highlighter">🖍️</button>
-            <button onclick="setTool('eraser')" id="btnEraser" class="draw-tool-btn" title="Eraser">🧽</button>
-            <input type="color" id="penColor" value="#ff0000" style="width:34px; height:34px; border:none; border-radius:50%; cursor:pointer; padding:0; background:none;">
-            <input type="range" id="penSize" min="2" max="30" value="4" style="writing-mode:vertical-lr; width:30px; height:80px; cursor:pointer;">
-            <button onclick="clearCanvas()" class="draw-tool-btn" title="Clear All" style="color:#ffcc00;">🗑️</button>
-            <button onclick="toggleDrawingMode()" class="draw-tool-btn" title="Close" style="color:#ff5555;">✖️</button>
+        <!-- Rail + popout panel -->
+<div id="drawToolbar" style="display:none; position:fixed; top:50%; right:20px; transform:translateY(-50%); z-index:10000000; gap:8px; align-items:flex-start;">
+    <div style="display:flex; flex-direction:column; gap:8px; background:#1a1a1a; padding:12px 8px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.4);">
+        <button class="rail-btn active" data-panel="draw" title="Draw">✏️</button>
+        <button class="rail-btn" data-panel="shape" title="Shape">▭</button>
+        <button class="rail-btn" data-tool="text" title="Text">T</button>
+        <button class="rail-btn" data-tool="eraser" title="Eraser">🧽</button>
+        <span style="height:1px; background:#444; margin:2px 4px;"></span>
+        <button class="rail-btn" onclick="undoDraw()" title="Undo">↶</button>
+        <button class="rail-btn" onclick="redoDraw()" title="Redo">↷</button>
+        <button class="rail-btn" onclick="clearCanvas()" title="Clear" style="color:#ffcc00;">🗑️</button>
+        <button class="rail-btn" onclick="saveCanvas()" title="Save" style="color:#7CFC00;">💾</button>
+        <button class="rail-btn" onclick="toggleDrawingMode()" title="Close" style="color:#ff5555;">✖️</button>
+    </div>
+
+    <div id="drawPanel" style="background:#1a1a1a; border-radius:12px; padding:14px; width:210px; box-shadow:0 4px 20px rgba(0,0,0,0.4);">
+        <!-- Draw section -->
+        <div data-section="draw">
+            <p class="panel-label">Draw</p>
+            <div class="panel-row">
+                <button class="opt pen-opt active" data-pen="pen" title="Pen">✏️</button>
+                <button class="opt pen-opt" data-pen="marker" title="Marker">🖊️</button>
+                <button class="opt pen-opt" data-pen="highlighter" title="Highlighter">🖍️</button>
+            </div>
+            <p class="panel-label">Line width</p>
+            <div class="panel-row">
+                <button class="opt w-opt active" data-w="3"><span class="wd" style="width:5px;height:5px;"></span></button>
+                <button class="opt w-opt" data-w="6"><span class="wd" style="width:9px;height:9px;"></span></button>
+                <button class="opt w-opt" data-w="10"><span class="wd" style="width:13px;height:13px;"></span></button>
+                <button class="opt w-opt" data-w="16"><span class="wd" style="width:18px;height:18px;"></span></button>
+            </div>
+            <p class="panel-label">Color</p>
+            <input type="color" id="penColor" value="#ff0000" style="width:100%; height:32px; border:none; border-radius:6px; background:none; cursor:pointer; padding:0;">
         </div>
 
-    
+        <!-- Shape section -->
+        <div data-section="shape" style="display:none;">
+            <p class="panel-label">Shape — outline</p>
+            <div class="panel-grid">
+                <button class="opt shape-opt" data-shape="line" data-fill="0" title="Line">╱</button>
+                <button class="opt shape-opt" data-shape="rect" data-fill="0" title="Rectangle">▭</button>
+                <button class="opt shape-opt" data-shape="ellipse" data-fill="0" title="Ellipse">◯</button>
+                <button class="opt shape-opt" data-shape="diamond" data-fill="0" title="Diamond">◇</button>
+                <button class="opt shape-opt" data-shape="arrow" data-fill="0" title="Arrow">➹</button>
+            </div>
+            <p class="panel-label" style="margin-top:12px;">Shape — filled</p>
+            <div class="panel-grid">
+                <button class="opt shape-opt" data-shape="rect" data-fill="1" title="Filled rectangle">▬</button>
+                <button class="opt shape-opt" data-shape="ellipse" data-fill="1" title="Filled ellipse">⬤</button>
+                <button class="opt shape-opt" data-shape="diamond" data-fill="1" title="Filled diamond">◆</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <canvas id="drawCanvas" style="display:none; position:fixed; top:0; left:0; z-index:9999999; pointer-events:none;"></canvas>
+<canvas id="drawCanvas" style="display:none; position:fixed; top:0; left:0; z-index:9999999; pointer-events:none;"></canvas>
+<canvas id="drawPreview" style="display:none; position:fixed; top:0; left:0; z-index:9999998; pointer-events:none;"></canvas>
 
-        <style>
-        .draw-tool-btn {
-            background:#333; border:none; color:#fff; width:38px; height:38px;
-            border-radius:8px; font-size:18px; cursor:pointer; transition:0.2s;
-            display:flex; align-items:center; justify-content:center;
-        }
-        .draw-tool-btn:hover { background:#cfa54f; }
-        .draw-tool-btn.active { background:#cfa54f; box-shadow:0 0 8px rgba(207,165,79,0.6); }
-        </style>
+<style>
+.rail-btn {
+    background:#333; border:none; color:#fff; width:38px; height:38px;
+    border-radius:8px; font-size:18px; cursor:pointer; transition:0.2s;
+    display:flex; align-items:center; justify-content:center;
+}
+.rail-btn:hover { background:#cfa54f; }
+.rail-btn.active { background:#cfa54f; box-shadow:0 0 8px rgba(207,165,79,0.6); }
+.panel-label { color:#bbb; font-size:11px; margin:0 0 6px; }
+.panel-row { display:flex; gap:8px; margin-bottom:14px; }
+.panel-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.opt {
+    background:#333; border:none; color:#fff; height:34px; min-width:34px;
+    border-radius:7px; cursor:pointer; font-size:16px; transition:0.15s;
+    display:inline-flex; align-items:center; justify-content:center;
+}
+.opt:hover { background:#555; }
+.opt.active { background:#cfa54f; color:#1a1a1a; }
+.wd { background:currentColor; border-radius:50%; display:inline-block; }
+</style>
 
-        <script>
-        let drawing = false;
-        let isDrawingMode = false;
-        let currentTool = 'pen';
-        let canvas, ctx;
-        let lastX = 0, lastY = 0;
+<script>
+let drawing = false;
+let isDrawingMode = false;
+let penStyle = 'pen';       
+let currentTool = 'pen';    
+let activeShape = null;    
+let fillShape = false;
+let lineWidth = 3;
+let canvas, ctx, preview, pctx;
+let startX = 0, startY = 0, lastX = 0, lastY = 0;
+const undoStack = [], redoStack = [];
 
-        function initCanvas() {
-            canvas = document.getElementById('drawCanvas');
-            ctx = canvas.getContext('2d');
-            resizeCanvas();
-        }
+function initCanvas() {
+    canvas  = document.getElementById('drawCanvas');
+    preview = document.getElementById('drawPreview');
+    ctx  = canvas.getContext('2d');
+    pctx = preview.getContext('2d');
+    resizeCanvas();
+    bindToolbar();
+    bindCanvasEvents();
+}
 
-        function resizeCanvas() {
-            let img = canvas.width ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            if (img) ctx.putImageData(img, 0, 0);
-        }
-
-        function toggleDrawingMode() {
-            if (!canvas) initCanvas();
-            isDrawingMode = !isDrawingMode;
-            const tb = document.getElementById('drawToolbar');
-            if (isDrawingMode) {
-                canvas.style.display = 'block';
-                canvas.style.pointerEvents = 'auto';
-                canvas.style.cursor = 'crosshair';
-                tb.style.display = 'flex';
-                setTool('pen');
-            } else {
-                canvas.style.pointerEvents = 'none';
-                tb.style.display = 'none';
+function bindToolbar() {
+    document.querySelectorAll('.rail-btn[data-panel], .rail-btn[data-tool]').forEach(b => {
+        b.addEventListener('click', () => {
+            if (b.dataset.panel) {
+                document.querySelectorAll('.rail-btn[data-panel],.rail-btn[data-tool]').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                showPanel(b.dataset.panel);
+                document.getElementById('drawPanel').style.display = 'block';
+                currentTool = (b.dataset.panel === 'draw') ? penStyle : 'shape';
+            } else if (b.dataset.tool) {
+                document.querySelectorAll('.rail-btn[data-panel],.rail-btn[data-tool]').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                currentTool = b.dataset.tool;
+                activeShape = null;
+                document.getElementById('drawPanel').style.display = 'none';
             }
-        }
+        });
+    });
+    document.querySelectorAll('.pen-opt').forEach(b => b.addEventListener('click', () => {
+        document.querySelectorAll('.pen-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active'); penStyle = b.dataset.pen; currentTool = penStyle; activeShape = null;
+    }));
+    document.querySelectorAll('.w-opt').forEach(b => b.addEventListener('click', () => {
+        document.querySelectorAll('.w-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active'); lineWidth = parseInt(b.dataset.w);
+    }));
+    document.querySelectorAll('.shape-opt').forEach(b => b.addEventListener('click', () => {
+        document.querySelectorAll('.shape-opt').forEach(x => x.classList.remove('active'));
+        b.classList.add('active'); activeShape = b.dataset.shape; fillShape = b.dataset.fill === '1'; currentTool = 'shape';
+    }));
+}
 
-        function setTool(tool) {
-            currentTool = tool;
-            document.querySelectorAll('.draw-tool-btn').forEach(b => b.classList.remove('active'));
-            const map = {pen:'btnPen', highlighter:'btnHighlight', eraser:'btnEraser'};
-            const el = document.getElementById(map[tool]);
-            if (el) el.classList.add('active');
-        }
+function showPanel(name) {
+    document.querySelectorAll('[data-section]').forEach(p => {
+        p.style.display = p.dataset.section === name ? 'block' : 'none';
+    });
+}
 
-        function getPos(e) {
-            if (e.touches && e.touches.length) {
-                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-            }
-            return { x: e.clientX, y: e.clientY };
-        }
+function resizeCanvas() {
+    const img = canvas.width ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
+    canvas.width  = window.innerWidth;  canvas.height  = window.innerHeight;
+    preview.width = window.innerWidth;  preview.height = window.innerHeight;
+    if (img) ctx.putImageData(img, 0, 0);
+}
 
-        function startDraw(e) {
-            if (!isDrawingMode) return;
-            drawing = true;
-            const p = getPos(e);
-            lastX = p.x; lastY = p.y;
-        }
+function toggleDrawingMode() {
+    if (!canvas) initCanvas();
+    isDrawingMode = !isDrawingMode;
+    const tb = document.getElementById('drawToolbar');
+    if (isDrawingMode) {
+        canvas.style.display = 'block';
+        preview.style.display = 'block';
+        canvas.style.pointerEvents = 'auto';
+        canvas.style.cursor = 'crosshair';
+        tb.style.display = 'flex';
+    } else {
+        canvas.style.display = 'none';      
+        preview.style.display = 'none';    
+        canvas.style.pointerEvents = 'none';
+        canvas.style.cursor = 'default';    
+        tb.style.display = 'none';
+        document.getElementById('drawPanel').style.display = 'none';
+        drawing = false;                    
+        currentTool = 'pen';  
+    }
+}
 
-        function draw(e) {
-            if (!drawing || !isDrawingMode) return;
-            e.preventDefault();
-            const p = getPos(e);
-            const size = parseInt(document.getElementById('penSize').value);
-            const color = document.getElementById('penColor').value;
+function getPos(e) {
+    if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+}
 
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
+function snapshot() {
+    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+    if (undoStack.length > 40) undoStack.shift();
+    redoStack.length = 0;
+}
 
-            if (currentTool === 'eraser') {
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.lineWidth = size * 3;
-            } else if (currentTool === 'highlighter') {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.globalAlpha = 0.35;
-                ctx.strokeStyle = color;
-                ctx.lineWidth = size * 4;
-            } else {
-                ctx.globalCompositeOperation = 'source-over';
-                ctx.globalAlpha = 1;
-                ctx.strokeStyle = color;
-                ctx.lineWidth = size;
-            }
+function applyStroke(c) {
+    c.lineJoin = 'round'; c.lineCap = 'round';
+    c.lineWidth = lineWidth;
+    c.strokeStyle = c.fillStyle = document.getElementById('penColor').value;
+    c.globalAlpha = 1; c.globalCompositeOperation = 'source-over';
+}
 
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(p.x, p.y);
-            ctx.stroke();
-            ctx.globalAlpha = 1;
+function drawArrow(c, x1, y1, x2, y2) {
+    const a = Math.atan2(y2 - y1, x2 - x1), h = Math.max(12, lineWidth * 2.5);
+    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
+    c.beginPath(); c.moveTo(x2, y2);
+    c.lineTo(x2 - h * Math.cos(a - Math.PI/6), y2 - h * Math.sin(a - Math.PI/6));
+    c.moveTo(x2, y2);
+    c.lineTo(x2 - h * Math.cos(a + Math.PI/6), y2 - h * Math.sin(a + Math.PI/6));
+    c.stroke();
+}
 
-            lastX = p.x; lastY = p.y;
-        }
+function drawDiamond(c, x1, y1, x2, y2, fill) {
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    c.beginPath(); c.moveTo(mx, y1); c.lineTo(x2, my); c.lineTo(mx, y2); c.lineTo(x1, my); c.closePath();
+    fill ? c.fill() : c.stroke();
+}
 
-        function stopDraw() { drawing = false; }
+function renderShape(c, x, y) {
+    if (activeShape === 'line')        { c.beginPath(); c.moveTo(startX, startY); c.lineTo(x, y); c.stroke(); }
+    else if (activeShape === 'arrow')  { drawArrow(c, startX, startY, x, y); }
+    else if (activeShape === 'rect')   { fillShape ? c.fillRect(startX, startY, x-startX, y-startY) : c.strokeRect(startX, startY, x-startX, y-startY); }
+    else if (activeShape === 'ellipse'){ c.beginPath(); c.ellipse((startX+x)/2, (startY+y)/2, Math.abs(x-startX)/2, Math.abs(y-startY)/2, 0, 0, 2*Math.PI); fillShape ? c.fill() : c.stroke(); }
+    else if (activeShape === 'diamond'){ drawDiamond(c, startX, startY, x, y, fillShape); }
+}
 
-        function clearCanvas() {
-            if (!ctx) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
+function startDraw(e) {
+    if (!isDrawingMode) return;
+    const p = getPos(e);
+    startX = p.x; startY = p.y; lastX = p.x; lastY = p.y;
 
-        document.addEventListener('mousedown', startDraw);
-        document.addEventListener('mousemove', draw);
-        document.addEventListener('mouseup', stopDraw);
-        document.addEventListener('touchstart', startDraw, {passive:false});
-        document.addEventListener('touchmove', draw, {passive:false});
-        document.addEventListener('touchend', stopDraw);
+    // if (currentTool === 'text') {
+    //     const t = prompt('Enter text:');
+    //     if (t) {
+    //         snapshot();
+    //         ctx.fillStyle = document.getElementById('penColor').value;
+    //         ctx.font = (lineWidth * 5) + 'px sans-serif';
+    //         ctx.fillText(t, p.x, p.y);
+    //     }
+    //     drawing = false;
+    //     return;
+    // }
+    if (currentTool === 'text') {
+    const t = prompt('Enter text:');
+    if (t) {
+        snapshot();
+        ctx.fillStyle = document.getElementById('penColor').value;
+        ctx.font = (lineWidth * 5) + 'px sans-serif';
+        ctx.fillText(t, p.x, p.y);
+    }
+    drawing = false;
+    currentTool = 'pen';   
+    document.querySelectorAll('.rail-btn[data-panel],.rail-btn[data-tool]').forEach(x => x.classList.remove('active'));
+    const drawBtn = document.querySelector('.rail-btn[data-panel="draw"]');
+    if (drawBtn) drawBtn.classList.add('active');
+    document.getElementById('drawPanel').style.display = 'block';
+    showPanel('draw');
+    return;
+}
+    drawing = true;
+    snapshot();
+}
 
-        window.addEventListener('resize', function(){ if(canvas) resizeCanvas(); });
-        </script>
+function draw(e) {
+    if (!drawing || !isDrawingMode) return;
+    e.preventDefault();
+    const p = getPos(e);
+
+    if (currentTool === 'pen' || currentTool === 'marker' || currentTool === 'highlighter' || currentTool === 'eraser') {
+        applyStroke(ctx);
+        if (currentTool === 'marker')      { ctx.lineWidth = lineWidth * 2; }
+        if (currentTool === 'highlighter') { ctx.globalAlpha = 0.35; ctx.lineWidth = lineWidth * 4; }
+        if (currentTool === 'eraser')      { ctx.globalCompositeOperation = 'destination-out'; ctx.lineWidth = lineWidth * 3; }
+        ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y); ctx.stroke();
+        ctx.globalAlpha = 1;
+        lastX = p.x; lastY = p.y;
+    } else if (currentTool === 'shape' && activeShape) {
+        pctx.clearRect(0, 0, preview.width, preview.height);
+        applyStroke(pctx);
+        renderShape(pctx, p.x, p.y);
+    }
+}
+
+function stopDraw(e) {
+    if (!drawing) return;
+    drawing = false;
+    const c = e.changedTouches ? e.changedTouches[0] : e;
+    const x = c.clientX, y = c.clientY;
+    pctx.clearRect(0, 0, preview.width, preview.height);
+    if (currentTool === 'shape' && activeShape) {
+        applyStroke(ctx);
+        renderShape(ctx, x, y);
+    }
+}
+
+function undoDraw() {
+    if (!undoStack.length) return;
+    redoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+    ctx.putImageData(undoStack.pop(), 0, 0);
+}
+function redoDraw() {
+    if (!redoStack.length) return;
+    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+    ctx.putImageData(redoStack.pop(), 0, 0);
+}
+function clearCanvas() {
+    if (!ctx) return;
+    snapshot();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+function saveCanvas() {
+    if (!canvas) return;
+    const a = document.createElement('a');
+    a.download = 'annotation-' + Date.now() + '.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+}
+
+// document.addEventListener('mousedown', startDraw);
+// document.addEventListener('mousemove', draw);
+// document.addEventListener('mouseup', stopDraw);
+// document.addEventListener('touchstart', startDraw, {passive:false});
+// document.addEventListener('touchmove', draw, {passive:false});
+// document.addEventListener('touchend', stopDraw);
+function bindCanvasEvents() {
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('touchstart', startDraw, {passive:false});
+    canvas.addEventListener('touchmove', draw, {passive:false});
+    canvas.addEventListener('touchend', stopDraw);
+}
+
+window.addEventListener('resize', function(){ if(canvas) resizeCanvas(); });
+</script>
 
     @endauth
         @php($info = \App\Information::query()->first())

@@ -3,6 +3,9 @@
 @section('title', 'Tajweed Quran 15')
 
 @section('custom_css')
+    {{-- Select2 CSS (searchable dropdowns). Agar adblock block kare to bhi dropdown chalega, bas plain dikhega. --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet" />
+
     <style>
         .contact-form>form {
             max-width: none;
@@ -68,6 +71,55 @@
         #para-select-container {
             display: none;
         }
+
+        /* --- Select2 theming to match existing form inputs --- */
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 48px !important;
+            border: 1px solid #ededed;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            border-radius: 4px;
+            margin-bottom:10px !important;
+        }
+
+       #searchForm .mrg20 {
+                align-items: center !important;
+            }
+
+            .select2-container .select2-selection--single,
+            #searchForm input[type="number"] {
+                height: 48px !important;
+                margin-top :0px !important;
+            }
+
+            #searchForm .thm-btn {
+                margin-top: 0 !important;
+                height: 48px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: normal;
+            color: #333;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 46px;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #c79f1a;
+        }
+
+        .select2-dropdown {
+            border: 1px solid #ededed;
+        }
     </style>
 @stop
 
@@ -102,8 +154,8 @@
                                 <div class="col-md-12">
                                     <div class="contact-form text-center mb-5">
                                         <form id="searchForm" action="{{ route('search') }}">
-                                            <div class="row mrg20 justify-content-center align-items-center text-center">
-                                                <!-- Surah Select - Show by default -->
+                                                <div class="row mrg20 justify-content-center align-items-start text-center">
+                                                    <!-- Surah Select - Show by default -->
                                                 <div id="surah-select-container" class="col-md-3 col-sm-6 col-lg-3">
                                                     <select name="surat" id="surah-select">
                                                         <option value="">-- Select Surah --</option>
@@ -124,7 +176,7 @@
                                                     <input type="number" name="page" placeholder="Enter Page No">
                                                 </div>
                                                 <div class="col-md-2 col-sm-12 col-lg-2">
-                                                    <button class="thm-btn brd-rd40 mt-3" type="submit">Search</button>
+                                                    <button class="thm-btn brd-rd40 " type="submit">Search</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -173,152 +225,215 @@
     </main>
 @stop
 
+{{-- Self-loading script: jQuery + Select2 ko khud load karta hai, dono ready hone par hi app start hota hai.
+     Isliye jQuery footer/head kahin bhi ho, ya adblock/slow network ho, "jQuery is not defined" error nahi aayega. --}}
 <script !src="">
-    document.addEventListener('DOMContentLoaded', function() {
-        var contactFormRow = ($('.contact-form-row').offset().top - 92);
-        $(window).on('scroll', function() {
-            var scroll = $(window).scrollTop();
-            if (scroll >= contactFormRow) {
-                $('.contact-form-row').addClass('sticky');
-            } else {
-                $('.contact-form-row').removeClass('sticky');
-            }
+(function () {
+    function loadScript(src, cb) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = cb;
+        s.onerror = function () { console.warn('Failed to load: ' + src); cb(); };
+        document.head.appendChild(s);
+    }
+
+    function ensureJQuery(next) {
+        if (window.jQuery) { next(); return; }
+        // Project ki local jQuery pehle (adblock isko block nahi karta), warna CDN
+        loadScript("{{ asset('assets/js/jquery.min.js') }}", function () {
+            if (window.jQuery) { next(); }
+            else { loadScript('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js', next); }
         });
+    }
 
-        const surahButton = document.getElementById('show-surahs');
-        const paraButton = document.getElementById('show-paras');
-        const surahList = document.getElementById('surah-list');
-        const paraList = document.getElementById('para-list');
-        const paraListContent = document.getElementById('para-list-content');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        
-        // New elements for select dropdowns
-        const surahSelectContainer = document.getElementById('surah-select-container');
-        const paraSelectContainer = document.getElementById('para-select-container');
-        const paraSelect = document.getElementById('para-select');
-
-        if (surahButton && paraButton && surahList && paraList) {
-
-            surahButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                paraList.style.display = 'none';
-                surahList.style.display = 'block';
-                loadingSpinner.classList.remove('show');
-                paraButton.classList.remove('active');
-                surahButton.classList.add('active');
-                
-                // Show surah select, hide para select
-                surahSelectContainer.style.display = 'block';
-                paraSelectContainer.style.display = 'none';
+    // function ensureSelect2(next) {
+    //     if (window.jQuery && jQuery.fn && jQuery.fn.select2) { next(); return; }
+    //     loadScript('https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js', next);
+    // }
+    function ensureSelect2(next) {
+            if (window.jQuery && jQuery.fn && jQuery.fn.select2) { next(); return; }
+            loadScript('https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js', function () {
+                // Plugin attach hone ka intezaar karo (kabhi onload ke baad bhi 1 tick lagta hai)
+                var tries = 0;
+                (function waitForSelect2() {
+                    if (window.jQuery && jQuery.fn && jQuery.fn.select2) {
+                        next();
+                    } else if (tries < 50) {
+                        tries++;
+                        setTimeout(waitForSelect2, 50);
+                    } else {
+                        console.warn('Select2 load hone mein der ho gayi.');
+                        next();
+                    }
+                })();
             });
+        }
 
-            paraButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Show para select, hide surah select
-                surahSelectContainer.style.display = 'none';
-                paraSelectContainer.style.display = 'block';
-                
-                if (paraListContent.innerHTML.trim() === '') {
-                    loadingSpinner.classList.add('show');
-                    
-                    $.ajax({
-                        url: "{{ route('quran.paraList') }}",
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            loadingSpinner.classList.remove('show');
-                            surahList.style.display = 'none';
-                            paraList.style.display = 'block';
-                            surahButton.classList.remove('active');
-                            paraButton.classList.add('active');
-                            
-                            // Populate para select dropdown
-                            paraSelect.innerHTML = '<option value="">-- Select Para --</option>';
-                            data.forEach(function(para) {
-                                const option = document.createElement('option');
-                                option.value = para.para_no;
-                                option.textContent = para.para_name;
-                                option.setAttribute('data-first', para.first_page);
-                                paraSelect.appendChild(option);
-                            });
-                            
-                            // Render para list
-                            renderParaList(data);
-                        },
-                        error: function(xhr) {
-                            console.error('Error:', xhr);
-                            loadingSpinner.classList.remove('show');
-                            paraListContent.innerHTML = '<p class="col-12 text-center text-danger">Error loading Paras</p>';
-                        }
-                    });
+    function startApp() {
+        var $ = window.jQuery;
+        var hasSelect2 = !!($ && $.fn && $.fn.select2);
+
+        function run() {
+            var contactFormRow = ($('.contact-form-row').offset().top - 92);
+            $(window).on('scroll', function () {
+                var scroll = $(window).scrollTop();
+                if (scroll >= contactFormRow) {
+                    $('.contact-form-row').addClass('sticky');
                 } else {
-                    surahList.style.display = 'none';
-                    paraList.style.display = 'block';
-                    surahButton.classList.remove('active');
-                    paraButton.classList.add('active');
+                    $('.contact-form-row').removeClass('sticky');
                 }
             });
-            // Surah select change -> turant us surat par jao (pehla page)
-                // const surahSelect = document.getElementById('surah-select');
-                // if (surahSelect) {
-                //     surahSelect.addEventListener('change', function () {
-                //         if (this.value) {
-                //             window.location.href = "{{ route('quranSurat', '') }}/" + this.value;
-                //         }
-                //     });
-                // }
-                const surahSelect = document.getElementById('surah-select');
-                    if (surahSelect) {
-                        surahSelect.addEventListener('change', function () {
-                            if (!this.value) { return; }  // empty -> kuch na karo
-                            var opt   = this.options[this.selectedIndex];
-                            var first = opt.getAttribute('data-first');
-                            if (first) {
-                                window.location.href = "{{ route('quranSurat.page', ['__SLUG__', '__PAGE__']) }}"
-                                    .replace('__SLUG__', this.value)
-                                    .replace('__PAGE__', first);
-                            } else {
-                                window.location.href = "{{ route('quranSurat', '') }}/" + this.value;
+
+            var surahButton = document.getElementById('show-surahs');
+            var paraButton = document.getElementById('show-paras');
+            var surahList = document.getElementById('surah-list');
+            var paraList = document.getElementById('para-list');
+            var paraListContent = document.getElementById('para-list-content');
+            var loadingSpinner = document.getElementById('loadingSpinner');
+
+            var surahSelectContainer = document.getElementById('surah-select-container');
+            var paraSelectContainer = document.getElementById('para-select-container');
+            var paraSelect = document.getElementById('para-select');
+
+            // --- Select2 init (searchable dropdowns) ---
+            if (hasSelect2) {
+                $('#surah-select').select2({
+                    placeholder: '-- Select Surah --',
+                    allowClear: true,
+                    width: '100%'
+                });
+                $('#para-select').select2({
+                    placeholder: '-- Select Para --',
+                    allowClear: true,
+                    width: '100%'
+                });
+            } else {
+                console.warn('Select2 not available - plain dropdowns will be used.');
+            }
+
+            if (surahButton && paraButton && surahList && paraList) {
+
+                surahButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    paraList.style.display = 'none';
+                    surahList.style.display = 'block';
+                    loadingSpinner.classList.remove('show');
+                    paraButton.classList.remove('active');
+                    surahButton.classList.add('active');
+
+                    surahSelectContainer.style.display = 'block';
+                    paraSelectContainer.style.display = 'none';
+                });
+
+                paraButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    surahSelectContainer.style.display = 'none';
+                    paraSelectContainer.style.display = 'block';
+
+                    if (paraListContent.innerHTML.trim() === '') {
+                        loadingSpinner.classList.add('show');
+
+                        $.ajax({
+                            url: "{{ route('quran.paraList') }}",
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                loadingSpinner.classList.remove('show');
+                                surahList.style.display = 'none';
+                                paraList.style.display = 'block';
+                                surahButton.classList.remove('active');
+                                paraButton.classList.add('active');
+
+                                paraSelect.innerHTML = '<option value="">-- Select Para --</option>';
+                                data.forEach(function (para) {
+                                    var option = document.createElement('option');
+                                    option.value = para.para_no;
+                                    option.textContent = para.para_name;
+                                    option.setAttribute('data-first', para.first_page);
+                                    paraSelect.appendChild(option);
+                                });
+
+                                // Select2 ko nayi options ka pata do (taake search mein aayein)
+                                if (hasSelect2) {
+                                    $('#para-select').trigger('change.select2');
+                                }
+
+                                renderParaList(data);
+                            },
+                            error: function (xhr) {
+                                console.error('Error:', xhr);
+                                loadingSpinner.classList.remove('show');
+                                paraListContent.innerHTML = '<p class="col-12 text-center text-danger">Error loading Paras</p>';
                             }
                         });
+                    } else {
+                        surahList.style.display = 'none';
+                        paraList.style.display = 'block';
+                        surahButton.classList.remove('active');
+                        paraButton.classList.add('active');
                     }
-            // Handle para select change
-            // paraSelect.addEventListener('change', function(e) {
-            //     if (this.value) {
-            //         window.location.href = "{{ route('quran.para', '') }}/" + this.value;
-            //     }
-            // });
-            paraSelect.addEventListener('change', function(e) {
-                if (!this.value) { return; }
-                var opt   = this.options[this.selectedIndex];
-                var first = opt.getAttribute('data-first');
-                if (first) {
-                    window.location.href = "{{ route('quranSurat.page', ['__SLUG__', '__PAGE__']) }}"
-                        .replace('__SLUG__', 'para-' + this.value)
-                        .replace('__PAGE__', first);
-                } else {
-                    window.location.href = "{{ route('quran.para', '') }}/" + this.value;
-                }
-            });
+                });
+
+                // Surah select change -> us surat ke pehle page par jao
+                $('#surah-select').on('change', function () {
+                    if (!this.value) { return; }
+                    var opt = this.options[this.selectedIndex];
+                    var first = opt.getAttribute('data-first');
+                    if (first) {
+                        window.location.href = "{{ route('quranSurat.page', ['__SLUG__', '__PAGE__']) }}"
+                            .replace('__SLUG__', this.value)
+                            .replace('__PAGE__', first);
+                    } else {
+                        window.location.href = "{{ route('quranSurat', '') }}/" + this.value;
+                    }
+                });
+
+                // Para select change
+                $('#para-select').on('change', function () {
+                    if (!this.value) { return; }
+                    var opt = this.options[this.selectedIndex];
+                    var first = opt.getAttribute('data-first');
+                    if (first) {
+                        window.location.href = "{{ route('quranSurat.page', ['__SLUG__', '__PAGE__']) }}"
+                            .replace('__SLUG__', 'para-' + this.value)
+                            .replace('__PAGE__', first);
+                    } else {
+                        window.location.href = "{{ route('quran.para', '') }}/" + this.value;
+                    }
+                });
+            }
+
+            function renderParaList(paras) {
+                var html = '';
+                paras.forEach(function (para) {
+                    html += '' +
+                        '<div class="col-md-3 col-sm-6 col-lg-3">' +
+                            '<div class="srv-box2">' +
+                                '<i class="flaticon-quran-rehal"></i>' +
+                                '<div class="srv-info2">' +
+                                    '<h4>' + para.para_name + '</h4>' +
+                                    '<a href="{{ route('quran.para', '') }}/' + para.para_no + '" title="">Read More<i class="flaticon-right-arrow"></i></a>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
+                });
+                document.getElementById('para-list-content').innerHTML = html;
+            }
         }
 
-        function renderParaList(paras) {
-            let html = '';
-            paras.forEach(function(para) {
-                html += `
-                    <div class="col-md-3 col-sm-6 col-lg-3">
-                        <div class="srv-box2">
-                            <i class="flaticon-quran-rehal"></i>
-                            <div class="srv-info2">
-                                <h4>${para.para_name}</h4>
-                                <a href="{{ route('quran.para', '') }}/${para.para_no}" title="">Read More<i class="flaticon-right-arrow"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('para-list-content').innerHTML = html;
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', run);
+        } else {
+            run();
         }
+    }
+
+    // Chain: jQuery -> Select2 -> App
+    ensureJQuery(function () {
+        ensureSelect2(function () {
+            startApp();
+        });
     });
+})();
 </script>
