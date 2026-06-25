@@ -129,11 +129,11 @@
             <table class="data" style="width:100%;">
                  @php
                     $dataCount = max(count($g['columns']), 1);
-                    $colW = round(94 / $dataCount, 2); 
+                    $colW = round(96 / $dataCount, 2); 
                 @endphp
                 <thead>
                     <tr>
-                        <th style="width:6%;">#</th>
+                        <th style="width:4%;">#</th>
                        @foreach($g['columns'] as $col)
                             <th style="width: {{ $colW }}%;">{{ $col['label'] }}</th>
                         @endforeach
@@ -142,7 +142,7 @@
                 <tbody>
                     @forelse($g['records'] as $i => $r)
                     <tr>
-                        <td class="muted" style="width:6%;">{{ $i + 1 }}</td>
+                        <td class="muted" style="width:4%;">{{ $i + 1 }}</td>
                         {{-- <td>
                             <div class="student-cell">
                                 <span class="avatar">{{ strtoupper(substr(optional($r->user)->name ?? '?', 0, 1)) }}</span>
