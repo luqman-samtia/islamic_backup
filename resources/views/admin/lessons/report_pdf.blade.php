@@ -35,17 +35,7 @@
         padding: 6px 10px; border-radius: 4px; margin-bottom: 6px;
     }
 
-    /* table.data { width: 100%; border-collapse: collapse; } */
-    table.data {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-        word-wrap: break-word;
-    }
-    table.data th,
-    table.data td {
-        word-break: break-word !important;
-    }
+    table.data { width: 100%; border-collapse: collapse; }
     table.data thead th {
         background: #2d3748; color: #fff; padding: 7px 6px; text-align: left;
         font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
@@ -136,19 +126,23 @@
     @forelse($grouped as $type => $g)
         <div class="type-section">
             <div class="type-title">{{ $typeLabels[$type] ?? ucfirst($type) }} ({{ $g['records']->count() }})</div>
-            <table class="data">
+            <table class="data" style="width:100%;">
+                 @php
+                    $dataCount = max(count($g['columns']), 1);
+                    $colW = round(94 / $dataCount, 2); 
+                @endphp
                 <thead>
                     <tr>
-                        <th style="width:24px">#</th>
-                        @foreach($g['columns'] as $col)
-                            <th>{{ $col['label'] }}</th>
+                        <th style="width:6%;">#</th>
+                       @foreach($g['columns'] as $col)
+                            <th style="width: {{ $colW }}%;">{{ $col['label'] }}</th>
                         @endforeach
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($g['records'] as $i => $r)
                     <tr>
-                        <td class="muted">{{ $i + 1 }}</td>
+                        <td class="muted" style="width:6%;">{{ $i + 1 }}</td>
                         {{-- <td>
                             <div class="student-cell">
                                 <span class="avatar">{{ strtoupper(substr(optional($r->user)->name ?? '?', 0, 1)) }}</span>
@@ -183,7 +177,7 @@
                             $att = ($key === 'attendance') ? strtolower(trim($val ?? '')) : null;
                             $isRtl = in_array($key, $rtlKeys);
                         @endphp
-                        <td @if($isRtl) dir="rtl" lang="ar" style="font-size: 12px;" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
+                        <td @if($isRtl) dir="rtl" lang="ar" style="font-size: 12px;width: {{ $colW }}%;" @endif class="{{ $key === 'notes' ? 'notes-cell' : '' }}">
                             @if($key === 'attendance')
                                 @if($att)
                                     <span class="pill {{ str_contains($att,'present') || str_contains($att,'haz') ? 'pill-green' : (str_contains($att,'absent') || str_contains($att,'ghair') ? 'pill-red' : 'pill-gray') }}">
