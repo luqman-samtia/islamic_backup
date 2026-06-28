@@ -203,39 +203,85 @@ class PublicController extends Controller
         ]);
     }
 
-    // public function contactUs(Request $request){
-    //     if($request->post()){
-    //         $request->validate([
-    //             'name' => 'required',
-    //             'email' => 'required|email',
-    //             'subject' => 'required',
-    //             'message' => 'required'
-    //         ]);
-    //         Mail::to('infotaleemulquraninstitute@gmail.com')->send(new ContacMail($request));
-    //         return redirect()->back()->with('success', 'Email has been sent to the team.');
-    //     }
-    //     return view('site.contact_us');
-    // }
-public function contactUs(Request $request){
-    if($request->post()){
+   
+// public function contactUs(Request $request){
+//     if($request->post()){
+//             $request->validate([
+//                 'name' => 'required',
+//                 'email' => 'required|email',
+//                 'subject' => 'required',
+//                 'message' => 'required'
+//             ]);
+//         $cacheKey = 'contact_' . md5($request->ip() . $validated['email']);
+
+//         if (cache()->has($cacheKey)) {
+//             return redirect()->back()->with('error', 'Please wait before sending another message.');
+//         }
+
+//         // 5 minute ke liye lock karo
+//         cache()->put($cacheKey, true, now()->addMinutes(5));
+//             try {
+//                 $this->sendResendMail('infotaleemulquraninstitute@gmail.com', 'Contact Us Message', new ContacMail($request));
+//             } catch (\Exception $e) {
+//                 \Log::error('Mail sending failed: ' . $e->getMessage());
+//             }
+
+//             return redirect()->back()->with('success', 'Email has been sent to the team.');
+//         }
+//         return view('site.contact_us');
+//     }
+    public function contactUs(Request $request)
+    {
+        if ($request->isMethod('POST')) {
+
+            $ipKey    = 'contact_ip_'    . md5($request->ip());
+            $emailKey = 'contact_email_' . md5($request->ip() . $request->input('email'));
+
+            if (cache()->get($ipKey, 0) >= 2) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors([
+                        'rate_limit' => 'Too many attempts. Please wait a minute before trying again.'
+                    ]);
+            }
+
             $request->validate([
-                'name' => 'required',
-                'email' => 'required|email',
-                'subject' => 'required',
-                'message' => 'required'
+                'name'    => 'required|string|max:255',
+                'email'   => 'required|email|max:255',
+                'subject' => 'required|string|max:255',
+                'message' => 'required|string|max:5000',
             ]);
 
+            if (cache()->has($emailKey)) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors([
+                        'rate_limit' => 'You already sent a message recently. Please wait 5 minutes.'
+                    ]);
+            }
+
+            cache()->put($ipKey, cache()->get($ipKey, 0) + 1, now()->addMinute());
+
+            cache()->put($emailKey, true, now()->addMinutes(5));
+
             try {
-                $this->sendResendMail('infotaleemulquraninstitute@gmail.com', 'Contact Us Message', new ContacMail($request));
+                $this->sendResendMail(
+                    'infotaleemulquraninstitute@gmail.com',
+                    'Contact Us Message',
+                    new ContacMail($request)
+                );
             } catch (\Exception $e) {
                 \Log::error('Mail sending failed: ' . $e->getMessage());
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['rate_limit' => 'Something went wrong. Please try again later.']);
             }
 
             return redirect()->back()->with('success', 'Email has been sent to the team.');
         }
+
         return view('site.contact_us');
     }
-
     /**
      * Resend API ke through email bhejne ka helper
      */

@@ -37,15 +37,29 @@
                         </p>
                     </div>
                     <div class="contact-form text-center">
-                        <form method="post">
+                        <form method="post" autocomplete="off">
                             @if(session()->has('success'))
                                 <div class="alert alert-success alert-dismissible">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                     {{ session('success') }}
                                 </div>
                             @endif
-
+                            {{-- Rate Limit / General Error --}}
+                            @if($errors->has('rate_limit'))
+                                <div class="alert alert-danger alert-dismissible">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    {{ $errors->first('rate_limit') }}
+                                </div>
+                            @endif
                             @csrf
+                             {{-- Honeypot: CSS se hide karo, JS se nahi (bots JS ignore karte hain) --}}
+                                <div style="position:absolute; left:-9999px; top:-9999px;" aria-hidden="true" tabindex="-1">
+                                    <label for="website">Leave this empty</label>
+                                    <input type="text" name="website" id="website" value="" autocomplete="new-password" tabindex="-1">
+                                </div>
+
+                                {{-- Timing token --}}
+                                <input type="hidden" name="_form_loaded_at" value="{{ time() }}">
                             <div class="row mrg20">
                                 <div class="col-md-6 col-sm-6 col-lg-6">
                                     <input type="text" name="name" placeholder="Name" required>

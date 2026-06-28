@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'student.auth' => \App\Http\Middleware\EnsureStudentIsAuthenticated::class,
+        'honeypot' => \App\Http\Middleware\HoneypotMiddleware::class,
     ];
 
     /**

@@ -45,7 +45,10 @@ Route::delete('admin/notifications/{id}', 'StudentController@deleteNotification'
 
 // END
 Route::get('/', 'PublicController@index')->name('site');
-Route::match(['GET', 'POST'],'/contactUs', 'PublicController@contactUs')->name('contactUs');
+// Route::match(['GET', 'POST'],'/contactUs', 'PublicController@contactUs')->name('contactUs');
+Route::get('/contactUs', 'PublicController@contactUs')->name('contactUs');
+Route::post('/contactUs', 'PublicController@contactUs')
+    ->middleware('honeypot');
 Route::get('/page/{slug}', 'PublicController@page')->middleware('student.auth')->name('page');
 Route::get('/quran', 'PublicController@quran')->middleware('student.auth')->name('quranPage');
 Route::prefix('quran')->middleware('student.auth')->group(function(){
