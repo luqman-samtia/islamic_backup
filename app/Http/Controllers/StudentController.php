@@ -1051,7 +1051,7 @@ public function showStudentFeedbacks(Request $request, $id)
         </table>
     </body>
     </html>
-    HTML;
+HTML;
     }
 // public function showResetForm(Request $request, $token)
 // {

@@ -291,331 +291,258 @@ background-color: rgba(0,0,0,0.4);
     @yield('custom_js')
     <!-- Floating buttons -->
     <div class="floating-buttons">
+ 
     @auth
-            <a href="javascript:void(0)" onclick="toggleDrawingMode()" class="draw-button" title="Draw on Screen"
-                style=" width:50px; height:50px; border-radius:50%; background:#cfa54f; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 8px rgba(0,0,0,0.2); z-index:9999999;">
-                    <span style="font-size:24px;">✏️</span>
-            </a>
-        <!-- Rail + popout panel -->
-<div id="drawToolbar" style="display:none; position:fixed; top:50%; right:20px; transform:translateY(-50%); z-index:10000000; gap:8px; align-items:flex-start;">
-    <div style="display:flex; flex-direction:column; gap:8px; background:#1a1a1a; padding:12px 8px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.4);">
-        <button class="rail-btn active" data-panel="draw" title="Draw">✏️</button>
-        <button class="rail-btn" data-panel="shape" title="Shape">▭</button>
-        <button class="rail-btn" data-tool="text" title="Text">T</button>
-        <button class="rail-btn" data-tool="eraser" title="Eraser">🧽</button>
-        <span style="height:1px; background:#444; margin:2px 4px;"></span>
-        <button class="rail-btn" onclick="undoDraw()" title="Undo">↶</button>
-        <button class="rail-btn" onclick="redoDraw()" title="Redo">↷</button>
-        <button class="rail-btn" onclick="clearCanvas()" title="Clear" style="color:#ffcc00;">🗑️</button>
-        <button class="rail-btn" onclick="saveCanvas()" title="Save" style="color:#7CFC00;">💾</button>
-        <button class="rail-btn" onclick="toggleDrawingMode()" title="Close" style="color:#ff5555;">✖️</button>
-    </div>
+        <a href="javascript:void(0)" onclick="toggleDrawingMode()" title="Draw on Screen"
+            style="width:50px;height:50px;border-radius:50%;background:#cfa54f;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 8px rgba(0,0,0,0.2);z-index:9999999;">
+            <span style="font-size:24px;">✏️</span>
+        </a>
 
-    <div id="drawPanel" style="background:#1a1a1a; border-radius:12px; padding:14px; width:210px; box-shadow:0 4px 20px rgba(0,0,0,0.4);">
-        <!-- Draw section -->
-        <div data-section="draw">
-            <p class="panel-label">Draw</p>
-            <div class="panel-row">
-                <button class="opt pen-opt active" data-pen="pen" title="Pen">✏️</button>
-                <button class="opt pen-opt" data-pen="marker" title="Marker">🖊️</button>
-                <button class="opt pen-opt" data-pen="highlighter" title="Highlighter">🖍️</button>
-            </div>
-            <p class="panel-label">Line width</p>
-            <div class="panel-row">
-                <button class="opt w-opt active" data-w="3"><span class="wd" style="width:5px;height:5px;"></span></button>
-                <button class="opt w-opt" data-w="6"><span class="wd" style="width:9px;height:9px;"></span></button>
-                <button class="opt w-opt" data-w="10"><span class="wd" style="width:13px;height:13px;"></span></button>
-                <button class="opt w-opt" data-w="16"><span class="wd" style="width:18px;height:18px;"></span></button>
-            </div>
-            <p class="panel-label">Color</p>
-            <input type="color" id="penColor" value="#ff0000" style="width:100%; height:32px; border:none; border-radius:6px; background:none; cursor:pointer; padding:0;">
-        </div>
+        <div id="drawToolbar" style="display:none;position:fixed;top:50%;right:12px;transform:translateY(-50%);z-index:10000000;">
+            <div style="display:flex;flex-direction:column;gap:6px;background:#1a1a1a;padding:10px 7px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.4);">
 
-        <!-- Shape section -->
-        <div data-section="shape" style="display:none;">
-            <p class="panel-label">Shape — outline</p>
-            <div class="panel-grid">
-                <button class="opt shape-opt" data-shape="line" data-fill="0" title="Line">╱</button>
-                <button class="opt shape-opt" data-shape="rect" data-fill="0" title="Rectangle">▭</button>
-                <button class="opt shape-opt" data-shape="ellipse" data-fill="0" title="Ellipse">◯</button>
-                <button class="opt shape-opt" data-shape="diamond" data-fill="0" title="Diamond">◇</button>
-                <button class="opt shape-opt" data-shape="arrow" data-fill="0" title="Arrow">➹</button>
-            </div>
-            <p class="panel-label" style="margin-top:12px;">Shape — filled</p>
-            <div class="panel-grid">
-                <button class="opt shape-opt" data-shape="rect" data-fill="1" title="Filled rectangle">▬</button>
-                <button class="opt shape-opt" data-shape="ellipse" data-fill="1" title="Filled ellipse">⬤</button>
-                <button class="opt shape-opt" data-shape="diamond" data-fill="1" title="Filled diamond">◆</button>
+                <!-- Color picker -->
+                <input type="color" id="drawColor" value="#ff0000" title="Color">
+
+                <!-- Line widths -->
+                <button class="draw-btn w-opt active" data-w="2" title="Thin">
+                    <span style="width:3px;height:3px;background:#fff;border-radius:50%;display:inline-block;pointer-events:none;"></span>
+                </button>
+                <button class="draw-btn w-opt" data-w="5" title="Medium">
+                    <span style="width:6px;height:6px;background:#fff;border-radius:50%;display:inline-block;pointer-events:none;"></span>
+                </button>
+                <button class="draw-btn w-opt" data-w="9" title="Thick">
+                    <span style="width:10px;height:10px;background:#fff;border-radius:50%;display:inline-block;pointer-events:none;"></span>
+                </button>
+                <button class="draw-btn w-opt" data-w="14" title="Extra Thick">
+                    <span style="width:14px;height:14px;background:#fff;border-radius:50%;display:inline-block;pointer-events:none;"></span>
+                </button>
+
+                <span style="height:1px;background:#444;margin:2px 0;display:block;"></span>
+
+                <!-- Shape outlines only (click again to deselect → back to freehand) -->
+                <button class="draw-btn shape-opt" data-shape="line"    title="Line">╱</button>
+                <button class="draw-btn shape-opt" data-shape="rect"    title="Rectangle">▭</button>
+                <button class="draw-btn shape-opt" data-shape="ellipse" title="Ellipse">◯</button>
+                <button class="draw-btn shape-opt" data-shape="diamond" title="Diamond">◇</button>
+                <button class="draw-btn shape-opt" data-shape="arrow"   title="Arrow">➹</button>
+
+                <span style="height:1px;background:#444;margin:2px 0;display:block;"></span>
+
+                <button class="draw-btn" onclick="undoDraw()"          title="Undo">↶</button>
+                <button class="draw-btn" onclick="clearCanvas()"       title="Clear">🗑️</button>
+                <button class="draw-btn" onclick="toggleDrawingMode()" title="Close" style="color:#ff5555;">✖️</button>
             </div>
         </div>
-    </div>
-</div>
 
-<canvas id="drawCanvas" style="display:none; position:fixed; top:0; left:0; z-index:9999999; pointer-events:none;"></canvas>
-<canvas id="drawPreview" style="display:none; position:fixed; top:0; left:0; z-index:9999998; pointer-events:none;"></canvas>
+        <canvas id="drawCanvas"  style="display:none;position:fixed;top:0;left:0;z-index:9999999; pointer-events:none;"></canvas>
+        <canvas id="drawPreview" style="display:none;position:fixed;top:0;left:0;z-index:9999998;pointer-events:none;"></canvas>
 
-<style>
-.rail-btn {
-    background:#333; border:none; color:#fff; width:38px; height:38px;
-    border-radius:8px; font-size:18px; cursor:pointer; transition:0.2s;
-    display:flex; align-items:center; justify-content:center;
-}
-.rail-btn:hover { background:#cfa54f; }
-.rail-btn.active { background:#cfa54f; box-shadow:0 0 8px rgba(207,165,79,0.6); }
-.panel-label { color:#bbb; font-size:11px; margin:0 0 6px; }
-.panel-row { display:flex; gap:8px; margin-bottom:14px; }
-.panel-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-.opt {
-    background:#333; border:none; color:#fff; height:34px; min-width:34px;
-    border-radius:7px; cursor:pointer; font-size:16px; transition:0.15s;
-    display:inline-flex; align-items:center; justify-content:center;
-}
-.opt:hover { background:#555; }
-.opt.active { background:#cfa54f; color:#1a1a1a; }
-.wd { background:currentColor; border-radius:50%; display:inline-block; }
-</style>
+        <style>
+        /* Draw toolbar buttons */
+        .draw-btn {
+            background:#333;border:none;color:#fff;
+            width:32px;height:32px;
+            border-radius:7px;font-size:15px;cursor:pointer;
+            transition:0.15s;display:flex;align-items:center;justify-content:center;
+        }
+        .draw-btn:hover  { background:#cfa54f; }
+        .draw-btn.active { background:#cfa54f;box-shadow:0 0 6px rgba(207,165,79,.6); }
 
-<script>
-let drawing = false;
-let isDrawingMode = false;
-let penStyle = 'pen';       
-let currentTool = 'pen';    
-let activeShape = null;    
-let fillShape = false;
-let lineWidth = 3;
-let canvas, ctx, preview, pctx;
-let startX = 0, startY = 0, lastX = 0, lastY = 0;
-const undoStack = [], redoStack = [];
+        /* Color input styling */
+        #drawColor {
+            -webkit-appearance:none;appearance:none;
+            width:32px;height:22px;border:none;border-radius:5px;
+            background:none;cursor:pointer;padding:0;display:block;
+        }
+        #drawColor::-webkit-color-swatch-wrapper { padding:0; }
+        #drawColor::-webkit-color-swatch         { border:none;border-radius:4px; }
 
-function initCanvas() {
-    canvas  = document.getElementById('drawCanvas');
-    preview = document.getElementById('drawPreview');
-    ctx  = canvas.getContext('2d');
-    pctx = preview.getContext('2d');
-    resizeCanvas();
-    bindToolbar();
-    bindCanvasEvents();
-}
+        /* Responsive: smaller on mobile */
+        @media(max-width:575px){
+            #drawToolbar { right:4px !important; }
+            .draw-btn    { width:26px;height:26px;font-size:12px; }
+            #drawColor   { width:26px !important;height:18px !important; }
+        }
+        </style>
 
-function bindToolbar() {
-    document.querySelectorAll('.rail-btn[data-panel], .rail-btn[data-tool]').forEach(b => {
-        b.addEventListener('click', () => {
-            if (b.dataset.panel) {
-                document.querySelectorAll('.rail-btn[data-panel],.rail-btn[data-tool]').forEach(x => x.classList.remove('active'));
-                b.classList.add('active');
-                showPanel(b.dataset.panel);
-                document.getElementById('drawPanel').style.display = 'block';
-                currentTool = (b.dataset.panel === 'draw') ? penStyle : 'shape';
-            } else if (b.dataset.tool) {
-                document.querySelectorAll('.rail-btn[data-panel],.rail-btn[data-tool]').forEach(x => x.classList.remove('active'));
-                b.classList.add('active');
-                currentTool = b.dataset.tool;
-                activeShape = null;
-                document.getElementById('drawPanel').style.display = 'none';
+        <script>
+      
+        var _dm=false,_act=false,_drawShape=null,_lw=2,_col='#ff0000';
+        var _dc=null,_dctx=null,_dpv=null,_dpctx=null;
+        var _sx=0,_sy=0,_penPts=[],_cmds=[],_redoCmds=[];
+        var _tmHandler=null; // touchmove handler ref for cleanup
+
+        function _initDraw(){
+            _dc=document.getElementById('drawCanvas');
+            _dpv=document.getElementById('drawPreview');
+            _dctx=_dc.getContext('2d');
+            _dpctx=_dpv.getContext('2d');
+            _resizeDraw();
+            _bindToolbar();
+            document.getElementById('drawColor').addEventListener('input',function(){_col=this.value;});
+            window.addEventListener('scroll',function(){if(_dm)_redrawAll();},{passive:true});
+        }
+
+        function _bindToolbar(){
+            document.querySelectorAll('.w-opt').forEach(function(b){
+                b.addEventListener('click',function(){
+                    document.querySelectorAll('.w-opt').forEach(function(x){x.classList.remove('active');});
+                    b.classList.add('active');_lw=parseInt(b.dataset.w);
+                });
+            });
+            document.querySelectorAll('.shape-opt').forEach(function(b){
+                b.addEventListener('click',function(){
+                    if(_drawShape===b.dataset.shape){b.classList.remove('active');_drawShape=null;return;}
+                    document.querySelectorAll('.shape-opt').forEach(function(x){x.classList.remove('active');});
+                    b.classList.add('active');_drawShape=b.dataset.shape;
+                });
+            });
+        }
+
+        function _resizeDraw(){
+            _dc.width=_dpv.width=window.innerWidth;
+            _dc.height=_dpv.height=window.innerHeight;
+            _redrawAll();
+        }
+
+        function toggleDrawingMode(){
+            if(!_dc)_initDraw();
+            _dm=!_dm;
+            var tb=document.getElementById('drawToolbar');
+            if(_dm){
+                _dc.style.display=_dpv.style.display=tb.style.display='block';
+                /* ─ Drawing mode ON: add ALL document listeners ─ */
+                document.addEventListener('mousedown',_onDown);
+                document.addEventListener('mousemove',_onMove);
+                document.addEventListener('mouseup',_onUp);
+                document.addEventListener('touchstart',_onDown,{passive:true});
+                document.addEventListener('touchend',_onUp);
+                _tmHandler=function(e){if(_act)e.preventDefault();_onMove(e);};
+                document.addEventListener('touchmove',_tmHandler,{passive:false});
+            } else {
+                _dc.style.display=_dpv.style.display='none';
+                tb.style.display='none';
+                _act=false;
+                if(_dpctx)_dpctx.clearRect(0,0,_dpv.width,_dpv.height);
+                /* ─ Drawing mode OFF: remove ALL document listeners ─
+                   Isse mobile browser ka scroll bilkul free ho jata hai */
+                document.removeEventListener('mousedown',_onDown);
+                document.removeEventListener('mousemove',_onMove);
+                document.removeEventListener('mouseup',_onUp);
+                document.removeEventListener('touchstart',_onDown);
+                document.removeEventListener('touchend',_onUp);
+                if(_tmHandler){
+                    document.removeEventListener('touchmove',_tmHandler);
+                    _tmHandler=null;
+                }
             }
-        });
-    });
-    document.querySelectorAll('.pen-opt').forEach(b => b.addEventListener('click', () => {
-        document.querySelectorAll('.pen-opt').forEach(x => x.classList.remove('active'));
-        b.classList.add('active'); penStyle = b.dataset.pen; currentTool = penStyle; activeShape = null;
-    }));
-    document.querySelectorAll('.w-opt').forEach(b => b.addEventListener('click', () => {
-        document.querySelectorAll('.w-opt').forEach(x => x.classList.remove('active'));
-        b.classList.add('active'); lineWidth = parseInt(b.dataset.w);
-    }));
-    document.querySelectorAll('.shape-opt').forEach(b => b.addEventListener('click', () => {
-        document.querySelectorAll('.shape-opt').forEach(x => x.classList.remove('active'));
-        b.classList.add('active'); activeShape = b.dataset.shape; fillShape = b.dataset.fill === '1'; currentTool = 'shape';
-    }));
-}
+        }
 
-function showPanel(name) {
-    document.querySelectorAll('[data-section]').forEach(p => {
-        p.style.display = p.dataset.section === name ? 'block' : 'none';
-    });
-}
+        function _toPage(cx,cy){return{x:cx+window.scrollX,y:cy+window.scrollY};}
+        function _toClient(px,py){return{x:px-window.scrollX,y:py-window.scrollY};}
 
-function resizeCanvas() {
-    const img = canvas.width ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
-    canvas.width  = window.innerWidth;  canvas.height  = window.innerHeight;
-    preview.width = window.innerWidth;  preview.height = window.innerHeight;
-    if (img) ctx.putImageData(img, 0, 0);
-}
+        function _cpos(e){
+            if(e.touches&&e.touches.length)return{x:e.touches[0].clientX,y:e.touches[0].clientY};
+            if(e.changedTouches&&e.changedTouches.length)return{x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY};
+            return{x:e.clientX,y:e.clientY};
+        }
 
-function toggleDrawingMode() {
-    if (!canvas) initCanvas();
-    isDrawingMode = !isDrawingMode;
-    const tb = document.getElementById('drawToolbar');
-    if (isDrawingMode) {
-        canvas.style.display = 'block';
-        preview.style.display = 'block';
-        canvas.style.pointerEvents = 'auto';
-        canvas.style.cursor = 'crosshair';
-        tb.style.display = 'flex';
-    } else {
-        canvas.style.display = 'none';      
-        preview.style.display = 'none';    
-        canvas.style.pointerEvents = 'none';
-        canvas.style.cursor = 'default';    
-        tb.style.display = 'none';
-        document.getElementById('drawPanel').style.display = 'none';
-        drawing = false;                    
-        currentTool = 'pen';  
-    }
-}
+        function _isUI(e){
+            var el=e.target;
+            while(el&&el!==document.body){
+                if(el.id==='drawToolbar')return true;
+                if(['A','BUTTON','INPUT','SELECT','TEXTAREA','LABEL'].indexOf(el.tagName)!==-1)return true;
+                el=el.parentElement;
+            }
+            return false;
+        }
 
-function getPos(e) {
-    if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    return { x: e.clientX, y: e.clientY };
-}
+        function _applyStyle(c,col,lw){
+            c.lineJoin='round';c.lineCap='round';c.lineWidth=lw;
+            c.strokeStyle=c.fillStyle=col;c.globalAlpha=1;
+            c.globalCompositeOperation='source-over';
+        }
 
-function snapshot() {
-    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-    if (undoStack.length > 40) undoStack.shift();
-    redoStack.length = 0;
-}
+        function _shapeRender(c,sh,x1,y1,x2,y2){
+            if(sh==='line'){c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();}
+            else if(sh==='rect'){c.strokeRect(x1,y1,x2-x1,y2-y1);}
+            else if(sh==='ellipse'){c.beginPath();c.ellipse((x1+x2)/2,(y1+y2)/2,Math.abs(x2-x1)/2,Math.abs(y2-y1)/2,0,0,2*Math.PI);c.stroke();}
+            else if(sh==='diamond'){var mx=(x1+x2)/2,my=(y1+y2)/2;c.beginPath();c.moveTo(mx,y1);c.lineTo(x2,my);c.lineTo(mx,y2);c.lineTo(x1,my);c.closePath();c.stroke();}
+            else if(sh==='arrow'){
+                var a=Math.atan2(y2-y1,x2-x1),h=Math.max(12,c.lineWidth*2.5);
+                c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();
+                c.beginPath();
+                c.moveTo(x2,y2);c.lineTo(x2-h*Math.cos(a-Math.PI/6),y2-h*Math.sin(a-Math.PI/6));
+                c.moveTo(x2,y2);c.lineTo(x2-h*Math.cos(a+Math.PI/6),y2-h*Math.sin(a+Math.PI/6));
+                c.stroke();
+            }
+        }
 
-function applyStroke(c) {
-    c.lineJoin = 'round'; c.lineCap = 'round';
-    c.lineWidth = lineWidth;
-    c.strokeStyle = c.fillStyle = document.getElementById('penColor').value;
-    c.globalAlpha = 1; c.globalCompositeOperation = 'source-over';
-}
+        function _renderCmd(c,cmd){
+            _applyStyle(c,cmd.col,cmd.lw);
+            var ox=-window.scrollX,oy=-window.scrollY;
+            if(cmd.type==='pen'&&cmd.pts.length>=2){
+                c.beginPath();c.moveTo(cmd.pts[0].x+ox,cmd.pts[0].y+oy);
+                for(var i=1;i<cmd.pts.length;i++)c.lineTo(cmd.pts[i].x+ox,cmd.pts[i].y+oy);
+                c.stroke();
+            }else if(cmd.type==='shape'){
+                _shapeRender(c,cmd.shape,cmd.x1+ox,cmd.y1+oy,cmd.x2+ox,cmd.y2+oy);
+            }
+        }
 
-function drawArrow(c, x1, y1, x2, y2) {
-    const a = Math.atan2(y2 - y1, x2 - x1), h = Math.max(12, lineWidth * 2.5);
-    c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
-    c.beginPath(); c.moveTo(x2, y2);
-    c.lineTo(x2 - h * Math.cos(a - Math.PI/6), y2 - h * Math.sin(a - Math.PI/6));
-    c.moveTo(x2, y2);
-    c.lineTo(x2 - h * Math.cos(a + Math.PI/6), y2 - h * Math.sin(a + Math.PI/6));
-    c.stroke();
-}
+        function _redrawAll(){
+            if(!_dctx)return;
+            _dctx.clearRect(0,0,_dc.width,_dc.height);
+            _cmds.forEach(function(cmd){_renderCmd(_dctx,cmd);});
+            if(_act&&!_drawShape&&_penPts.length>=2){
+                _applyStyle(_dctx,_col,_lw);_dctx.beginPath();
+                var s=_toClient(_penPts[0].x,_penPts[0].y);_dctx.moveTo(s.x,s.y);
+                for(var i=1;i<_penPts.length;i++){var p=_toClient(_penPts[i].x,_penPts[i].y);_dctx.lineTo(p.x,p.y);}
+                _dctx.stroke();
+            }
+        }
 
-function drawDiamond(c, x1, y1, x2, y2, fill) {
-    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
-    c.beginPath(); c.moveTo(mx, y1); c.lineTo(x2, my); c.lineTo(mx, y2); c.lineTo(x1, my); c.closePath();
-    fill ? c.fill() : c.stroke();
-}
+        function _onDown(e){
+            if(!_dm||_isUI(e))return;
+            var cp=_cpos(e),pp=_toPage(cp.x,cp.y);
+            _sx=pp.x;_sy=pp.y;_penPts=[pp];_act=true;
+        }
 
-function renderShape(c, x, y) {
-    if (activeShape === 'line')        { c.beginPath(); c.moveTo(startX, startY); c.lineTo(x, y); c.stroke(); }
-    else if (activeShape === 'arrow')  { drawArrow(c, startX, startY, x, y); }
-    else if (activeShape === 'rect')   { fillShape ? c.fillRect(startX, startY, x-startX, y-startY) : c.strokeRect(startX, startY, x-startX, y-startY); }
-    else if (activeShape === 'ellipse'){ c.beginPath(); c.ellipse((startX+x)/2, (startY+y)/2, Math.abs(x-startX)/2, Math.abs(y-startY)/2, 0, 0, 2*Math.PI); fillShape ? c.fill() : c.stroke(); }
-    else if (activeShape === 'diamond'){ drawDiamond(c, startX, startY, x, y, fillShape); }
-}
+        function _onMove(e){
+            if(!_dm||!_act)return;
+            var cp=_cpos(e),pp=_toPage(cp.x,cp.y);
+            if(_drawShape){
+                _dpctx.clearRect(0,0,_dpv.width,_dpv.height);
+                var sc=_toClient(_sx,_sy);
+                _applyStyle(_dpctx,_col,_lw);
+                _shapeRender(_dpctx,_drawShape,sc.x,sc.y,cp.x,cp.y);
+            }else{
+                var last=_penPts[_penPts.length-1],lc=_toClient(last.x,last.y);
+                _applyStyle(_dctx,_col,_lw);
+                _dctx.beginPath();_dctx.moveTo(lc.x,lc.y);_dctx.lineTo(cp.x,cp.y);_dctx.stroke();
+                _penPts.push(pp);
+            }
+        }
 
-function startDraw(e) {
-    if (!isDrawingMode) return;
-    const p = getPos(e);
-    startX = p.x; startY = p.y; lastX = p.x; lastY = p.y;
+        function _onUp(e){
+            if(!_act)return;_act=false;
+            var cp=_cpos(e),pp=_toPage(cp.x,cp.y);
+            _dpctx.clearRect(0,0,_dpv.width,_dpv.height);
+            if(_drawShape){
+                _cmds.push({type:'shape',shape:_drawShape,x1:_sx,y1:_sy,x2:pp.x,y2:pp.y,col:_col,lw:_lw});
+                _redrawAll();
+            }else if(_penPts.length>=2){
+                _cmds.push({type:'pen',pts:_penPts.slice(),col:_col,lw:_lw});
+            }
+            _redoCmds.length=0;
+        }
 
-    // if (currentTool === 'text') {
-    //     const t = prompt('Enter text:');
-    //     if (t) {
-    //         snapshot();
-    //         ctx.fillStyle = document.getElementById('penColor').value;
-    //         ctx.font = (lineWidth * 5) + 'px sans-serif';
-    //         ctx.fillText(t, p.x, p.y);
-    //     }
-    //     drawing = false;
-    //     return;
-    // }
-    if (currentTool === 'text') {
-    const t = prompt('Enter text:');
-    if (t) {
-        snapshot();
-        ctx.fillStyle = document.getElementById('penColor').value;
-        ctx.font = (lineWidth * 5) + 'px sans-serif';
-        ctx.fillText(t, p.x, p.y);
-    }
-    drawing = false;
-    currentTool = 'pen';   
-    document.querySelectorAll('.rail-btn[data-panel],.rail-btn[data-tool]').forEach(x => x.classList.remove('active'));
-    const drawBtn = document.querySelector('.rail-btn[data-panel="draw"]');
-    if (drawBtn) drawBtn.classList.add('active');
-    document.getElementById('drawPanel').style.display = 'block';
-    showPanel('draw');
-    return;
-}
-    drawing = true;
-    snapshot();
-}
+        function undoDraw(){if(!_cmds.length)return;_redoCmds.push(_cmds.pop());_redrawAll();}
+        function clearCanvas(){_cmds.length=0;_redoCmds.length=0;if(_dctx)_dctx.clearRect(0,0,_dc.width,_dc.height);}
 
-function draw(e) {
-    if (!drawing || !isDrawingMode) return;
-    e.preventDefault();
-    const p = getPos(e);
-
-    if (currentTool === 'pen' || currentTool === 'marker' || currentTool === 'highlighter' || currentTool === 'eraser') {
-        applyStroke(ctx);
-        if (currentTool === 'marker')      { ctx.lineWidth = lineWidth * 2; }
-        if (currentTool === 'highlighter') { ctx.globalAlpha = 0.35; ctx.lineWidth = lineWidth * 4; }
-        if (currentTool === 'eraser')      { ctx.globalCompositeOperation = 'destination-out'; ctx.lineWidth = lineWidth * 3; }
-        ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y); ctx.stroke();
-        ctx.globalAlpha = 1;
-        lastX = p.x; lastY = p.y;
-    } else if (currentTool === 'shape' && activeShape) {
-        pctx.clearRect(0, 0, preview.width, preview.height);
-        applyStroke(pctx);
-        renderShape(pctx, p.x, p.y);
-    }
-}
-
-function stopDraw(e) {
-    if (!drawing) return;
-    drawing = false;
-    const c = e.changedTouches ? e.changedTouches[0] : e;
-    const x = c.clientX, y = c.clientY;
-    pctx.clearRect(0, 0, preview.width, preview.height);
-    if (currentTool === 'shape' && activeShape) {
-        applyStroke(ctx);
-        renderShape(ctx, x, y);
-    }
-}
-
-function undoDraw() {
-    if (!undoStack.length) return;
-    redoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-    ctx.putImageData(undoStack.pop(), 0, 0);
-}
-function redoDraw() {
-    if (!redoStack.length) return;
-    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-    ctx.putImageData(redoStack.pop(), 0, 0);
-}
-function clearCanvas() {
-    if (!ctx) return;
-    snapshot();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-function saveCanvas() {
-    if (!canvas) return;
-    const a = document.createElement('a');
-    a.download = 'annotation-' + Date.now() + '.png';
-    a.href = canvas.toDataURL('image/png');
-    a.click();
-}
-
-// document.addEventListener('mousedown', startDraw);
-// document.addEventListener('mousemove', draw);
-// document.addEventListener('mouseup', stopDraw);
-// document.addEventListener('touchstart', startDraw, {passive:false});
-// document.addEventListener('touchmove', draw, {passive:false});
-// document.addEventListener('touchend', stopDraw);
-function bindCanvasEvents() {
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDraw);
-    canvas.addEventListener('touchstart', startDraw, {passive:false});
-    canvas.addEventListener('touchmove', draw, {passive:false});
-    canvas.addEventListener('touchend', stopDraw);
-}
-
-window.addEventListener('resize', function(){ if(canvas) resizeCanvas(); });
-</script>
-
+        window.addEventListener('resize',function(){if(_dc)_resizeDraw();});
+        </script>
     @endauth
         @php($info = \App\Information::query()->first())
         <!-- WhatsApp Button -->
