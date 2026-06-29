@@ -242,7 +242,7 @@
 
 {{-- @section('custom_js') --}}
     {{-- Self-loading: Select2 ko load karta hai, ready hone par init hota hai. --}}
-    <script !src="">
+    {{-- <script !src="">
         (function () {
             function loadScript(src, cb) {
                 var s = document.createElement('script');
@@ -439,5 +439,207 @@
                 });
             });
         })();
-    </script>
+    </script> --}}
+
+    {{-- Replace your existing <script> block with this --}}
+<script>
+(function () {
+    function loadScript(src, cb) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = cb;
+        s.onerror = function () { console.warn('Failed to load: ' + src); cb(); };
+        document.head.appendChild(s);
+    }
+
+    function ensureJQuery(next) {
+        if (window.jQuery) { next(); return; }
+        loadScript("{{ asset('assets/js/jquery.min.js') }}", function () {
+            if (window.jQuery) { next(); }
+            else { loadScript('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js', next); }
+        });
+    }
+
+    function ensureSelect2(next) {
+        // ✅ KEY FIX: never trust cached Select2 — always reload fresh
+        loadScript('https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js', function () {
+            // ✅ Poll until jQuery.fn.select2 is truly available (CDN may lag behind onload)
+            var tries = 0;
+            function check() {
+                if (window.jQuery && jQuery.fn && jQuery.fn.select2) {
+                    next();
+                } else if (tries++ < 20) {
+                    setTimeout(check, 100);
+                } else {
+                    console.warn('Select2 unavailable after retries — using plain dropdowns.');
+                    next();
+                }
+            }
+            check();
+        });
+    }
+
+    function init() {
+        var $ = window.jQuery;
+        var hasSelect2 = !!($ && $.fn && $.fn.select2);
+
+        // Sticky Form
+        var contactFormRow = ($('.contact-form-row').offset().top - 92);
+        $(window).on('scroll', function() {
+            var scroll = $(window).scrollTop();
+            if (scroll >= contactFormRow) {
+                $('.contact-form-row').addClass('sticky');
+            } else {
+                $('.contact-form-row').removeClass('sticky');
+            }
+        });
+
+        // Toggle buttons and elements
+        const tajweedSurahButton = document.getElementById('tajweed-show-surahs');
+        const tajweedParaButton = document.getElementById('tajweed-show-paras');
+        const tajweedSurahList = document.getElementById('tajweed-surah-list');
+        const tajweedParaList = document.getElementById('tajweed-para-list');
+        const tajweedParaListContent = document.getElementById('tajweed-para-list-content');
+        const tajweedLoadingSpinner = document.getElementById('tajweedLoadingSpinner');
+        const tajweedSurahSelectContainer = document.getElementById('tajweed-surah-select-container');
+        const tajweedParaSelectContainer = document.getElementById('tajweed-para-select-container');
+        const tajweedParaSelect = document.getElementById('tajweed-para-select');
+
+        // ✅ Destroy any existing Select2 instance before re-initializing
+        if (hasSelect2) {
+            var $surahSel = $('#tajweed-surah-select');
+            var $paraSel  = $('#tajweed-para-select');
+
+            if ($surahSel.hasClass('select2-hidden-accessible')) {
+                $surahSel.select2('destroy');
+            }
+            if ($paraSel.hasClass('select2-hidden-accessible')) {
+                $paraSel.select2('destroy');
+            }
+
+            $surahSel.select2({ placeholder: '-- Select Surah --', allowClear: true, width: '100%' });
+            $paraSel.select2({  placeholder: '-- Select Para --',  allowClear: true, width: '100%' });
+        } else {
+            console.warn('Select2 not available — plain dropdowns will be used.');
+        }
+
+        if (tajweedSurahButton && tajweedParaButton && tajweedSurahList && tajweedParaList) {
+
+            tajweedSurahButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                tajweedParaList.style.display = 'none';
+                tajweedSurahList.style.display = 'block';
+                tajweedLoadingSpinner.classList.remove('show');
+                tajweedParaButton.classList.remove('active');
+                tajweedSurahButton.classList.add('active');
+                tajweedSurahSelectContainer.style.display = 'block';
+                tajweedParaSelectContainer.style.display = 'none';
+            });
+
+            tajweedParaButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                tajweedSurahSelectContainer.style.display = 'none';
+                tajweedParaSelectContainer.style.display = 'block';
+
+                if (tajweedParaListContent.innerHTML.trim() === '') {
+                    tajweedLoadingSpinner.classList.add('show');
+
+                    $.ajax({
+                        url: "{{ route('tajweedQuran.paraList') }}",
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            tajweedLoadingSpinner.classList.remove('show');
+                            tajweedSurahList.style.display = 'none';
+                            tajweedParaList.style.display = 'block';
+                            tajweedSurahButton.classList.remove('active');
+                            tajweedParaButton.classList.add('active');
+
+                            tajweedParaSelect.innerHTML = '<option value="">-- Select Para --</option>';
+                            data.forEach(function(para) {
+                                const option = document.createElement('option');
+                                option.value = para.para_no;
+                                option.textContent = para.para_name;
+                                option.setAttribute('data-first', para.first_page);
+                                tajweedParaSelect.appendChild(option);
+                            });
+
+                            if (hasSelect2) {
+                                $('#tajweed-para-select').trigger('change.select2');
+                            }
+
+                            renderTajweedParaList(data);
+                        },
+                        error: function(xhr) {
+                            console.error('Error:', xhr);
+                            tajweedLoadingSpinner.classList.remove('show');
+                            tajweedParaListContent.innerHTML = '<p class="col-12 text-center text-danger">Error loading Paras</p>';
+                        }
+                    });
+                } else {
+                    tajweedSurahList.style.display = 'none';
+                    tajweedParaList.style.display = 'block';
+                    tajweedSurahButton.classList.remove('active');
+                    tajweedParaButton.classList.add('active');
+                }
+            });
+
+            $('#tajweed-surah-select').on('change', function () {
+                if (!this.value) { return; }
+                var opt   = this.options[this.selectedIndex];
+                var first = opt.getAttribute('data-first');
+                if (first) {
+                    window.location.href = "{{ route('tajweedQuranSurat.page', ['__SLUG__', '__PAGE__']) }}"
+                        .replace('__SLUG__', this.value)
+                        .replace('__PAGE__', first);
+                } else {
+                    window.location.href = "{{ route('tajweedQuranSurat', '') }}/" + this.value;
+                }
+            });
+
+            $('#tajweed-para-select').on('change', function () {
+                if (!this.value) { return; }
+                var opt   = this.options[this.selectedIndex];
+                var first = opt.getAttribute('data-first');
+                if (first) {
+                    window.location.href = "{{ route('tajweedQuranSurat.page', ['__SLUG__', '__PAGE__']) }}"
+                        .replace('__SLUG__', 'para-' + this.value)
+                        .replace('__PAGE__', first);
+                } else {
+                    window.location.href = "{{ route('tajweedQuran.para', '') }}/" + this.value;
+                }
+            });
+        }
+
+        function renderTajweedParaList(paras) {
+            let html = '';
+            paras.forEach(function(para) {
+                html += `
+                    <div class="col-md-3 col-sm-6 col-lg-3">
+                        <div class="srv-box2">
+                            <i class="flaticon-quran-rehal"></i>
+                            <div class="srv-info2">
+                                <h4>${para.para_name}</h4>
+                                <a href="{{ route('tajweedQuran.para', '') }}/${para.para_no}" title="">Read More<i class="flaticon-right-arrow"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('tajweed-para-list-content').innerHTML = html;
+        }
+    }
+
+    // ✅ Always run the full chain on every page load — no skipping
+    ensureJQuery(function () {
+        ensureSelect2(function () {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init(); // page already loaded (e.g. returned from search)
+            }
+        });
+    });
+})();
+</script>
 {{-- @stop --}}
