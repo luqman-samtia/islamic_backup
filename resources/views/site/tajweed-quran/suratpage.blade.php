@@ -38,7 +38,14 @@
                         <ul class="breadcrumbs">
                             <li><a href="{{ route('site') }}" title="">Home</a></li>
                             <li><a href="{{ route('tajweedQuran') }}" title="">Tajweed Quran 16</a></li>
-                            <li><a href="{{ route('tajweedQuranSurat', $surat->getParent->slug) }}" >{{ $surat->getParent->title }}</a></li>
+                            {{-- <li><a href="{{ route('tajweedQuranSurat', $surat->getParent->slug) }}" >{{ $surat->getParent->title }}</a></li> --}}
+                            <li>
+                                @if($surat->getParent)
+                                    <a href="{{ route('tajweedQuranSurat', $surat->getParent->slug) }}">
+                                        {{ $surat->getParent->title }}
+                                    </a>
+                                @endif
+                            </li>
                             <li>Page - {{ $surat->number }}</li>
                         </ul>
                     </div>

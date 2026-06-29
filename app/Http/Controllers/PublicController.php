@@ -606,9 +606,9 @@ public function quranSuratPage($slug, $page)
     }])->where('slug', $slug)->first();
 
         if(!$data['surat']){
-            return redirect()->route('tajweed.quran.index')->with('error', 'Surat not found');
+            return redirect()->route('tajweedQuran')->with('error', 'Surat not found');
         }
-            
+                    
 
         $prev = TajweedQuran::where('id', '<', $data['surat']->id)->whereNull('parent_id')->orderBy('id','desc')->first();
         $next = TajweedQuran::where('id', '>', $data['surat']->id)->whereNull('parent_id')->orderBy('id')->first();
