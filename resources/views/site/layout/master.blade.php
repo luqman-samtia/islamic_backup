@@ -335,8 +335,8 @@ background-color: rgba(0,0,0,0.4);
             </div>
         </div>
 
-        <canvas id="drawCanvas"  style="display:none;position:fixed;top:0;left:0;z-index:9999999; pointer-events:none;"></canvas>
-        <canvas id="drawPreview" style="display:none;position:fixed;top:0;left:0;z-index:9999998;pointer-events:none;"></canvas>
+        <canvas id="drawCanvas"  style="display:none;position:fixed;top:0;left:0;z-index:9999999;"></canvas>
+        <canvas id="drawPreview" style="display:none;position:fixed;top:0;left:0;z-index:9999998;"></canvas>
 
         <style>
         /* Draw toolbar buttons */
@@ -505,6 +505,9 @@ background-color: rgba(0,0,0,0.4);
 
         function _onDown(e){
             if(!_dm||_isUI(e))return;
+            
+            e.preventDefault(); 
+            
             var cp=_cpos(e),pp=_toPage(cp.x,cp.y);
             _sx=pp.x;_sy=pp.y;_penPts=[pp];_act=true;
         }
